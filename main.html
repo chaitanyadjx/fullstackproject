@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verto | Stream with Substance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Outfit:wght@300;400;600;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --obsidian: #050505;
+            --zinc: #121214;
+            --bone: #FFFFFF;
+            --crimson: #E11D48;
+            --stone: #F8FAFC;
+            --midnight: #020617;
+            --glass: rgba(5, 5, 5, 0.98);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        /* --- HIDE SCROLLBAR --- */
+        body {
+            background-color: var(--obsidian);
+            color: var(--bone);
+            font-family: 'Outfit', sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none;  /* IE/Edge */
+        }
+        body::-webkit-scrollbar { display: none; } /* Chrome/Safari */
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0; width: 100%; height: 90px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 6%; z-index: 1000;
+            transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        nav.scrolled {
+            height: 75px;
+            background: var(--glass);
+            backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem; font-style: italic; letter-spacing: -1.5px;
+            color: var(--bone); text-decoration: none;
+        }
+
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a {
+            text-decoration: none; color: var(--bone);
+            font-size: 0.75rem; text-transform: uppercase; letter-spacing: 3px;
+            font-weight: 600; transition: 0.3s;
+        }
+        .nav-links a:hover { color: var(--crimson); }
+
+        /* --- TIER 1: FULL SCREEN HERO --- */
+        .hero {
+            height: 100vh;
+            display: flex; flex-direction: column; justify-content: center;
+            padding: 0 8%;
+            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.4)), 
+                        url('https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?q=80&w=2071&auto=format&fit=crop');
+            background-size: cover; background-position: center; background-attachment: fixed;
+        }
+
+        .hero-label {
+            font-size: 0.8rem; text-transform: uppercase; letter-spacing: 10px;
+            color: var(--crimson); font-weight: 900; margin-bottom: 25px;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(3rem, 9vw, 6.5rem);
+            line-height: 0.95; font-style: italic;
+            max-width: 900px; margin-bottom: 35px;
+        }
+
+        .hero-sub {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            line-height: 1.6; max-width: 800px;
+            color: #fff; border-left: 3px solid var(--crimson);
+            padding-left: 25px; margin-bottom: 45px; font-weight: 400;
+        }
+
+        .hero-btn {
+            padding: 22px 55px; border: 2px solid var(--bone);
+            color: var(--bone); text-decoration: none; display: inline-block;
+            font-weight: 700; letter-spacing: 4px; text-transform: uppercase; transition: 0.4s;
+            width: fit-content;
+        }
+        .hero-btn:hover { background: var(--bone); color: var(--obsidian); transform: translateY(-5px); }
+
+        /* --- TIER 2: MANIFESTO (BONE WHITE) --- */
+        .tier-white { background: var(--bone); color: var(--obsidian); padding: 160px 8%; }
+        .manifesto-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 120px; align-items: center; }
+        .h2-editorial { font-family: 'Playfair Display', serif; font-size: 3.8rem; font-style: italic; line-height: 1.1; margin-bottom: 30px; }
+        .p-manifesto { font-size: 1.25rem; line-height: 1.8; color: #27272a; margin-bottom: 30px; }
+
+        /* --- TIER 3: HOW IT WORKS (STONE GREY) --- */
+        .tier-stone { background: var(--stone); color: var(--obsidian); padding: 140px 8%; }
+        .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 60px; }
+        .step-card { padding: 50px; background: white; border: 1px solid rgba(0,0,0,0.05); transition: 0.4s; }
+        .step-num { font-family: 'Playfair Display'; font-style: italic; font-size: 3rem; color: var(--crimson); margin-bottom: 20px; }
+
+        /* --- TIER 4: NETWORK LEDGER (VIBRANT) --- */
+        .tier-network { background: #fdfdfd; color: var(--obsidian); padding: 140px 8%; text-align: center; }
+        .network-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 60px; }
+        .network-card { height: 280px; position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+        .network-card img { position: absolute; width: 100%; height: 100%; object-fit: cover; transition: 0.8s; }
+        .network-overlay { position: absolute; width: 100%; height: 100%; background: rgba(0,0,0,0.35); z-index: 2; transition: 0.4s; }
+        .network-card:hover img { transform: scale(1.1); }
+        .network-card:hover .network-overlay { background: rgba(225, 29, 72, 0.4); }
+        .network-name { position: relative; z-index: 3; color: white; font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.8rem; }
+
+        /* --- TIER 5: THE PACKS (ZINC) --- */
+        .tier-zinc { background: var(--zinc); padding: 140px 0; overflow: hidden; }
+        .packs-header { padding: 0 8% 80px; display: flex; justify-content: space-between; align-items: flex-end; }
+        
+        .ticker-track { display: flex; width: calc(480px * 8 + 40px * 8); animation: infiniteTicker 40s linear infinite !important; }
+        .tier-zinc:hover .ticker-track { animation-play-state: running !important; }
+        @keyframes infiniteTicker { 0% { transform: translateX(0); } 100% { transform: translateX(calc(-480px * 4 - 40px * 4)); } }
+        
+        .pack-card { flex: 0 0 480px; height: 600px; background: var(--obsidian); color: var(--bone); margin-right: 40px; padding: 60px; display: flex; flex-direction: column; justify-content: space-between; position: relative; overflow: hidden; }
+        .pack-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-size: cover; background-position: center; opacity: 0.5; transition: 0.6s; }
+        .pack-card:hover .pack-bg { opacity: 0.8; }
+        .pack-price { font-size: 3rem; font-weight: 800; color: var(--crimson); position: relative; z-index: 5; }
+
+        /* --- TIER 6: COMPARISON AUDIT (OBSIDIAN) --- */
+        .tier-comparison { background: var(--obsidian); padding: 160px 8%; border-top: 1px solid rgba(255,255,255,0.05); }
+        .comp-header { text-align: center; margin-bottom: 80px; }
+        .comp-table { width: 100%; border-collapse: separate; border-spacing: 0 12px; }
+        .comp-table th { text-align: left; padding: 20px; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 3px; color: #555; font-weight: 900; }
+        .comp-table td { padding: 30px 20px; background: rgba(255,255,255,0.02); border-top: 1px solid rgba(255,255,255,0.03); border-bottom: 1px solid rgba(255,255,255,0.03); font-size: 1rem; }
+        .v-col { background: rgba(225, 29, 72, 0.05); border-top: 1px solid rgba(225, 29, 72, 0.2); border-bottom: 1px solid rgba(225, 29, 72, 0.2); color: var(--bone); font-weight: 700; width: 35%; }
+        .v-col::before { content: '●'; color: var(--crimson); margin-right: 10px; font-size: 0.8rem; }
+        .legacy-col { color: #555; width: 35%; }
+
+        /* --- TIER 7: CTA (CRIMSON) --- */
+        .tier-cta { padding: 180px 8%; background: var(--crimson); text-align: center; }
+        .btn-luxury { padding: 25px 80px; border: 2px solid white; color: white; text-decoration: none; font-weight: 800; font-size: 1.4rem; text-transform: uppercase; letter-spacing: 5px; display: inline-block; transition: 0.4s; }
+        .btn-luxury:hover { background: white; color: var(--crimson); transform: translateY(-5px); }
+
+        footer { padding: 60px 8%; background: var(--obsidian); display: flex; justify-content: space-between; font-size: 0.7rem; color: #555; text-transform: uppercase; letter-spacing: 4px; border-top: 1px solid rgba(255,255,255,0.05); }
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <a href="#" class="logo">Verto</a>
+        <div class="nav-links">
+            <a href="#how">How it Works</a>
+            <a href="#network">Network</a>
+            <a href="#packs">Marketplace</a>
+            <a href="#" style="color: var(--crimson);">Join Us</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <h1>Stream with Substance.</h1>
+        <p class="hero-sub">The modern, unbundled cable TV experience. A high-definition streaming marketplace built for verified organizations and independent minds.</p>
+        <a href="#packs" class="hero-btn">Enter Marketplace</a>
+    </header>
+
+    <section class="tier-white">
+        <div class="manifesto-grid">
+            <div>
+                <h2 class="h2-editorial">Your Content, <br> Your Choice.</h2>
+                <p class="p-manifesto">Verto is a simple marketplace where trusted organizations host their own stations. We took apart the old cable box and rebuilt it for the modern world.</p>
+                <p class="p-manifesto">No algorithmic noise. No commercial breaks. Just high-quality video from the verified names you trust.</p>
+                <a href="#" style="color: var(--obsidian); font-weight: 900; text-transform: uppercase; letter-spacing: 2px; text-decoration: none; border-bottom: 2px solid var(--crimson);">Read the Manifesto</a>
+            </div>
+            <div>
+                <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2070&auto=format&fit=crop" style="width: 100%; border: 1px solid #ddd;" alt="Vision">
+            </div>
+        </div>
+    </section>
+
+    <section class="tier-stone" id="how">
+        <div style="text-align: center; margin-bottom: 40px;">
+            <span style="text-transform: uppercase; letter-spacing: 5px; font-weight: 800; color: rgba(0,0,0,0.3);">Process</span>
+            <h2 class="h2-editorial" style="margin-top: 10px;">The Simple Path</h2>
+        </div>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-num">01</div>
+                <h3 style="text-transform: uppercase; letter-spacing: 1px; font-weight: 800;">Pick a Package</h3>
+                <p style="margin-top: 15px; line-height: 1.6; color: #555;">Choose a genre you love. One bundle subscription gives you instant access to 10-20 verified stations.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">02</div>
+                <h3 style="text-transform: uppercase; letter-spacing: 1px; font-weight: 800;">Trusted Sources</h3>
+                <p style="margin-top: 15px; line-height: 1.6; color: #555;">Every organization is manually reviewed. We ensure you only stream high-quality, ad-free content.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-num">03</div>
+                <h3 style="text-transform: uppercase; letter-spacing: 1px; font-weight: 800;">Watch Anywhere</h3>
+                <p style="margin-top: 15px; line-height: 1.6; color: #555;">Enjoy your stream on any device. Ad-free, high-definition, and exactly what you chose to watch.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="tier-network" id="network">
+        <h2 class="h2-editorial">The Verified Network</h2>
+        <div class="network-grid">
+            <div class="network-card">
+                <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=600&auto=format&fit=crop" alt="Tech">
+                <div class="network-overlay"></div>
+                <div class="network-name">TechStream</div>
+            </div>
+            <div class="network-card">
+                <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=600&auto=format&fit=crop" alt="Film">
+                <div class="network-overlay"></div>
+                <div class="network-name">CinemaHouse</div>
+            </div>
+            <div class="network-card">
+                <img src="https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=600&auto=format&fit=crop" alt="News">
+                <div class="network-overlay"></div>
+                <div class="network-name">GlobalLink</div>
+            </div>
+            <div class="network-card">
+                <img src="https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=600&auto=format&fit=crop" alt="Edu">
+                <div class="network-overlay"></div>
+                <div class="network-name">EduPortal</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="tier-zinc" id="packs">
+        <div class="packs-header">
+            <h2 style="font-family: 'Playfair Display', serif; font-size: 4.5rem; font-style: italic; line-height: 1;">The Packs_</h2>
+            <p style="max-width: 320px; font-size: 0.95rem; opacity: 0.5;">Genre-based bundles for a modern, ad-free streaming experience.</p>
+        </div>
+        
+        <div class="ticker-track">
+            <div class="pack-card">
+                <div class="pack-bg" style="background-image: url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=600&auto=format&fit=crop');"></div>
+                <div style="position:relative; z-index:5;">
+                    <span style="color: var(--crimson); font-weight: 800; letter-spacing: 2px; font-size: 0.7rem;">TECH BUNDLE</span>
+                    <h3 style="font-family: 'Playfair Display', serif; font-size: 3rem; font-style: italic; margin-top: 15px;">The Dev Editorial</h3>
+                </div>
+                <div class="pack-price">$9.00</div>
+            </div>
+            <div class="pack-card">
+                <div class="pack-bg" style="background-image: url('https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=600&auto=format&fit=crop');"></div>
+                <div style="position:relative; z-index:5;">
+                    <span style="color: var(--crimson); font-weight: 800; letter-spacing: 2px; font-size: 0.7rem;">CINEMA VAULT</span>
+                    <h3 style="font-family: 'Playfair Display', serif; font-size: 3rem; font-style: italic; margin-top: 15px;">Indie Authority</h3>
+                </div>
+                <div class="pack-price">$12.00</div>
+            </div>
+            <div class="pack-card">
+                <div class="pack-bg" style="background-image: url('https://images.unsplash.com/photo-1504711434969-e33886168f5c?q=80&w=600&auto=format&fit=crop');"></div>
+                <div style="position:relative; z-index:5;">
+                    <span style="color: var(--crimson); font-weight: 800; letter-spacing: 2px; font-size: 0.7rem;">GLOBAL HUB</span>
+                    <h3 style="font-family: 'Playfair Display', serif; font-size: 3rem; font-style: italic; margin-top: 15px;">World Dispatch</h3>
+                </div>
+                <div class="pack-price">$7.00</div>
+            </div>
+            <div class="pack-card">
+                <div class="pack-bg" style="background-image: url('https://images.unsplash.com/photo-1558655146-d09347e92766?q=80&w=600&auto=format&fit=crop');"></div>
+                <div style="position:relative; z-index:5;">
+                    <span style="color: var(--crimson); font-weight: 800; letter-spacing: 2px; font-size: 0.7rem;">UNBUNDLED</span>
+                    <h3 style="font-family: 'Playfair Display', serif; font-size: 3.5rem; font-style: italic; margin-top: 15px;">Custom Selection</h3>
+                </div>
+                <div class="pack-price">Custom</div>
+            </div>
+            <div class="pack-card"><div class="pack-bg" style="background-image: url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=600&auto=format&fit=crop');"></div><div><h3>The Dev Editorial</h3></div><div class="pack-price">$9.00</div></div>
+            <div class="pack-card"><div class="pack-bg" style="background-image: url('https://images.unsplash.com/photo-1485846234645-a62644f84728?q=80&w=600&auto=format&fit=crop');"></div><div><h3>Indie Authority</h3></div><div class="pack-price">$12.00</div></div>
+        </div>
+    </section>
+
+    <section class="tier-comparison" id="compare">
+        <div class="comp-header">
+            <span style="text-transform: uppercase; letter-spacing: 5px; font-weight: 900; color: var(--crimson);">The Audit</span>
+            <h2 class="h2-editorial" style="margin-top: 10px; color: white;">Verto vs. Legacy_</h2>
+        </div>
+
+        <table class="comp-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th class="v-col">Verto Marketplace</th>
+                    <th class="legacy-col">Legacy Platforms</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Ad-Interruption</td><td class="v-col">Absolute Zero</td><td class="legacy-col">Constant</td></tr>
+                <tr><td>Source Type</td><td class="v-col">Verified Organizations</td><td class="legacy-col">Unverified Mix</td></tr>
+                <tr><td>Billing Logic</td><td class="v-col">Genre Packages</td><td class="legacy-col">Bloated Tiers</td></tr>
+                <tr><td>Streaming Quality</td><td class="v-col">HD & 4K Baseline</td><td class="legacy-col">Variable Bitrate</td></tr>
+            </tbody>
+        </table>
+    </section>
+
+    <section class="tier-cta">
+        <h2 style="font-family: 'Playfair Display', serif; font-size: 5rem; font-style: italic; margin-bottom: 60px;">Ready to witness?</h2>
+        <a href="#" class="btn-luxury">Start Your 14-Day Trial</a>
+    </section>
+
+    <footer>
+        <div>Verto © 2026</div>
+        <div>Authority • Unbundled • Verified</div>
+    </footer>
+
+    <script>
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 80) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
+    </script>
+</body>
+</html>

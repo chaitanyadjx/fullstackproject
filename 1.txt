@@ -1,0 +1,79 @@
+
+1
+
+Automatic Zoom
+Assignment -3  -------------------------------------------------------------------------------------------------------------------------- 
+Semester: December-April 2026                                Subject: Skill Development Course-II                                               
+Date: 22-01-2026 3:00 PM                                            Deadline: 22-01-2026 6:00 PM 
+---------------------------------------------------------------------------------------------------------------- 
+Topics: JavaScript Event Handling, Functions, Loops, and Arrays 
+Question: 
+Design and develop a dynamic and interactive web application using HTML, CSS, and 
+JavaScript that demonstrates the effective use of DOM and Client Side Validation.  
+The assignment must address the following sections and questions. 
+Section A: Build a DOM Interactive Webpage 
+1.  Smooth Scroll Navigation 
+  Create navbar with 3 sections: Home, Gallery and Playground 
+  Clicking nav items should smooth scroll to the section. 
+  
+2.  Dynamic Text Change 
+In Home section: 
+  show heading: "Welcome!" 
+  add a button: Change Text 
+  on click → heading changes to "Hello DOM World!" 
+  
+3.  Scroll Animation Reveal 
+When scrolling down: 
+  About/Gallery/Contact sections must fade in / slide in 
+(use classList.add("show")) 
+  
+4.  Scroll Progress Bar  
+  Add a progress bar at the top that updates as user scrolls. 
+5.  Image Scrolling / Crousel 
+In Gallery section: 
+  add at least 6 images 
+  implement horizontal scrolling carousel 
+  include: 
+  Prev button 
+  Next button 
+  Smooth scrolling 
+  
+6.  Create a new section called Playground that contains a ball. 
+      Ball color change 
+  input: <input type="color"> 
+  ball color updates instantly 
+      Ball movement using input 
+  input: X position slider (Left/Right) 
+  input: Y position slider (Up/Down) 
+  ball position updates instantly on screen 
+  Jump button (ball jumps up and comes down) 
+  Slide left / right buttons (ball slides smoothly) 
+ 
+Section B: Client Side Validation 
+1.  Create a Faculty and Student registration forms and login pages. Apply proper 
+CSS for all web pages.   
+i.  All fields are Mandatory 
+ii.  EmpId-Number-Size (6 digits) 
+  Validations: Check whether entered input is number or not? 
+  Number of digits in that number 
+  Start the number with 5 
+iii.  EmpName-Characters (Size-25) 
+  No Special Characters 
+  Size validation 
+iv.  Gender-Radio Button 
+v.  DOB-(DD-MM-YYYY) 
+  Validate the age is at least 25 years and above. 
+  Age must be less than less than or equal to 65 years. 
+vi.  DOJ-(DD-XXX-YYYY) 
+  Not allow future date. 
+  Use proper regular expressions to validate date. 
+vii.  MailId 
+  @,.,Proper Domain(com, in, edu, corp, edu) 
+viii.  Password 
+  Should contain one capital letter, one special character, it should not 
+start with any number. 
+ 
+ 
+ix.  Mobile Number 
+  10 digits 
+  Any character entered 

@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DOM Interactive Webpage</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f5f5;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Progress Bar */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: #333;
+            width: 0%;
+            z-index: 1000;
+        }
+
+        /* Navigation */
+        nav {
+            background: #fff;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 3px;
+            z-index: 999;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            border-bottom: 1px solid #ddd;
+        }
+
+        nav button {
+            background: #fff;
+            color: #333;
+            border: 1px solid #333;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: normal;
+        }
+
+        nav button:hover {
+            background: #333;
+            color: #fff;
+        }
+
+        nav button.active {
+            background: #333;
+            color: #fff;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        section {
+            display: none;
+            background: #fff;
+            border-radius: 0;
+            padding: 3rem;
+            margin: 2rem 0;
+            box-shadow: none;
+            border: 1px solid #ddd;
+        }
+
+        section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 1rem;
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            color: #333;
+            margin: 2rem 0 1rem 0;
+            font-size: 2rem;
+        }
+
+        p {
+            color: #666;
+            margin: 1rem 0;
+            font-size: 1rem;
+        }
+
+        /* Home Section */
+        #home {
+            text-align: center;
+        }
+
+        #home h1 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn {
+            background: #333;
+            color: white;
+            border: 1px solid #333;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 0.5rem;
+        }
+
+        .btn:hover {
+            background: #555;
+            border-color: #555;
+        }
+
+        /* Gallery Section */
+        .carousel-container {
+            position: relative;
+            max-width: 800px;
+            margin: 2rem auto;
+            overflow: hidden;
+            border-radius: 0;
+            box-shadow: none;
+            border: 1px solid #ddd;
+        }
+
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .carousel img {
+            min-width: 100%;
+            height: 400px;
+            object-fit: cover;
+        }
+
+        .carousel-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .carousel-controls button {
+            background: #333;
+            color: white;
+            border: 1px solid #333;
+            padding: 0.8rem 1.5rem;
+            border-radius: 0;
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .carousel-controls button:hover {
+            background: #555;
+            border-color: #555;
+        }
+
+        /* Playground Section */
+        .playground {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .ball-container {
+            text-align: center;
+            padding: 2rem;
+            background: #f5f5f5;
+            border-radius: 0;
+            min-height: 500px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+
+        .ball {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: #333;
+            position: absolute;
+            transition: all 0.3s ease;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: none;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .control-group {
+            background: #f5f5f5;
+            padding: 1.5rem;
+            border-radius: 0;
+            border: 1px solid #ddd;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 0.8rem;
+            font-weight: normal;
+            color: #333;
+        }
+
+        .control-group input[type="color"] {
+            width: 100%;
+            height: 50px;
+            border: 1px solid #ddd;
+            border-radius: 0;
+            cursor: pointer;
+        }
+
+        .control-group input[type="range"] {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+        }
+
+        .slider-value {
+            color: #666;
+            font-weight: normal;
+            text-align: center;
+            margin-top: 0.5rem;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .button-group button {
+            flex: 1;
+            min-width: 100px;
+        }
+
+        @keyframes jump {
+            0%, 100% { transform: translate(-50%, -50%); }
+            50% { transform: translate(-50%, -150%); }
+        }
+
+        .ball.jumping {
+            animation: jump 0.6s ease;
+        }
+
+        @keyframes slideLeft {
+            0% { transform: translate(-50%, -50%); }
+            100% { transform: translate(-200%, -50%); }
+        }
+
+        .ball.slidingLeft {
+            animation: slideLeft 0.5s ease;
+        }
+
+        @keyframes slideRight {
+            0% { transform: translate(-50%, -50%); }
+            100% { transform: translate(100%, -50%); }
+        }
+
+        .ball.slidingRight {
+            animation: slideRight 0.5s ease;
+        }
+
+        /* Validation Form */
+        .form-group {
+            margin: 1.5rem 0;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: normal;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="date"],
+        input[type="tel"],
+        select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 0;
+            font-size: 1rem;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="password"]:focus,
+        input[type="date"]:focus,
+        input[type="tel"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #333;
+            box-shadow: none;
+        }
+
+        .error {
+            color: #d9534f;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        .success {
+            color: #5cb85c;
+            font-size: 0.9rem;
+            margin-top: 0.3rem;
+        }
+
+        .radio-group,
+        .checkbox-group {
+            display: flex;
+            gap: 2rem;
+            margin: 1rem 0;
+        }
+
+        .radio-group label,
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: normal;
+            cursor: pointer;
+        }
+
+        input[type="radio"],
+        input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .form-actions button {
+            flex: 1;
+        }
+
+        .form-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-container,
+            .playground {
+                grid-template-columns: 1fr;
+            }
+
+            .carousel-controls {
+                flex-wrap: wrap;
+            }
+
+            nav {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            nav button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Navigation -->
+    <nav>
+        <button class="nav-btn active" data-section="home">🏠 Home</button>
+        <button class="nav-btn" data-section="gallery">🖼️ Gallery</button>
+        <button class="nav-btn" data-section="playground">🎮 Playground</button>
+        <button class="nav-btn" data-section="validation">📝 Registration</button>
+    </nav>
+
+    <div class="container">
+        <!-- Home Section -->
+        <section id="home" class="active">
+            <div style="background: #f0f0f0; padding: 1rem; margin-bottom: 2rem; border: 1px solid #ccc;">
+                <strong>Section A: Build a DOM Interactive Webpage</strong>
+            </div>
+            <h1 id="mainHeading">Welcome!</h1>
+            <p style="font-size: 1.1rem; color: #666;">Click the button below to change the text</p>
+            <button class="btn" id="changeTextBtn">Change Text</button>
+            <p style="margin-top: 2rem; font-size: 1rem;">
+                This is a dynamic DOM Interactive Webpage demonstrating various JavaScript concepts including event handling, DOM manipulation, and animations.
+            </p>
+        </section>
+
+        <!-- Gallery Section -->
+        <section id="gallery">
+            <div style="background: #f0f0f0; padding: 1rem; margin-bottom: 2rem; border: 1px solid #ccc;">
+                <strong>Section A: Build a DOM Interactive Webpage - Gallery & Carousel</strong>
+            </div>
+            <h2>Gallery</h2>
+            <p>Experience smooth carousel navigation with beautiful images</p>
+            
+            <div class="carousel-container">
+                <div class="carousel" id="carousel">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop" alt="Mountain 1">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop&q=80" alt="Mountain 2">
+                    <img src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800&h=400&fit=crop" alt="Ocean 1">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop&q=60" alt="Mountain 3">
+                    <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=400&fit=crop&q=40" alt="Mountain 4">
+                    <img src="https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800&h=400&fit=crop&q=80" alt="Ocean 2">
+                </div>
+            </div>
+
+            <div class="carousel-controls">
+                <button id="prevBtn" class="btn">← Previous</button>
+                <button id="nextBtn" class="btn">Next →</button>
+            </div>
+        </section>
+
+        <!-- Playground Section -->
+        <section id="playground">
+            <div style="background: #f0f0f0; padding: 1rem; margin-bottom: 2rem; border: 1px solid #ccc;">
+                <strong>Section A: Build a DOM Interactive Webpage - Interactive Playground</strong>
+            </div>
+            <h2>Playground - Interactive Ball</h2>
+            <p>Control the ball with the controls below!</p>
+            
+            <div class="playground">
+                <div class="ball-container">
+                    <div class="ball" id="ball"></div>
+                </div>
+
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="colorPicker">🎨 Ball Color</label>
+                        <input type="color" id="colorPicker" value="#667eea">
+                    </div>
+
+                    <div class="control-group">
+                        <label for="xSlider">↔️ X Position (Left/Right)</label>
+                        <input type="range" id="xSlider" min="0" max="100" value="50">
+                        <div class="slider-value" id="xValue">50%</div>
+                    </div>
+
+                    <div class="control-group">
+                        <label for="ySlider">↕️ Y Position (Up/Down)</label>
+                        <input type="range" id="ySlider" min="0" max="100" value="50">
+                        <div class="slider-value" id="yValue">50%</div>
+                    </div>
+
+                    <div class="control-group button-group">
+                        <button class="btn" id="jumpBtn">Jump ⬆️</button>
+                        <button class="btn" id="slideLeftBtn">Slide Left ⬅️</button>
+                        <button class="btn" id="slideRightBtn">Slide Right ➡️</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Validation Section -->
+        <section id="validation">
+            <h2>Faculty & Student Registration</h2>
+
+            <div class="form-container">
+                <!-- Faculty Form -->
+                <div>
+                    <h3 style="color: #333; margin-bottom: 1rem;">Faculty Registration</h3>
+                    <form id="facultyForm">
+                        <div class="form-group">
+                            <label for="facEmpId">Employee ID (6 digits, starts with 5)</label>
+                            <input type="text" id="facEmpId" placeholder="e.g., 500123">
+                            <div class="error" id="facEmpIdError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="facName">Name (Max 25 characters)</label>
+                            <input type="text" id="facName" placeholder="Enter your name">
+                            <div class="error" id="facNameError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="facGender" value="Male"> Male</label>
+                                <label><input type="radio" name="facGender" value="Female"> Female</label>
+                                <label><input type="radio" name="facGender" value="Other"> Other</label>
+                            </div>
+                            <div class="error" id="facGenderError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="facDOB">Date of Birth (DD-MM-YYYY)</label>
+                            <input type="text" id="facDOB" placeholder="DD-MM-YYYY">
+                            <div class="error" id="facDOBError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="facDOJ">Date of Joining (DD-MM-YYYY)</label>
+                            <input type="text" id="facDOJ" placeholder="DD-MM-YYYY">
+                            <div class="error" id="facDOJError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="facEmail">Email ID</label>
+                            <input type="email" id="facEmail" placeholder="name@domain.com">
+                            <div class="error" id="facEmailError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="facPassword">Password</label>
+                            <input type="password" id="facPassword" placeholder="Min 8 chars, 1 capital, 1 special char">
+                            <div class="error" id="facPasswordError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="facMobile">Mobile Number (10 digits)</label>
+                            <input type="tel" id="facMobile" placeholder="10 digit number">
+                            <div class="error" id="facMobileError"></div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn">Submit</button>
+                            <button type="reset" class="btn" style="background: #999; border-color: #999;">Reset</button>
+                        </div>
+                        <div class="success" id="facSuccess"></div>
+                    </form>
+                </div>
+
+                <!-- Student Form -->
+                <div>
+                    <h3 style="color: #333; margin-bottom: 1rem;">Student Registration</h3>
+                    <form id="studentForm">
+                        <div class="form-group">
+                            <label for="stdEmpId">Student ID (6 digits, starts with 5)</label>
+                            <input type="text" id="stdEmpId" placeholder="e.g., 500456">
+                            <div class="error" id="stdEmpIdError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="stdName">Name (Max 25 characters)</label>
+                            <input type="text" id="stdName" placeholder="Enter your name">
+                            <div class="error" id="stdNameError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Gender</label>
+                            <div class="radio-group">
+                                <label><input type="radio" name="stdGender" value="Male"> Male</label>
+                                <label><input type="radio" name="stdGender" value="Female"> Female</label>
+                                <label><input type="radio" name="stdGender" value="Other"> Other</label>
+                            </div>
+                            <div class="error" id="stdGenderError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="stdDOB">Date of Birth (DD-MM-YYYY)</label>
+                            <input type="text" id="stdDOB" placeholder="DD-MM-YYYY">
+                            <div class="error" id="stdDOBError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="stdDOJ">Date of Joining (DD-MM-YYYY)</label>
+                            <input type="text" id="stdDOJ" placeholder="DD-MM-YYYY">
+                            <div class="error" id="stdDOJError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="stdEmail">Email ID</label>
+                            <input type="email" id="stdEmail" placeholder="name@domain.com">
+                            <div class="error" id="stdEmailError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="stdPassword">Password</label>
+                            <input type="password" id="stdPassword" placeholder="Min 8 chars, 1 capital, 1 special char">
+                            <div class="error" id="stdPasswordError"></div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="stdMobile">Mobile Number (10 digits)</label>
+                            <input type="tel" id="stdMobile" placeholder="10 digit number">
+                            <div class="error" id="stdMobileError"></div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn">Submit</button>
+                            <button type="reset" class="btn" style="background: #999; border-color: #999;">Reset</button>
+                        </div>
+                        <div class="success" id="stdSuccess"></div>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Navigation
+        const navBtns = document.querySelectorAll('.nav-btn');
+        const sections = document.querySelectorAll('section');
+
+        navBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const sectionId = btn.dataset.section;
+                
+                navBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                sections.forEach(s => s.classList.remove('active'));
+                document.getElementById(sectionId).classList.add('active');
+            });
+        });
+
+        // Progress Bar
+        window.addEventListener('scroll', () => {
+            const scrollPercentage = (window.scrollY / (document.documentElement.scrollHeight - window.innerHeight)) * 100;
+            document.getElementById('progressBar').style.width = scrollPercentage + '%';
+        });
+
+        // Home Section - Change Text
+        document.getElementById('changeTextBtn').addEventListener('click', function() {
+            const heading = document.getElementById('mainHeading');
+            if (heading.textContent === 'Welcome!') {
+                heading.textContent = 'Hello DOM World!';
+            } else {
+                heading.textContent = 'Welcome!';
+            }
+        });
+
+        // Gallery - Carousel
+        let carouselIndex = 0;
+        const carousel = document.getElementById('carousel');
+        const carouselImages = carousel.querySelectorAll('img');
+        const totalImages = carouselImages.length;
+
+        function updateCarousel() {
+            const offset = -carouselIndex * 100;
+            carousel.style.transform = `translateX(${offset}%)`;
+        }
+
+        document.getElementById('nextBtn').addEventListener('click', () => {
+            carouselIndex = (carouselIndex + 1) % totalImages;
+            updateCarousel();
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', () => {
+            carouselIndex = (carouselIndex - 1 + totalImages) % totalImages;
+            updateCarousel();
+        });
+
+        // Playground - Ball
+        const ball = document.getElementById('ball');
+        const colorPicker = document.getElementById('colorPicker');
+        const xSlider = document.getElementById('xSlider');
+        const ySlider = document.getElementById('ySlider');
+        const xValue = document.getElementById('xValue');
+        const yValue = document.getElementById('yValue');
+
+        colorPicker.addEventListener('change', (e) => {
+            ball.style.backgroundColor = e.target.value;
+        });
+
+        xSlider.addEventListener('input', (e) => {
+            const percent = e.target.value;
+            xValue.textContent = percent + '%';
+            updateBallPosition();
+        });
+
+        ySlider.addEventListener('input', (e) => {
+            const percent = e.target.value;
+            yValue.textContent = percent + '%';
+            updateBallPosition();
+        });
+
+        function updateBallPosition() {
+            const x = xSlider.value;
+            const y = ySlider.value;
+            ball.style.left = x + '%';
+            ball.style.top = y + '%';
+        }
+
+        document.getElementById('jumpBtn').addEventListener('click', () => {
+            ball.classList.remove('jumping');
+            void ball.offsetWidth; // Trigger reflow
+            ball.classList.add('jumping');
+            setTimeout(() => ball.classList.remove('jumping'), 600);
+        });
+
+        document.getElementById('slideLeftBtn').addEventListener('click', () => {
+            ball.classList.remove('slidingLeft');
+            void ball.offsetWidth;
+            ball.classList.add('slidingLeft');
+            setTimeout(() => {
+                ball.classList.remove('slidingLeft');
+                xSlider.value = Math.max(0, xSlider.value - 20);
+                xValue.textContent = xSlider.value + '%';
+                updateBallPosition();
+            }, 500);
+        });
+
+        document.getElementById('slideRightBtn').addEventListener('click', () => {
+            ball.classList.remove('slidingRight');
+            void ball.offsetWidth;
+            ball.classList.add('slidingRight');
+            setTimeout(() => {
+                ball.classList.remove('slidingRight');
+                xSlider.value = Math.min(100, parseInt(xSlider.value) + 20);
+                xValue.textContent = xSlider.value + '%';
+                updateBallPosition();
+            }, 500);
+        });
+
+        // Validation Functions
+        function validateEmpId(empId) {
+            if (!/^\d{6}$/.test(empId)) return 'Must be exactly 6 digits';
+            if (!empId.startsWith('5')) return 'Must start with 5';
+            return '';
+        }
+
+        function validateName(name) {
+            if (name.length === 0) return 'Name is required';
+            if (!/^[a-zA-Z\s]+$/.test(name)) return 'No special characters allowed';
+            if (name.length > 25) return 'Name must be max 25 characters';
+            return '';
+        }
+
+        function validateGender(gender) {
+            return gender ? '' : 'Please select a gender';
+        }
+
+        function validateDOB(dob) {
+            const regex = /^(0[1-9]|[12]\d|3[01])-(0[1-9]|1[012])-\d{4}$/;
+            if (!regex.test(dob)) return 'Invalid format (DD-MM-YYYY)';
+            
+            const [day, month, year] = dob.split('-');
+            const birthDate = new Date(year, month - 1, day);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) age--;
+            
+            if (age < 25) return 'Age must be at least 25 years';
+            if (age > 65) return 'Age must be 65 years or less';
+            return '';
+        }
+
+        function validateDOJ(doj) {
+            const regex = /^(0[1-9]|[12]\d|3[01])-(0[1-9]|1[012])-\d{4}$/;
+            if (!regex.test(doj)) return 'Invalid format (DD-MM-YYYY)';
+            
+            const [day, month, year] = doj.split('-');
+            const joinDate = new Date(year, month - 1, day);
+            const today = new Date();
+            
+            if (joinDate > today) return 'Cannot be a future date';
+            return '';
+        }
+
+        function validateEmail(email) {
+            const regex = /^[^\s@]+@[^\s@]+\.(com|in|edu|corp|edu)$/i;
+            if (!regex.test(email)) return 'Invalid email format';
+            return '';
+        }
+
+        function validatePassword(password) {
+            if (password.length < 8) return 'Minimum 8 characters required';
+            if (!/[A-Z]/.test(password)) return 'Must contain at least one capital letter';
+            if (!/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]/.test(password)) return 'Must contain at least one special character';
+            if (/^\d/.test(password)) return 'Cannot start with a number';
+            return '';
+        }
+
+        function validateMobile(mobile) {
+            if (!/^\d{10}$/.test(mobile)) return 'Must be exactly 10 digits';
+            return '';
+        }
+
+        // Form Validation
+        function validateForm(formId, prefix) {
+            const empId = document.getElementById(prefix + 'EmpId').value;
+            const name = document.getElementById(prefix + 'Name').value;
+            const gender = document.querySelector(`input[name="${prefix}Gender"]:checked`)?.value;
+            const dob = document.getElementById(prefix + 'DOB').value;
+            const doj = document.getElementById(prefix + 'DOJ').value;
+            const email = document.getElementById(prefix + 'Email').value;
+            const password = document.getElementById(prefix + 'Password').value;
+            const mobile = document.getElementById(prefix + 'Mobile').value;
+
+            let isValid = true;
+
+            // Clear all errors
+            document.querySelectorAll(`#${formId} .error`).forEach(el => el.textContent = '');
+
+            // Validate each field
+            let error = validateEmpId(empId);
+            if (error) { document.getElementById(prefix + 'EmpIdError').textContent = error; isValid = false; }
+
+            error = validateName(name);
+            if (error) { document.getElementById(prefix + 'NameError').textContent = error; isValid = false; }
+
+            error = validateGender(gender);
+            if (error) { document.getElementById(prefix + 'GenderError').textContent = error; isValid = false; }
+
+            error = validateDOB(dob);
+            if (error) { document.getElementById(prefix + 'DOBError').textContent = error; isValid = false; }
+
+            error = validateDOJ(doj);
+            if (error) { document.getElementById(prefix + 'DOJError').textContent = error; isValid = false; }
+
+            error = validateEmail(email);
+            if (error) { document.getElementById(prefix + 'EmailError').textContent = error; isValid = false; }
+
+            error = validatePassword(password);
+            if (error) { document.getElementById(prefix + 'PasswordError').textContent = error; isValid = false; }
+
+            error = validateMobile(mobile);
+            if (error) { document.getElementById(prefix + 'MobileError').textContent = error; isValid = false; }
+
+            return isValid;
+        }
+
+        // Faculty Form Submit
+        document.getElementById('facultyForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (validateForm('facultyForm', 'fac')) {
+                document.getElementById('facSuccess').textContent = '✓ Registration successful!';
+                setTimeout(() => {
+                    document.getElementById('facultyForm').reset();
+                    document.getElementById('facSuccess').textContent = '';
+                }, 2000);
+            }
+        });
+
+        // Student Form Submit
+        document.getElementById('studentForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (validateForm('studentForm', 'std')) {
+                document.getElementById('stdSuccess').textContent = '✓ Registration successful!';
+                setTimeout(() => {
+                    document.getElementById('studentForm').reset();
+                    document.getElementById('stdSuccess').textContent = '';
+                }, 2000);
+            }
+        });
+    </script>
+</body>
+</html>
