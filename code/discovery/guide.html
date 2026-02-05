@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Discovery & Guide | VERTO</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@1,500;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --orange: #FF4D24;
+            --black: #0D0D0D;
+            --white: #FDFBFB;
+            --gray-surface: #F2F2F2;
+            --border: 1px solid rgba(13, 13, 13, 0.1);
+            --column-width: 320px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            color: var(--black);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--white);
+            line-height: 1.4;
+            overflow-x: hidden;
+        }
+
+        /* --- Navigation --- */
+        nav {
+            position: fixed;
+            top: 0; width: 100%; height: 80px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; background: var(--white);
+            border-bottom: var(--border); z-index: 1000;
+        }
+        .brand { font-family: 'Lora', serif; font-style: italic; font-size: 1.6rem; font-weight: 600; text-decoration: none; color: var(--black); }
+        .brand span { color: var(--orange); }
+
+        /* --- Section Styling --- */
+        section { padding: 60px 5%; }
+        h2 { font-family: 'Lora', serif; font-size: 2.5rem; font-style: italic; margin-bottom: 30px; letter-spacing: -1px; }
+        h2 em { color: var(--orange); }
+
+        /* --- New Arrivals: Horizontal Cards --- */
+        .new-shows-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+        }
+        .show-card {
+            background: #FFF;
+            border: var(--border);
+            border-radius: 24px;
+            overflow: hidden;
+            transition: 0.3s;
+        }
+        .show-card:hover { transform: translateY(-5px); border-color: var(--orange); }
+        .show-thumb { width: 100%; height: 200px; background: #EEE; object-fit: cover; }
+        .show-content { padding: 20px; }
+        .tag { font-size: 0.6rem; font-weight: 800; text-transform: uppercase; color: var(--orange); letter-spacing: 1px; display: block; margin-bottom: 8px; }
+        .show-content h3 { font-family: 'Lora', serif; font-size: 1.3rem; margin-bottom: 5px; }
+        .show-content p { font-size: 0.8rem; color: rgba(0,0,0,0.6); }
+
+        /* --- Top Creators: Rank List --- */
+        .creator-leaderboard {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 15px;
+        }
+        .creator-item {
+            display: flex; align-items: center; gap: 15px;
+            padding: 20px; background: #FFF;
+            border: var(--border); border-radius: 20px;
+        }
+        .rank { font-family: 'Lora', serif; font-size: 1.2rem; font-style: italic; color: var(--orange); min-width: 30px; }
+        .avatar { width: 50px; height: 50px; border-radius: 50%; background: var(--black); flex-shrink: 0; }
+        .creator-info h4 { font-size: 0.95rem; font-weight: 700; }
+        .creator-info span { font-size: 0.7rem; color: rgba(0,0,0,0.5); font-weight: 600; }
+
+        /* --- The EPG Guide (Simplified Layout) --- */
+        .epg-container {
+            border: var(--border);
+            border-radius: 30px;
+            overflow: hidden;
+            background: #FFF;
+            display: flex;
+        }
+        .epg-sidebar { width: 200px; background: var(--gray-surface); border-right: var(--border); flex-shrink: 0; }
+        .epg-main { overflow-x: auto; flex-grow: 1; position: relative; }
+        
+        .channel-label { height: 100px; padding: 20px; border-bottom: var(--border); display: flex; flex-direction: column; justify-content: center; }
+        .channel-label strong { font-size: 0.85rem; }
+        .channel-label span { font-size: 0.65rem; color: var(--orange); font-weight: 800; }
+
+        .time-bar { display: flex; background: var(--gray-surface); border-bottom: var(--border); position: sticky; top: 0; z-index: 10; }
+        .time-label { min-width: var(--column-width); padding: 15px 20px; font-size: 0.7rem; font-weight: 800; opacity: 0.5; }
+
+        .schedule-row { display: flex; height: 100px; border-bottom: var(--border); }
+        .program {
+            flex-shrink: 0; margin: 10px 5px; padding: 15px;
+            background: #FFF; border: var(--border); border-radius: 12px;
+            display: flex; flex-direction: column; justify-content: center;
+        }
+        .program.new { border-left: 3px solid var(--orange); }
+        .program h5 { font-size: 0.8rem; font-weight: 700; margin-bottom: 2px; }
+        .program span { font-size: 0.65rem; color: rgba(0,0,0,0.5); }
+
+        /* Width Classes */
+        .w60 { width: calc(var(--column-width) * 2 - 10px); }
+        .w30 { width: calc(var(--column-width) - 10px); }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" class="brand">Verto<span>.</span></a>
+        <div style="display: flex; gap: 20px;">
+            <a href="#" style="text-decoration:none; color:var(--black); font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px;">Discover</a>
+            <a href="#" style="text-decoration:none; color:var(--orange); font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px;">The Guide</a>
+            <a href="#" style="text-decoration:none; color:var(--black); font-size:0.7rem; font-weight:800; text-transform:uppercase; letter-spacing:1px;">Top Charts</a>
+        </div>
+        <button style="padding: 10px 20px; border-radius: 50px; background: var(--black); color: white; border: none; font-size: 0.7rem; font-weight: 800; cursor: pointer;">PITCH DECK</button>
+    </nav>
+
+    <section style="margin-top: 80px;">
+        <span class="tag">Just Dropped</span>
+        <h2>New <em>Premieres</em>.</h2>
+        <div class="new-shows-grid">
+            <div class="show-card">
+                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=600" class="show-thumb" alt="Show">
+                <div class="show-content">
+                    <span class="tag">Series</span>
+                    <h3>The Silicon Manifesto</h3>
+                    <p>A 6-part docu-series about the rise of peer-to-peer cloud infrastructure.</p>
+                </div>
+            </div>
+            <div class="show-card">
+                <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=600" class="show-thumb" alt="Show">
+                <div class="show-content">
+                    <span class="tag">Premiere</span>
+                    <h3>Retro-Future Design</h3>
+                    <p>Independent designers rethink the 90s aesthetic for the 2026 web.</p>
+                </div>
+            </div>
+            <div class="show-card">
+                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=600" class="show-thumb" alt="Show">
+                <div class="show-content">
+                    <span class="tag">Special</span>
+                    <h3>Acoustic Architecture</h3>
+                    <p>Exploring how sound shapes the virtual environments of the future.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: var(--gray-surface);">
+        <span class="tag">Trending Talent</span>
+        <h2>Top <em>Creators</em>.</h2>
+        <div class="creator-leaderboard">
+            <div class="creator-item">
+                <div class="rank">01</div>
+                <div class="avatar" style="background: #FF4D24;"></div>
+                <div class="creator-info">
+                    <h4>Studio 88</h4>
+                    <span>Motion & Brand Pack</span>
+                </div>
+            </div>
+            <div class="creator-item">
+                <div class="rank">02</div>
+                <div class="avatar" style="background: #2D5BFF;"></div>
+                <div class="creator-info">
+                    <h4>The Node Master</h4>
+                    <span>Engineering Pack</span>
+                </div>
+            </div>
+            <div class="creator-item">
+                <div class="rank">03</div>
+                <div class="avatar" style="background: #00C853;"></div>
+                <div class="creator-info">
+                    <h4>Cinema Lab</h4>
+                    <span>Indie Film Pack</span>
+                </div>
+            </div>
+            <div class="creator-item">
+                <div class="rank">04</div>
+                <div class="avatar" style="background: #9D2DFF;"></div>
+                <div class="creator-info">
+                    <h4>Vapor Waves</h4>
+                    <span>Acoustics Pack</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <span class="tag">Schedules</span>
+        <h2>Full <em>Guide</em>.</h2>
+        <div class="epg-container">
+            <div class="epg-sidebar">
+                <div style="height: 48px; border-bottom: var(--border);"></div>
+                <div class="channel-label">
+                    <strong>Verto News</strong>
+                    <span>General</span>
+                </div>
+                <div class="channel-label">
+                    <strong>Dev Studio</strong>
+                    <span>Engineering</span>
+                </div>
+                <div class="channel-label">
+                    <strong>Lens Indie</strong>
+                    <span>Cinema</span>
+                </div>
+            </div>
+            <div class="epg-main">
+                <div class="time-bar">
+                    <div class="time-label">06:00 PM</div>
+                    <div class="time-label">06:30 PM</div>
+                    <div class="time-label">07:00 PM</div>
+                    <div class="time-label">07:30 PM</div>
+                </div>
+                
+                <div class="schedule-row">
+                    <div class="program w60 new">
+                        <h5>Daily Crypto Summary</h5>
+                        <span>06:00 - 07:00 PM</span>
+                    </div>
+                    <div class="program w30">
+                        <h5>DAO Talk</h5>
+                        <span>07:00 - 07:30 PM</span>
+                    </div>
+                </div>
+
+                <div class="schedule-row">
+                    <div class="program w30">
+                        <h5>Python Live</h5>
+                        <span>06:00 - 06:30 PM</span>
+                    </div>
+                    <div class="program w60 new">
+                        <h5>React Masterclass</h5>
+                        <span>06:30 - 07:30 PM</span>
+                    </div>
+                </div>
+
+                <div class="schedule-row">
+                    <div class="program w60">
+                        <h5>Short Film Fest</h5>
+                        <span>06:00 - 07:00 PM</span>
+                    </div>
+                    <div class="program w30 new">
+                        <h5>The Premiere</h5>
+                        <span>07:00 - 07:30 PM</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer style="padding: 60px 5%; text-align: center; border-top: var(--border);">
+        <div class="brand">Verto<span>.</span></div>
+        <p style="font-size: 0.7rem; font-weight: 800; opacity: 0.4; margin-top: 20px; letter-spacing: 1px;">© 2026 VERTO LABS INC.</p>
+    </footer>
+
+    <script>
+        gsap.from(".show-card", {
+            opacity: 0,
+            y: 30,
+            stagger: 0.2,
+            duration: 1,
+            ease: "power3.out"
+        });
+
+        gsap.from(".creator-item", {
+            opacity: 0,
+            x: -20,
+            stagger: 0.1,
+            duration: 0.8,
+            ease: "power2.out",
+            scrollTrigger: ".creator-leaderboard"
+        });
+    </script>
+</body>
+</html>
