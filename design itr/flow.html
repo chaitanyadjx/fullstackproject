@@ -2,26 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>VERTO | Full Site User Flow</title>
+    <title>VERTO | Sovereign Architecture 2.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { background: #0a0a0c; color: #d1d5db; font-family: 'Inter', sans-serif; }
-        .zone-box { border: 1px solid #222; border-radius: 16px; padding: 24px; background: #111113; }
-        .page-node { background: #1c1c1f; border: 1px solid #333; padding: 10px 14px; border-radius: 8px; font-size: 13px; margin-bottom: 8px; transition: all 0.2s; }
-        .page-node:hover { border-color: #444; background: #252529; }
+        .zone-box { border: 1px solid #222; border-radius: 16px; padding: 24px; background: #111113; position: relative; overflow: hidden; }
+        .page-node { background: #1c1c1f; border: 1px solid #333; padding: 10px 14px; border-radius: 8px; font-size: 12px; margin-bottom: 8px; transition: all 0.2s; position: relative; }
+        .page-node:hover { border-color: #444; background: #252529; transform: translateX(4px); }
+        .new-badge { position: absolute; right: -5px; top: -5px; background: #10b981; color: white; font-size: 8px; padding: 2px 6px; border-radius: 10px; font-weight: bold; }
         .arrow { color: #444; text-align: center; font-size: 20px; margin: 4px 0; }
         .title-gradient { background: linear-gradient(to right, #fff, #666); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .tier-card { background: #161618; border-left: 4px solid #3b82f6; padding: 15px; border-radius: 0 12px 12px 0; }
     </style>
 </head>
 <body class="p-10">
 
-    <div class="max-w-6xl mx-auto">
-        <header class="mb-12 border-b border-white/5 pb-8">
-            <h1 class="text-4xl font-black title-gradient mb-2 uppercase tracking-tighter">Verto Site Architecture</h1>
-            <p class="text-gray-500">A comprehensive map of all 23 HTML pages and user transitions.</p>
+    <div class="max-w-7xl mx-auto">
+        <header class="mb-12 border-b border-white/5 pb-8 flex justify-between items-end">
+            <div>
+                <h1 class="text-4xl font-black title-gradient mb-2 uppercase tracking-tighter">Verto Site Architecture 2.0</h1>
+                <p class="text-gray-500 text-lg">Community & Sovereignty Expansion</p>
+            </div>
+            <div class="text-right">
+                <span class="bg-emerald-500/10 text-emerald-400 px-3 py-1 rounded-full text-xs font-bold border border-emerald-500/20">v2.0: The Community Update</span>
+            </div>
         </header>
 
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-12">
             
             <div class="zone-box">
                 <h2 class="text-sky-400 font-bold text-xs uppercase tracking-widest mb-4">1. Marketing & Public</h2>
@@ -33,57 +40,114 @@
                 <div class="page-node">6. Pricing</div>
                 <div class="page-node">7. Blog (News)</div>
                 <div class="page-node">8. Blog Post (Template)</div>
-                <div class="page-node text-gray-500 italic">9. Terms of Service</div>
-                <div class="page-node text-gray-500 italic">10. Privacy Policy</div>
-                <div class="page-node">11. FAQ</div>
-                <div class="page-node">12. Contact</div>
+                <div class="page-node text-gray-500 italic">9. Terms / 10. Privacy</div>
+                <div class="page-node">11. FAQ / 12. Contact</div>
+                <div class="page-node border-sky-500/30">
+                    13. Impact Board (Public)
+                    <span class="new-badge">NEW</span>
+                </div>
                 <div class="arrow">↘</div>
             </div>
 
             <div class="zone-box border-purple-900/30">
-                <h2 class="text-purple-400 font-bold text-xs uppercase tracking-widest mb-4">2. Authentication</h2>
-                <div class="page-node">13. Login</div>
+                <h2 class="text-purple-400 font-bold text-xs uppercase tracking-widest mb-4">2. Auth & Tier Setup</h2>
+                <div class="page-node">14. Login</div>
                 <div class="arrow">↕</div>
-                <div class="page-node border-emerald-900/50">14. Sign Up (Creator)</div>
-                <div class="arrow">↕</div>
-                <div class="page-node border-blue-900/50">15. Sign Up (Viewer)</div>
-                <div class="mt-8 p-4 bg-purple-950/20 rounded-lg text-xs text-purple-300">
-                    Determines user permissions and redirects to respective dashboards.
+                <div class="page-node border-emerald-900/50">15. Sign Up (Creator/Viewer)</div>
+                <div class="arrow">↓</div>
+                <div class="page-node border-purple-500/50 font-bold">
+                    16. Tier Onboarding
+                    <span class="new-badge">NEW</span>
+                </div>
+                <div class="mt-4 p-4 bg-purple-950/20 rounded-lg text-[11px] text-purple-300">
+                    Determines "Sovereignty Level" and triggers custom branding setup.
                 </div>
             </div>
 
             <div class="zone-box border-emerald-900/30">
-                <h2 class="text-emerald-400 font-bold text-xs uppercase tracking-widest mb-4">3. Creator Dashboard</h2>
-                <div class="page-node font-bold text-emerald-100">16. Dashboard Home</div>
-                <div class="page-node">17. Upload Content</div>
-                <div class="page-node">18. Analytics Panel</div>
-                <div class="page-node">19. Pack Management</div>
-                <div class="mt-4 border-t border-emerald-900/30 pt-4">
-                    <p class="text-[11px] text-gray-500 italic">Creators manage collaboration invites and revenue splits here.</p>
+                <h2 class="text-emerald-400 font-bold text-xs uppercase tracking-widest mb-4">3. Creator Sovereignty</h2>
+                <div class="page-node font-bold text-emerald-100">17. Dashboard Home</div>
+                <div class="page-node">
+                    18. Growth Tier Management
+                    <span class="new-badge">NEW</span>
+                </div>
+                <div class="page-node">
+                    19. Bundle & Boost Hub
+                    <span class="new-badge">NEW</span>
+                </div>
+                <div class="page-node">20. Upload & TV Scheduling</div>
+                <div class="page-node">21. Advanced Analytics (Impact)</div>
+                <div class="page-node">22. Sabbatical & Trust Tool</div>
+                <div class="mt-4 border-t border-emerald-900/30 pt-4 text-[11px] text-gray-500 italic">
+                    Focus: Automatic revenue splits and "Impact" data over vanity metrics.
                 </div>
             </div>
 
             <div class="zone-box border-blue-900/30">
                 <h2 class="text-blue-400 font-bold text-xs uppercase tracking-widest mb-4">4. Viewer Experience</h2>
-                <div class="page-node">20. Browse Creators</div>
-                <div class="page-node">21. Browse Packs</div>
-                <div class="page-node font-bold text-blue-100">22. Creator Profile</div>
-                <div class="page-node font-bold text-blue-100 bg-blue-950/30 border-blue-500/50">23. Video Player</div>
+                <div class="page-node">23. Browse (Creators/Packs)</div>
+                <div class="page-node">24. Creator Storefront</div>
+                <div class="page-node font-bold text-blue-100 bg-blue-950/30 border-blue-500/50">25. Interactive Player</div>
+                <div class="page-node">
+                    26. Watch Party (Premiere)
+                    <span class="new-badge">NEW</span>
+                </div>
+                <div class="page-node">27. Curation Desk (Tastemaker)</div>
+                <div class="page-node">28. Collaborative Feed</div>
                 <div class="mt-4 border-t border-blue-900/30 pt-4 text-[11px] text-gray-400">
-                    Where the consumption and 5% curation earning happens.
+                    Includes Interactive Overlays (PDF/Code) and the 5% Curation payout.
                 </div>
             </div>
-
         </div>
 
-        <footer class="mt-12 p-6 bg-white/5 rounded-2xl flex justify-between items-center">
-            <div>
-                <span class="text-xs font-bold text-gray-500 uppercase">Total Count</span>
-                <p class="text-2xl font-bold text-white">23 Pages</p>
+        <section class="mb-12">
+            <h2 class="text-xl font-bold mb-6 text-white flex items-center">
+                <span class="w-8 h-8 bg-blue-600 rounded flex items-center justify-center text-xs mr-3">★</span>
+                Creator Growth Tiers (The "X-Factor" Module)
+            </h2>
+            <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div class="tier-card border-gray-600">
+                    <span class="text-[10px] uppercase font-bold text-gray-500">Tier 1: Seed</span>
+                    <p class="text-sm mt-1 text-white">Base Monetization</p>
+                    <p class="text-[11px] mt-2 text-gray-500">85% Revenue, Instant Payday, Anti-Shadowban.</p>
+                </div>
+                <div class="tier-card border-sky-500">
+                    <span class="text-[10px] uppercase font-bold text-sky-500">Tier 2: Sovereign</span>
+                    <p class="text-sm mt-1 text-white">White-Label</p>
+                    <p class="text-[11px] mt-2 text-gray-500">Custom Branding, Storefront Editor, Private URLs.</p>
+                </div>
+                <div class="tier-card border-purple-500">
+                    <span class="text-[10px] uppercase font-bold text-purple-500">Tier 3: Catalyst</span>
+                    <p class="text-sm mt-1 text-white">Collaboration</p>
+                    <p class="text-[11px] mt-2 text-gray-500">Bundle & Boost (Co-Subs), Shared Revenue Splits.</p>
+                </div>
+                <div class="tier-card border-emerald-500">
+                    <span class="text-[10px] uppercase font-bold text-emerald-500">Tier 4: Architect</span>
+                    <p class="text-sm mt-1 text-white">Community</p>
+                    <p class="text-[11px] mt-2 text-gray-500">TV Guide Scheduling, Watch Parties, Fan Challenges.</p>
+                </div>
+                <div class="tier-card border-amber-500">
+                    <span class="text-[10px] uppercase font-bold text-amber-500">Tier 5: Master</span>
+                    <p class="text-sm mt-1 text-white">Transformation</p>
+                    <p class="text-[11px] mt-2 text-gray-500">Impact Meter, Interactive Overlays, Sabbatical Mode.</p>
+                </div>
             </div>
-            <div class="text-right">
-                <span class="text-xs font-bold text-gray-500 uppercase">Revenue Model</span>
-                <p class="text-2xl font-bold text-emerald-400">85% Creator / 5% Curator</p>
+        </section>
+
+        <footer class="p-6 bg-white/5 rounded-2xl flex justify-between items-center">
+            <div>
+                <span class="text-xs font-bold text-gray-500 uppercase">Total Pages</span>
+                <p class="text-2xl font-bold text-white">28 Screens</p>
+            </div>
+            <div class="flex gap-12">
+                <div class="text-right">
+                    <span class="text-xs font-bold text-gray-500 uppercase">Creator Cut</span>
+                    <p class="text-2xl font-bold text-emerald-400">85%</p>
+                </div>
+                <div class="text-right">
+                    <span class="text-xs font-bold text-gray-500 uppercase">Curator Cut</span>
+                    <p class="text-2xl font-bold text-blue-400">5%</p>
+                </div>
             </div>
         </footer>
     </div>

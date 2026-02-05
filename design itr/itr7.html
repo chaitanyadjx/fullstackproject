@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTO | The Netflix of Indie</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@300;600;800;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FF5A35;
+            --secondary: #7000FF;
+            --deep: #E64A19;
+            --bg: #FFFFFF;
+            --subtle: #F8F9FA;
+            --text: #1A1A1B;
+            --text-light: #667085;
+            --glass: rgba(255, 255, 255, 0.85);
+            --transition: all 0.6s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4, .logo { font-family: 'Outfit', sans-serif; }
+
+        /* --- ANIMATIONS --- */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(2deg); }
+        }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: var(--transition); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* --- NAV --- */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 15px 6%; position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: var(--glass); backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .logo { font-size: 1.8rem; font-weight: 800; letter-spacing: -1.5px; }
+        .logo span { color: var(--primary); }
+        
+        .nav-links { display: flex; gap: 32px; list-style: none; }
+        .nav-links a { text-decoration: none; color: var(--text); font-size: 0.95rem; font-weight: 500; opacity: 0.7; transition: 0.3s; }
+        .nav-links a:hover { opacity: 1; color: var(--primary); }
+
+        /* --- HERO --- */
+        .hero {
+            min-height: 100vh; display: flex; align-items: center;
+            padding: 0 8%; background: radial-gradient(circle at 90% 20%, #fff2ef 0%, #ffffff 60%);
+            position: relative;
+        }
+
+        .hero-content { max-width: 800px; z-index: 2; }
+        .hero h1 { 
+            font-size: clamp(3.5rem, 8vw, 6rem); line-height: 0.9; margin-bottom: 24px; 
+            font-weight: 800; letter-spacing: -4px;
+        }
+        .hero h1 b { color: var(--primary); font-style: italic; font-weight: 900; }
+        .hero p { font-size: 1.3rem; color: var(--text-light); margin-bottom: 40px; max-width: 550px; }
+
+        /* --- BUTTONS --- */
+        .btn {
+            background: var(--primary); color: white; padding: 18px 40px;
+            border-radius: 100px; text-decoration: none; font-weight: 700;
+            display: inline-block; transition: var(--transition); border: none; cursor: pointer;
+            box-shadow: 0 10px 20px rgba(255, 90, 53, 0.2);
+        }
+        .btn:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(255, 90, 53, 0.4); background: var(--deep); }
+
+        .hero-visual { position: absolute; right: 5%; top: 50%; transform: translateY(-50%); width: 40%; z-index: 1; }
+        .sphere {
+            width: 450px; height: 450px;
+            background: linear-gradient(135deg, #FF8A71 0%, #FF5A35 100%);
+            border-radius: 50%; animation: float 6s ease-in-out infinite;
+            box-shadow: inset -25px -25px 70px rgba(0,0,0,0.1), 0 40px 80px rgba(255,90,53,0.25);
+        }
+
+        /* --- SECTION GENERIC --- */
+        section { padding: 120px 8%; position: relative; }
+        .section-tag { color: var(--primary); text-transform: uppercase; font-weight: 800; font-size: 0.8rem; letter-spacing: 2.5px; margin-bottom: 12px; display: block; }
+        .section-header { max-width: 700px; margin-bottom: 60px; }
+        .section-header h2 { font-size: 3.5rem; letter-spacing: -2px; line-height: 1.1; margin-bottom: 20px; }
+
+        /* --- 1. MARKETPLACE (Problem) --- */
+        #marketplace { background: var(--subtle); }
+        .comparison-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+        .comp-card { background: #fff; padding: 40px; border-radius: 32px; border: 1px solid rgba(0,0,0,0.05); }
+        .comp-card.highlight { background: var(--text); color: #fff; }
+        .comp-card h3 { font-size: 1.8rem; margin-bottom: 15px; }
+
+        /* --- 2. CREATORS (Revenue) --- */
+        #creators { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 80px; }
+        .stat-massive { font-size: 10rem; font-weight: 900; color: var(--primary); line-height: 0.8; letter-spacing: -8px; }
+
+        /* --- 3. BUNDLES (Collaboration) --- */
+        #bundles { background: var(--secondary); color: #fff; border-radius: 60px; margin: 0 4%; }
+        .bundle-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; }
+        .glass-box { 
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
+            padding: 30px; border-radius: 24px; border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+        }
+        .glass-box:hover { background: rgba(255, 255, 255, 0.15); transform: translateY(-10px); }
+
+        /* --- 4. TECH (Infrastructure) --- */
+        .tech-visual { background: #000; color: #fff; padding: 80px; border-radius: 40px; display: flex; justify-content: space-between; align-items: center; }
+
+        @media (max-width: 1024px) {
+            .hero-visual { display: none; }
+            .comparison-grid, #creators, .tech-visual { grid-template-columns: 1fr; display: flex; flex-direction: column; }
+            .stat-massive { font-size: 6rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="logo">VERTO<span>.</span></div>
+        <ul class="nav-links">
+            <li><a href="#marketplace">Marketplace</a></li>
+            <li><a href="#creators">Creators</a></li>
+            <li><a href="#bundles">Bundles</a></li>
+            <li><a href="#tech">Tech</a></li>
+        </ul>
+        <a href="#" class="btn" style="padding: 12px 24px; font-size: 0.85rem;">Join Beta</a>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content reveal">
+            <span class="section-tag">Streaming 2.0</span>
+            <h1>The <b>Netflix</b> <br>for Indie Content.</h1>
+            <p>Tired of 50 different creator subscriptions? Verto unifies the indie-verse into one powerhouse marketplace. Zero ads. Pure quality.</p>
+            <div style="display: flex; gap: 16px;">
+                <a href="#marketplace" class="btn">Start Watching</a>
+                <a href="#creators" class="btn" style="background: transparent; color: var(--text); border: 2px solid var(--text); box-shadow: none;">For Creators</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="sphere"></div>
+        </div>
+    </section>
+
+    <section id="marketplace">
+        <div class="section-header reveal">
+            <span class="section-tag">The Marketplace</span>
+            <h2>One App. <br>Every Creator.</h2>
+            <p>The problem: Subscription Fatigue. The solution: The Verto Mall.</p>
+        </div>
+        <div class="comparison-grid">
+            <div class="comp-card reveal">
+                <span style="font-size: 2rem;">🛑</span>
+                <h3>The "Web2" Mess</h3>
+                <p>Scattered pledges, multiple logins, and apps that take 45% of every dollar you spend on your favorite artist.</p>
+            </div>
+            <div class="comp-card highlight reveal">
+                <span style="font-size: 2rem;">✅</span>
+                <h3>The Verto Way</h3>
+                <p>One unified dashboard. Browse creators like a Netflix catalog. One single payment that supports everyone you follow.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="creators">
+        <div class="reveal">
+            <span class="section-tag">The Creators</span>
+            <h2>Stop Paying <br>Platform Taxes.</h2>
+            <p style="margin-bottom: 30px;">Big platforms treat you like a product. We treat you like a partner. Our P2P network removes server overhead, letting us give you what you actually earned.</p>
+            <a href="#" class="btn">Calculate Earnings</a>
+        </div>
+        <div class="reveal" style="text-align: center;">
+            <div class="stat-massive">90%</div>
+            <h4 style="font-size: 1.5rem; letter-spacing: 2px;">TO THE CREATOR</h4>
+        </div>
+    </section>
+
+    <section id="bundles">
+        <div class="section-header reveal">
+            <span class="section-tag" style="color: #fff; opacity: 0.8;">Collaborative Bundles</span>
+            <h2 style="color: #fff;">Better Together.</h2>
+            <p style="color: rgba(255,255,255,0.8);">Individual subscriptions are expensive. Collaborative bundles are unstoppable. Team up with other creators to offer "Channel Packs."</p>
+        </div>
+        <div class="bundle-grid">
+            <div class="glass-box reveal">
+                <h4>Education Pack</h4>
+                <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 10px;">5 Top Physics & Math creators for one $12/mo sub.</p>
+            </div>
+            <div class="glass-box reveal">
+                <h4>Indie Film Hub</h4>
+                <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 10px;">A collective of 10 cinematographers sharing one stage.</p>
+            </div>
+            <div class="glass-box reveal">
+                <h4>Gaming Pro</h4>
+                <p style="font-size: 0.85rem; opacity: 0.7; margin-top: 10px;">Exclusive strategy guides from the best in the biz.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="tech">
+        <div class="section-header reveal">
+            <span class="section-tag">The Tech Stack</span>
+            <h2>Powered by Wails.</h2>
+        </div>
+        <div class="tech-visual reveal">
+            <div style="max-width: 500px;">
+                <h3 style="font-size: 2rem; margin-bottom: 20px;">P2P Distribution</h3>
+                <p>By using the <b>Wails P2P Engine</b>, we turn every viewer into a node. This cuts hosting costs by 80% and allows for lightning-fast 4K streaming without the central server lag.</p>
+            </div>
+            <div style="text-align: right;">
+                <div style="font-size: 4rem;">⚡ 4x</div>
+                <p style="text-transform: uppercase; font-weight: 800; opacity: 0.6;">Faster Streaming</p>
+            </div>
+        </div>
+    </section>
+
+    <section style="text-align: center; background: var(--text); color: #fff; margin: 0 4% 80px; border-radius: 60px;">
+        <div class="reveal">
+            <h2 style="font-size: 4rem; letter-spacing: -3px; margin-bottom: 30px;">The Future is <br>Unbundled.</h2>
+            <a href="#" class="btn" style="background: #fff; color: #000;">Join the Revolution</a>
+        </div>
+    </section>
+
+    <footer style="padding: 40px 8%; display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #eee;">
+        <div class="logo">VERTO<span>.</span></div>
+        <div style="color: var(--text-light); font-size: 0.9rem;">© 2026 Verto P2P Technologies. Build for the people.</div>
+    </footer>
+
+    <script>
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    </script>
+
+</body>
+</html>
