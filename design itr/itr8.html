@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTO | The Creator-First Streaming Marketplace</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@1,500;1,600&family=Plus+Jakarta+Sans:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #F8F9FA;
+            --silk: rgba(255, 255, 255, 0.4);
+            --text: #1A1A1A;
+            --accent: #FF4D24; /* Verto Orange */
+            --glass-border: rgba(255, 255, 255, 0.8);
+            --soft-shadow: 0 40px 100px rgba(0,0,0,0.03);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ambient-field {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            background: radial-gradient(circle at 50% 50%, #FFFFFF 0%, #E8EDF2 100%);
+        }
+
+        .glow-orb {
+            position: absolute;
+            width: 60vw; height: 60vw;
+            background: radial-gradient(circle, rgba(255, 77, 36, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(100px);
+            pointer-events: none;
+        }
+
+        .silk-frame {
+            width: 94vw;
+            height: 92vh;
+            background: var(--silk);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border: 1px solid var(--glass-border);
+            border-radius: 50px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--soft-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        nav {
+            padding: 40px 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .brand {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.8rem;
+            letter-spacing: -1px;
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .nav-links { display: flex; gap: 30px; }
+
+        .nav-btn {
+            background: none; border: none;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.7rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 2px;
+            cursor: pointer; color: rgba(0,0,0,0.3);
+            transition: 0.4s ease;
+            position: relative;
+        }
+
+        .nav-btn.active { color: var(--text); }
+        .nav-btn.active::after {
+            content: ''; position: absolute;
+            bottom: -8px; left: 0; width: 100%; height: 2px;
+            background: var(--accent);
+        }
+
+        .viewport {
+            flex: 1;
+            padding: 0 60px 60px 60px;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .viewport::-webkit-scrollbar { width: 4px; }
+        .viewport::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.05); border-radius: 10px; }
+
+        .panel { display: none; opacity: 0; transform: translateY(20px); }
+        .panel.active { display: block; opacity: 1; transform: translateY(0); }
+
+        h1 {
+            font-family: 'Lora', serif;
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-style: italic;
+            font-weight: 500;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            letter-spacing: -1.5px;
+        }
+
+        .hero-flex {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 60px;
+            align-items: center;
+            margin-top: 40px;
+        }
+
+        .hero-img {
+            width: 100%;
+            height: 500px;
+            border-radius: 40px;
+            object-fit: cover;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.05);
+            border: 8px solid white;
+        }
+
+        p { font-size: 1.1rem; line-height: 1.7; color: rgba(0,0,0,0.5); max-width: 600px; margin-bottom: 2rem; }
+
+        /* --- Pack Grid --- */
+        .pack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .pack-card {
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 35px;
+            border: 1px solid rgba(0,0,0,0.04);
+            overflow: hidden;
+            transition: 0.5s cubic-bezier(0.2, 1, 0.3, 1);
+        }
+
+        .pack-card:hover {
+            transform: translateY(-10px);
+            background: white;
+            box-shadow: var(--soft-shadow);
+        }
+
+        .pack-card img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+        }
+
+        .pack-content { padding: 30px; }
+
+        .pack-card label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--accent);
+            font-weight: 800;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .pack-card h3 {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+
+        .accent-line {
+            width: 60px; height: 2px; background: var(--accent); margin-bottom: 30px;
+        }
+
+        @media (max-width: 900px) {
+            .hero-flex { grid-template-columns: 1fr; }
+            nav { padding: 30px; flex-direction: column; gap: 20px; }
+            .brand { font-size: 1.5rem; }
+            .silk-frame { border-radius: 0; width: 100vw; height: 100vh; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="ambient-field">
+        <div class="glow-orb" id="glow"></div>
+    </div>
+
+    <main class="silk-frame">
+        <nav>
+            <div class="brand">Verto.</div>
+            <div class="nav-links">
+                <button class="nav-btn active" onclick="switchView('manifesto', this)">Manifesto</button>
+                <button class="nav-btn" onclick="switchView('solutions', this)">Solutions</button>
+                <button class="nav-btn" onclick="switchView('packs', this)">The Packs</button>
+                <button class="nav-btn" onclick="switchView('access', this)">Access</button>
+            </div>
+        </nav>
+
+        <div class="viewport" id="main-scroll">
+            
+            <section id="manifesto" class="panel active">
+                <div class="hero-flex">
+                    <div>
+                        <h1>The Streaming <br><em>Renaissance</em>.</h1>
+                        <div class="accent-line"></div>
+                        <p>Netflix for indie creators. Instant blockchain settlements. Collaborative bundling. We believe creators should keep 85% of their value, not the platform.</p>
+                        <p>Verto is a decentralized streaming marketplace that removes the "Platform Tax" and puts power back into the hands of those who build the culture.</p>
+                        <button style="padding: 15px 35px; border-radius: 50px; border: none; background: var(--accent); color: white; font-weight: 700; cursor: pointer; font-size: 0.8rem; letter-spacing: 1px; text-transform: uppercase;">Launch Platform</button>
+                    </div>
+                    <img src="https://images.unsplash.com/photo-1492619334764-22ce0457f726?auto=format&fit=crop&q=80&w=800" class="hero-img" alt="Cinema">
+                </div>
+            </section>
+
+            <section id="solutions" class="panel">
+                <h1>Built for <br><em>Independence</em>.</h1>
+                <p>We solved the triple crisis of the creator economy: discovery, monetization, and exhaustion.</p>
+                
+                <div class="pack-grid">
+                    <div class="pack-card" style="padding: 40px;">
+                        <label>The Problem</label>
+                        <h3>The Platform Tax</h3>
+                        <p style="font-size: 0.9rem;">YouTube and Twitch keep up to 50% of your earnings. We reduced that to zero.</p>
+                    </div>
+                    <div class="pack-card" style="padding: 40px;">
+                        <label>The Problem</label>
+                        <h3>Algorithm Fatigue</h3>
+                        <p style="font-size: 0.9rem;">Stop chasing clickbait. Verto uses peer-curation and direct bundling for discovery.</p>
+                    </div>
+                    <div class="pack-card" style="padding: 40px;">
+                        <label>The Solution</label>
+                        <h3>Verto Protocol</h3>
+                        <p style="font-size: 0.9rem;">Decentralized payments ensure you get paid the second a viewer hits play.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="packs" class="panel">
+                <h1>Curated <br><em>Collections</em>.</h1>
+                <p>Creators team up to sell "Packs"—curated bundles of content that provide massive value to viewers while increasing creator reach.</p>
+                
+                <div class="pack-grid">
+                    <div class="pack-card">
+                        <img src="https://images.unsplash.com/photo-1516116216624-53e697fedbea?auto=format&fit=crop&q=80&w=600" alt="Tech">
+                        <div class="pack-content">
+                            <label>Technology</label>
+                            <h3>Full-Stack Dev Pack</h3>
+                            <p style="font-size: 0.85rem;">5 Educators • 120 Lessons • $12/mo</p>
+                        </div>
+                    </div>
+                    <div class="pack-card">
+                        <img src="https://images.unsplash.com/photo-1478720568477-152d9b164e26?auto=format&fit=crop&q=80&w=600" alt="Film">
+                        <div class="pack-content">
+                            <label>Cinema</label>
+                            <h3>Indie Film Academy</h3>
+                            <p style="font-size: 0.85rem;">4 Filmmakers • 4K Originals • $13/mo</p>
+                        </div>
+                    </div>
+                    <div class="pack-card">
+                        <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=600" alt="Music">
+                        <div class="pack-content">
+                            <label>Sound</label>
+                            <h3>Modern Audio Lab</h3>
+                            <p style="font-size: 0.85rem;">3 Producers • Sample Kits • $10/mo</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="access" class="panel">
+                <h1>Join the <br><em>Movement</em>.</h1>
+                <p>We are currently raising a seed round to scale the infrastructure. If you are a creator or investor, we'd love to talk.</p>
+                <div style="margin-top: 40px;">
+                    <a href="mailto:founders@verto.io" style="font-family: 'Lora', serif; font-size: clamp(1.5rem, 3vw, 3rem); font-style: italic; text-decoration: none; color: var(--text); border-bottom: 2px solid var(--accent);">founders@verto.io</a>
+                </div>
+                <div style="margin-top: 60px; display: flex; gap: 40px;">
+                    <div>
+                        <label style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: rgba(0,0,0,0.4); font-weight: 800; display: block; margin-bottom: 5px;">Traction</label>
+                        <p style="font-weight: 700;">$2.4M Paid to Creators</p>
+                    </div>
+                    <div>
+                        <label style="font-size: 0.65rem; text-transform: uppercase; letter-spacing: 2px; color: rgba(0,0,0,0.4); font-weight: 800; display: block; margin-bottom: 5px;">Community</label>
+                        <p style="font-weight: 700;">500+ Beta Creators</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+        // GSAP Mouse Interaction
+        window.addEventListener('mousemove', (e) => {
+            gsap.to("#glow", {
+                x: e.clientX - window.innerWidth / 2.5,
+                y: e.clientY - window.innerHeight / 2.5,
+                duration: 2.5, ease: "power2.out"
+            });
+        });
+
+        // Navigation Switcher Logic
+        function switchView(id, btn) {
+            const current = document.querySelector('.panel.active');
+            const next = document.getElementById(id);
+            const scrollArea = document.getElementById('main-scroll');
+
+            if (current === next) return;
+
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            gsap.to(current, {
+                opacity: 0, y: 15, duration: 0.3,
+                onComplete: () => {
+                    current.classList.remove('active');
+                    next.classList.add('active');
+                    scrollArea.scrollTo({ top: 0, behavior: 'instant' });
+                    gsap.fromTo(next, 
+                        { opacity: 0, y: 15 }, 
+                        { opacity: 1, y: 0, duration: 0.7, ease: "power3.out" }
+                    );
+                }
+            });
+        }
+
+        // Entrance
+        gsap.from(".silk-frame", { opacity: 0, y: 40, duration: 1.5, ease: "expo.out" });
+        lucide.createIcons();
+    </script>
+</body>
+</html>
