@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTO | Account Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #FDFBFB; color: #0D0D0D; scroll-behavior: smooth; }
+        .heading-font { font-family: 'Bricolage Grotesque', sans-serif; }
+        .orange-gradient { background: linear-gradient(135deg, #FF6B4A 0%, #FF3D1F 100%); }
+        
+        /* Requirement 3: Glassmorphism for top-left settings section */
+        .glass-settings { 
+            background: rgba(255, 255, 255, 0.4); 
+            backdrop-filter: blur(12px); 
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Requirement 2: Toggle Color Logic (White off, Orange on) */
+        .toggle-bg { background-color: white; border: 1px solid #e5e7eb; transition: background-color 0.3s; }
+        input:checked + .toggle-bg { background-color: #FF4D24; border-color: #FF4D24; }
+        input:checked + .toggle-bg .toggle-dot { transform: translateX(100%); background-color: white; }
+        .toggle-dot { background-color: #e5e7eb; transition: transform 0.3s, background-color 0.3s; }
+        
+        .sphere-glow { position: fixed; width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,107,74,0.1) 0%, rgba(255,255,255,0) 70%); z-index: -1; top: -50px; right: -50px; }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="sphere-glow"></div>
+
+    <nav class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <div class="flex flex-col gap-0.5">
+                <div class="w-5 h-1 orange-gradient rounded-full"></div>
+                <div class="w-5 h-1 orange-gradient rounded-full"></div>
+                <div class="w-5 h-1 orange-gradient rounded-full"></div>
+            </div>
+            <span class="heading-font text-2xl font-800 tracking-tighter uppercase">Verto</span>
+        </div>
+        <div class="hidden md:flex gap-8 text-sm font-medium text-gray-500">
+            <a href="#" class="hover:text-black transition-colors">Problem</a>
+            <a href="#" class="hover:text-black transition-colors">Solution</a>
+            <a href="#" class="text-black font-semibold underline decoration-orange-500 decoration-2 underline-offset-4">Account</a>
+        </div>
+        <button class="orange-gradient text-white px-5 py-2 rounded-full text-sm font-bold shadow-lg">View Deck</button>
+    </nav>
+
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-12 p-8">
+        
+        <aside class="md:w-56 h-fit sticky top-28 space-y-6">
+            <h2 class="heading-font text-xl font-800 uppercase tracking-tighter">Account</h2>
+            <ul class="space-y-4 text-sm font-medium text-gray-400">
+                <li><a href="#settings" class="text-black hover:text-orange-500 transition-all">Settings</a></li>
+                <li><a href="#subscriptions" class="hover:text-black transition-all">Subscriptions</a></li>
+                <li><a href="#billing" class="hover:text-black transition-all">Billing</a></li>
+                <li><a href="#notifications" class="hover:text-black transition-all">Notifications</a></li>
+            </ul>
+        </aside>
+
+        <main class="flex-1 space-y-20 pb-20">
+
+            <section id="settings" class="scroll-mt-32">
+                <h3 class="heading-font text-3xl font-800 mb-6">Profile Settings</h3>
+                <div class="glass-settings rounded-[32px] p-8 space-y-8">
+                    <div class="flex items-center gap-6">
+                        <div class="w-20 h-20 rounded-2xl orange-gradient p-1">
+                            <div class="w-full h-full bg-white rounded-[14px] flex items-center justify-center font-bold text-orange-500">VC</div>
+                        </div>
+                        <button class="text-sm font-bold border border-gray-200 px-4 py-2 rounded-xl">Update Avatar</button>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold uppercase text-gray-400">Display Name</label>
+                            <input type="text" value="Verto_Creator_88" class="w-full bg-white/50 border border-gray-100 rounded-2xl px-4 py-3 outline-none focus:ring-1 focus:ring-orange-500">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-[10px] font-bold uppercase text-gray-400">Password</label>
+                            <input type="password" value="********" class="w-full bg-white/50 border border-gray-100 rounded-2xl px-4 py-3 outline-none focus:ring-1 focus:ring-orange-500">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="subscriptions" class="scroll-mt-32">
+                <h3 class="heading-font text-3xl font-800 mb-6">Active Stations</h3>
+                <div class="bg-white border border-gray-100 rounded-[32px] p-8 space-y-6">
+                    <div class="flex justify-between items-center p-4 border border-orange-100 bg-orange-50/30 rounded-2xl">
+                        <div class="flex items-center gap-4">
+                            <div class="w-10 h-10 orange-gradient rounded-xl flex items-center justify-center text-white font-bold">A</div>
+                            <div>
+                                <p class="font-bold">Pack A</p>
+                                <p class="text-xs text-gray-500">$19/mo • Active</p>
+                            </div>
+                        </div>
+                        <button class="text-xs font-bold bg-black text-white px-4 py-2 rounded-lg">Switch to Pack B</button>
+                    </div>
+                    <p class="text-[11px] text-gray-400 italic px-2">Note: Switching mid-cycle triggers automated proration credits on your next invoice.</p>
+                </div>
+            </section>
+
+            <section id="billing" class="scroll-mt-32">
+                <h3 class="heading-font text-3xl font-800 mb-6">Billing & Payments</h3>
+                <div class="bg-white border border-gray-100 rounded-[32px] p-8 space-y-6">
+                    <div class="flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <div class="px-3 py-1 bg-blue-50 text-blue-600 text-[10px] font-bold rounded">STRIPE</div>
+                            <p class="text-sm font-medium text-gray-600">•••• 4242</p>
+                        </div>
+                        <button class="text-xs font-bold text-orange-500">Manage Method</button>
+                    </div>
+                    <div class="pt-6 border-t border-gray-50">
+                        <h4 class="text-xs font-bold uppercase text-gray-400 mb-4 tracking-widest">Recent Invoices</h4>
+                        <div class="space-y-4">
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500 font-medium">Feb 01, 2026 — #V-990</span>
+                                <span class="font-bold">$19.00</span>
+                            </div>
+                            <div class="flex justify-between text-sm">
+                                <span class="text-gray-500 font-medium">Jan 01, 2026 — #V-841</span>
+                                <span class="font-bold">$19.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="notifications" class="scroll-mt-32">
+                <h3 class="heading-font text-3xl font-800 mb-6">Notifications</h3>
+                <div class="bg-white border border-gray-100 rounded-[32px] p-8 space-y-6">
+                    
+                    <div class="flex justify-between items-center">
+                        <p class="text-sm font-bold">New Subscription Alert</p>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" checked class="sr-only peer">
+                            <div class="w-11 h-6 toggle-bg rounded-full relative">
+                                <div class="toggle-dot absolute left-1 top-1 w-4 h-4 rounded-full"></div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-4 border-t border-gray-50">
+                        <p class="text-sm font-bold">Milestone & Perks Alert</p>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer">
+                            <div class="w-11 h-6 toggle-bg rounded-full relative">
+                                <div class="toggle-dot absolute left-1 top-1 w-4 h-4 rounded-full"></div>
+                            </div>
+                        </label>
+                    </div>
+
+                    <div class="flex justify-between items-center pt-4 border-t border-gray-50">
+                        <p class="text-sm font-bold">Revenue Settlement Alert</p>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" checked class="sr-only peer">
+                            <div class="w-11 h-6 toggle-bg rounded-full relative">
+                                <div class="toggle-dot absolute left-1 top-1 w-4 h-4 rounded-full"></div>
+                            </div>
+                        </label>
+                    </div>
+
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="h-40 flex items-center justify-center bg-[#0D0D0D] overflow-hidden relative">
+        <div class="absolute bottom-[-50px] w-64 h-32 bg-orange-500/20 blur-3xl"></div>
+        <p class="text-[10px] text-white/30 font-bold uppercase tracking-[0.4em]">VERTO © 2026</p>
+    </footer>
+
+</body>
+</html>

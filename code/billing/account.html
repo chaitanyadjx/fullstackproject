@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTO | Account Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #FDFBFB; color: #0D0D0D; scroll-behavior: smooth; }
+        .heading-font { font-family: 'Bricolage Grotesque', sans-serif; }
+        .orange-gradient { background: linear-gradient(135deg, #FF6B4A 0%, #FF3D1F 100%); }
+        .glass-card { background: rgba(255, 255, 255, 0.7); backdrop-filter: blur(10px); border: 1px solid rgba(0,0,0,0.05); }
+        .sphere-glow { position: fixed; width: 400px; height: 400px; background: radial-gradient(circle, rgba(255,107,74,0.15) 0%, rgba(255,255,255,0) 70%); z-index: -1; top: -100px; right: -100px; }
+        .sidebar-link:hover { color: #FF4D24; }
+        .active-dot { width: 6px; height: 6px; background-color: #FF4D24; border-radius: 50%; display: inline-block; margin-right: 8px; }
+    </style>
+</head>
+<body class="antialiased">
+    <div class="sphere-glow"></div>
+
+    <nav class="sticky top-0 z-50 w-full bg-white/80 backdrop-blur-md border-b border-gray-100 px-6 py-4 flex justify-between items-center">
+        <div class="flex items-center gap-2">
+            <div class="w-8 h-8 orange-gradient rounded-lg flex items-center justify-center shadow-lg shadow-orange-200">
+                <span class="text-white font-bold text-xs">V</span>
+            </div>
+            <span class="heading-font text-2xl font-800 tracking-tighter uppercase">Verto</span>
+        </div>
+        <div class="hidden md:flex gap-8 text-sm font-medium text-gray-500">
+            <a href="#" class="hover:text-black transition-colors">Dashboard</a>
+            <a href="#" class="hover:text-black transition-colors">Creators</a>
+            <a href="#" class="text-black font-semibold">Account</a>
+        </div>
+        <button class="orange-gradient text-white px-5 py-2 rounded-full text-sm font-semibold hover:opacity-90 transition-all shadow-md">
+            View Deck
+        </button>
+    </nav>
+
+    <div class="max-w-6xl mx-auto flex flex-col md:flex-row gap-12 p-8">
+        
+        <aside class="md:w-64 h-fit sticky top-28 space-y-6">
+            <h2 class="heading-font text-xl font-800">Settings</h2>
+            <ul class="space-y-4 text-sm font-medium text-gray-500">
+                <li><a href="#profile" class="sidebar-link flex items-center transition-all"><span class="active-dot"></span> Profile</a></li>
+                <li><a href="#subscriptions" class="sidebar-link transition-all">Subscriptions</a></li>
+                <li><a href="#billing" class="sidebar-link transition-all">Billing & Invoices</a></li>
+                <li><a href="#notifications" class="sidebar-link transition-all">Notifications</a></li>
+            </ul>
+        </aside>
+
+        <main class="flex-1 space-y-24 pb-32">
+
+            <section id="profile" class="scroll-mt-32">
+                <header class="mb-8">
+                    <h1 class="heading-font text-4xl font-800 text-black leading-none">Account Settings</h1>
+                    <p class="text-gray-500 mt-2">Manage your public identity on the VERTO network.</p>
+                </header>
+                <div class="glass-card rounded-[32px] p-8 space-y-8 shadow-sm">
+                    <div class="flex items-center gap-6">
+                        <div class="w-24 h-24 rounded-full bg-gray-200 orange-gradient p-1">
+                            <img src="https://i.pravatar.cc/150?u=verto" class="rounded-full border-4 border-white" alt="Avatar">
+                        </div>
+                        <button class="border border-gray-200 px-4 py-2 rounded-xl text-sm font-semibold hover:bg-gray-50 transition-all">Change Photo</button>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold uppercase tracking-wider text-gray-400">Display Name</label>
+                            <input type="text" value="IndieCreator_01" class="w-full bg-gray-50 border-none rounded-2xl px-4 py-3 focus:ring-2 focus:ring-orange-500 transition-all">
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-xs font-bold uppercase tracking-wider text-gray-400">Email Address</label>
+                            <input type="email" value="alex@verto.io" class="w-full bg-gray-50 border-none rounded-2xl px-4 py-3 focus:ring-2 focus:ring-orange-500 transition-all">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="subscriptions" class="scroll-mt-32">
+                <header class="mb-8">
+                    <h2 class="heading-font text-3xl font-800">Your Stations</h2>
+                    <p class="text-gray-500 mt-2">Managing packs and smart switching.</p>
+                </header>
+                <div class="grid gap-4">
+                    <div class="glass-card rounded-[32px] p-6 border-l-4 border-l-orange-500 flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-orange-100 rounded-2xl flex items-center justify-center text-orange-600 font-bold">P-A</div>
+                            <div>
+                                <h4 class="font-bold">Creator Pack A</h4>
+                                <p class="text-xs text-gray-500">Active • $19/mo</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-3">
+                            <button class="bg-black text-white px-4 py-2 rounded-xl text-xs font-bold hover:scale-105 transition-transform">Switch to Pack B</button>
+                            <button class="text-red-500 text-xs font-bold px-4 py-2">Cancel Station</button>
+                        </div>
+                    </div>
+                    <div class="bg-orange-50 rounded-2xl p-4 text-xs text-orange-800 border border-orange-100">
+                        <strong>💡 Proration Logic Active:</strong> Switching packs mid-cycle will automatically apply a credit of <strong>$8.50</strong> to your next invoice.
+                    </div>
+                </div>
+            </section>
+
+            <section id="billing" class="scroll-mt-32">
+                <header class="mb-8">
+                    <h2 class="heading-font text-3xl font-800">Billing</h2>
+                    <p class="text-gray-500 mt-2">Secure payments via Stripe and PayPal.</p>
+                </header>
+                <div class="glass-card rounded-[32px] overflow-hidden shadow-sm">
+                    <div class="p-8 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                        <div>
+                            <p class="text-xs font-bold text-gray-400 uppercase tracking-widest">Payment Method</p>
+                            <p class="font-medium flex items-center gap-2 mt-1">•••• •••• •••• 4242 <span class="text-[10px] bg-blue-100 text-blue-700 px-2 py-0.5 rounded uppercase font-bold">Stripe</span></p>
+                        </div>
+                        <button class="text-orange-500 text-sm font-bold">Update</button>
+                    </div>
+                    <div class="p-8">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="text-[10px] uppercase text-gray-400 font-bold border-b border-gray-100">
+                                    <th class="pb-4">Date</th>
+                                    <th class="pb-4">Invoice</th>
+                                    <th class="pb-4">Amount</th>
+                                    <th class="pb-4 text-right">Receipt</th>
+                                </tr>
+                            </thead>
+                            <tbody class="text-sm">
+                                <tr class="border-b border-gray-50">
+                                    <td class="py-4 text-gray-600">Feb 05, 2026</td>
+                                    <td class="py-4 font-medium">#V-88291</td>
+                                    <td class="py-4 font-bold text-black">$19.00</td>
+                                    <td class="py-4 text-right"><button class="text-gray-400 hover:text-black">PDF</button></td>
+                                </tr>
+                                <tr>
+                                    <td class="py-4 text-gray-600">Jan 05, 2026</td>
+                                    <td class="py-4 font-medium">#V-88102</td>
+                                    <td class="py-4 font-bold text-black">$19.00</td>
+                                    <td class="py-4 text-right"><button class="text-gray-400 hover:text-black">PDF</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <section id="notifications" class="scroll-mt-32">
+                <header class="mb-8">
+                    <h2 class="heading-font text-3xl font-800">Alerts</h2>
+                    <p class="text-gray-500 mt-2">Stay updated on your revenue and collab alerts.</p>
+                </header>
+                <div class="glass-card rounded-[32px] p-8 space-y-6 shadow-sm">
+                    <div class="flex justify-between items-center">
+                        <div>
+                            <p class="font-bold">Creator Revenue Alerts</p>
+                            <p class="text-xs text-gray-500">Get notified when blockchain payments settle.</p>
+                        </div>
+                        <input type="checkbox" checked class="w-10 h-5 bg-orange-500 rounded-full appearance-none relative cursor-pointer outline-none after:content-[''] after:absolute after:w-4 after:h-4 after:bg-white after:rounded-full after:top-0.5 after:left-0.5 after:transition-all checked:after:left-5">
+                    </div>
+                    <div class="flex justify-between items-center pt-6 border-t border-gray-100">
+                        <div>
+                            <p class="font-bold">Newsletter & Updates</p>
+                            <p class="text-xs text-gray-500">Occasional tips on indie growth.</p>
+                        </div>
+                        <input type="checkbox" class="w-10 h-5 bg-gray-200 rounded-full appearance-none relative cursor-pointer outline-none after:content-[''] after:absolute after:w-4 after:h-4 after:bg-white after:rounded-full after:top-0.5 after:left-0.5 after:transition-all checked:after:left-5 checked:bg-orange-500">
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer class="h-64 flex items-center justify-center relative overflow-hidden bg-[#0D0D0D] mt-20">
+        <div class="absolute bottom-[-150px] w-[500px] h-[300px] bg-orange-600 blur-[120px] opacity-40"></div>
+        <p class="text-white/40 text-xs font-bold uppercase tracking-[0.3em] z-10">© 2026 VERTO — THE FUTURE OF CREATOR REVENUE</p>
+    </footer>
+
+</body>
+</html>
