@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTO | The Streaming Revolution</title>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@1,500;1,600&family=Plus+Jakarta+Sans:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --orange: #FF4D24;
+            --black: #0D0D0D;
+            --white: #FDFBFB;
+            --card-dark: #1A1A1A; /* Solid background for dark boxes */
+            --text-muted: rgba(13, 13, 13, 0.6);
+            --border: 1px solid rgba(13, 13, 13, 0.08);
+            --shadow: 0 40px 100px rgba(0,0,0,0.06);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
+
+        body {
+            color: var(--black);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--white);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .bg-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -2;
+            background-image: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=2000');
+            background-size: cover;
+            background-position: center;
+            opacity: 0.03;
+        }
+
+        nav {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            height: 90px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 8%;
+            background: rgba(253, 251, 251, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: var(--border);
+            z-index: 1000;
+        }
+
+        .brand {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: var(--black);
+            text-decoration: none;
+            letter-spacing: -1.2px;
+        }
+        .brand span { color: var(--orange); }
+
+        .nav-links { display: flex; gap: 40px; }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: 0.3s;
+        }
+        .nav-links a:hover { color: var(--orange); }
+
+        .btn-cta {
+            background: var(--black);
+            color: var(--white);
+            padding: 14px 32px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border: 1px solid var(--black);
+            display: inline-block;
+        }
+        .btn-cta:hover { background: var(--orange); border-color: var(--orange); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(255, 77, 36, 0.2); }
+
+        header {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 120px 8% 80px;
+            gap: 5%;
+        }
+
+        .hero-content { flex: 1.2; }
+        .hero-image-container { flex: 1; position: relative; }
+
+        .hero-image-wrapper {
+            width: 100%;
+            aspect-ratio: 1/1;
+            background: #f0f0f0;
+            border-radius: 40px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            border: 15px solid white;
+            transform: rotate(-2deg);
+        }
+        .hero-image-wrapper img { width: 100%; height: 100%; object-fit: cover; filter: grayscale(20%); }
+
+        h1 {
+            font-family: 'Lora', serif;
+            font-size: clamp(3.5rem, 7vw, 6rem);
+            font-style: italic;
+            font-weight: 500;
+            line-height: 0.95;
+            margin-bottom: 30px;
+            letter-spacing: -3px;
+        }
+        h1 em { color: var(--orange); }
+
+        .hero-sub {
+            font-size: 1.25rem;
+            font-weight: 400;
+            color: var(--text-muted);
+            max-width: 580px;
+            margin-bottom: 45px;
+        }
+
+        section { padding: 100px 8%; max-width: 1440px; margin: 0 auto; }
+
+        .silk-card {
+            background: var(--white);
+            border-radius: 60px;
+            padding: 100px 80px;
+            border: var(--border);
+            box-shadow: var(--shadow);
+        }
+
+        h2 {
+            font-family: 'Lora', serif;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-style: italic;
+            margin-bottom: 60px;
+            letter-spacing: -2px;
+        }
+        h2 em { color: var(--orange); }
+
+        .grid-4 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+        }
+
+        .content-box {
+            padding: 40px 30px;
+            background: #ffffff; /* Solid white for light mode */
+            border-radius: 35px;
+            border: var(--border);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .content-box:hover { transform: translateY(-10px); border-color: var(--orange); }
+        .content-box i { color: var(--orange); margin-bottom: 25px; display: block; }
+        .content-box h3 { font-family: 'Lora', serif; font-size: 1.6rem; font-style: italic; margin-bottom: 15px; }
+
+        .pack-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .pack-item {
+            border-radius: 40px;
+            overflow: hidden;
+            background: var(--white);
+            border: 8px solid var(--white);
+            box-shadow: var(--shadow);
+            transition: 0.4s ease;
+        }
+        .pack-item:hover { transform: scale(1.02); }
+        .pack-img { width: 100%; height: 300px; object-fit: cover; }
+        .pack-info { padding: 30px; }
+        .pack-info label { font-size: 0.65rem; font-weight: 800; color: var(--orange); text-transform: uppercase; letter-spacing: 2px; }
+        .pack-info h4 { font-size: 1.3rem; margin: 10px 0; font-family: 'Lora', serif; font-style: italic; }
+
+        .reveal { opacity: 0; transform: translateY(40px); }
+
+        @media (max-width: 1024px) {
+            header { flex-direction: column; text-align: center; padding-top: 160px; }
+            .hero-content { margin-bottom: 80px; }
+            .hero-sub { margin-left: auto; margin-right: auto; }
+            .silk-card { padding: 60px 30px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-layer"></div>
+
+    <nav>
+        <a href="#" class="brand">Verto<span>.</span></a>
+        <div class="nav-links">
+            <a href="#vision">Manifesto</a>
+            <a href="#solutions">Solutions</a>
+            <a href="#packs">The Packs</a>
+            <a href="#tech">Infrastructure</a>
+        </div>
+        <a href="#" class="btn-cta">Pitch Deck</a>
+    </nav>
+
+    <header>
+        <div class="hero-content">
+            <h1 class="reveal">Built for <br><em>Independents</em>.</h1>
+            <p class="hero-sub reveal">The first decentralized streaming layer where creators own their audience, their data, and 85% of every dollar earned. No middlemen, no algorithms, just art.</p>
+            <div class="reveal">
+                <a href="#vision" class="btn-cta" style="padding: 22px 55px; font-size: 0.9rem;">Join the Revolution</a>
+            </div>
+        </div>
+        <div class="hero-image-container reveal">
+            <div class="hero-image-wrapper">
+                <img src="https://images.unsplash.com/photo-1598550874175-4d0ef436c909?auto=format&fit=crop&q=80&w=1000" alt="Independent Creator">
+            </div>
+        </div>
+    </header>
+
+    <section id="vision">
+        <div class="silk-card">
+            <h2 class="reveal">The <em>Old</em> Way.</h2>
+            <div class="grid-4">
+                <div class="content-box reveal">
+                    <i data-lucide="scissors" size="32"></i>
+                    <h3>The 50% Cut</h3>
+                    <p>Legacy platforms take half your revenue before you even see it. We flipped the script—you keep 85%.</p>
+                </div>
+                <div class="content-box reveal">
+                    <i data-lucide="ghost" size="32"></i>
+                    <h3>Shadow Banning</h3>
+                    <p>Algorithms bury creators who don't post daily. Verto uses human curation and social proof to surface quality.</p>
+                </div>
+                <div class="content-box reveal">
+                    <i data-lucide="lock" size="32"></i>
+                    <h3>Data Silos</h3>
+                    <p>You don't own your subscribers on YouTube. On Verto, your audience is portable and owned by you on-chain.</p>
+                </div>
+                <div class="content-box reveal">
+                    <i data-lucide="zap-off" size="32"></i>
+                    <h3>Burnout Loop</h3>
+                    <p>The "Treadmill" culture kills creativity. Our model favors deep engagement over constant clickbait frequency.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="solutions">
+        <div class="silk-card" style="background: var(--black); color: var(--white); border: none;">
+            <h2 class="reveal" style="color: var(--white);">The <em>Solution</em>.</h2>
+            <p class="reveal" style="margin-bottom: 60px; max-width: 750px; font-size: 1.3rem; opacity: 0.8; font-weight: 300;">
+                Verto introduces <strong>Creative Bundling</strong>. Instead of fighting alone, creators form "Packs" to offer subscribers massive value while sharing a single, frictionless subscription.
+            </p>
+            <div class="grid-4">
+                <div class="content-box reveal" style="background: var(--card-dark); border: 1px solid #262626;">
+                    <h3 style="color: #fff;">Smart Contracts</h3>
+                    <p style="color: rgba(255,255,255,0.5);">Revenue is automatically split the second a user pays. No accounting, no waiting 30 days for a payout.</p>
+                </div>
+                <div class="content-box reveal" style="background: var(--card-dark); border: 1px solid #262626;">
+                    <h3 style="color: #fff;">Zero Ad-Entry</h3>
+                    <p style="color: rgba(255,255,255,0.5);">A pure viewing experience. We don't sell data, we sell access to world-class independent talent.</p>
+                </div>
+                <div class="content-box reveal" style="background: var(--card-dark); border: 1px solid #262626;">
+                    <h3 style="color: #fff;">Global Rails</h3>
+                    <p style="color: rgba(255,255,255,0.5);">Accept payments from anywhere in the world with zero cross-border fees using stablecoin protocols.</p>
+                </div>
+                <div class="content-box reveal" style="background: var(--card-dark); border: 1px solid #262626;">
+                    <h3 style="color: #fff;">Co-Ownership</h3>
+                    <p style="color: rgba(255,255,255,0.5);">Audience members can become stakeholders in their favorite Packs, sharing in the long-term growth.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="packs">
+        <h2 class="reveal">Active <em>Packs</em>.</h2>
+        <div class="pack-grid">
+            <div class="pack-item reveal">
+                <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=800" class="pack-img" alt="Dev">
+                <div class="pack-info">
+                    <label>Engineering</label>
+                    <h4>The Full-Stack Collective</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">6 Senior Devs • $15/mo</p>
+                </div>
+            </div>
+            <div class="pack-item reveal">
+                <img src="https://images.unsplash.com/photo-1558655146-d09347e92766?auto=format&fit=crop&q=80&w=800" class="pack-img" alt="Design">
+                <div class="pack-info">
+                    <label>Design</label>
+                    <h4>Motion & Brand Mastery</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">4 Studios • $12/mo</p>
+                </div>
+            </div>
+            <div class="pack-item reveal">
+                <img src="https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&q=80&w=800" class="pack-img" alt="Film">
+                <div class="pack-info">
+                    <label>Cinema</label>
+                    <h4>Indie Film Academy</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">5 Filmmakers • $10/mo</p>
+                </div>
+            </div>
+            <div class="pack-item reveal">
+                <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=800" class="pack-img" alt="Audio">
+                <div class="pack-info">
+                    <label>Acoustics</label>
+                    <h4>The Audio Architects</h4>
+                    <p style="font-size: 0.9rem; color: var(--text-muted);">8 Sound Designers • $9/mo</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="roadmap">
+        <div class="silk-card">
+            <h2 class="reveal">Our <em>Milestones</em>.</h2>
+            <div class="grid-4">
+                <div class="content-box reveal" style="border-left: 4px solid var(--orange);">
+                    <label style="font-weight: 800; font-size: 0.6rem; color: var(--orange);">PHASE 01</label>
+                    <h3 style="font-size: 1.2rem; margin-top: 5px;">Genesis Mint</h3>
+                    <p style="font-size: 0.85rem;">Onboarding our first 100 pioneer creators to the Polygon Mainnet.</p>
+                </div>
+                <div class="content-box reveal" style="border-left: 4px solid var(--orange);">
+                    <label style="font-weight: 800; font-size: 0.6rem; color: var(--orange);">PHASE 02</label>
+                    <h3 style="font-size: 1.2rem; margin-top: 5px;">Pack Launch</h3>
+                    <p style="font-size: 0.85rem;">Enabling cross-creator bundling and automated revenue splitting.</p>
+                </div>
+                <div class="content-box reveal" style="border-left: 4px solid var(--orange);">
+                    <label style="font-weight: 800; font-size: 0.6rem; color: var(--orange);">PHASE 03</label>
+                    <h3 style="font-size: 1.2rem; margin-top: 5px;">Mobile Portal</h3>
+                    <p style="font-size: 0.85rem;">Native iOS and Android apps with built-in hardware wallet support.</p>
+                </div>
+                <div class="content-box reveal" style="border-left: 4px solid var(--orange);">
+                    <label style="font-weight: 800; font-size: 0.6rem; color: var(--orange);">PHASE 04</label>
+                    <h3 style="font-size: 1.2rem; margin-top: 5px;">Verto DAO</h3>
+                    <p style="font-size: 0.85rem;">Transitioning governance to the community of creators and fans.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="tech">
+        <div class="silk-card" style="border-color: var(--orange); background: #fffaf9;">
+            <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+                <h2 class="reveal">Modern <em>Infrastructure</em>.</h2>
+                <p class="reveal" style="margin-bottom: 40px;">Verto is built on the Polygon network for speed, IPFS for censorship-resistant hosting, and Stripe for seamless fiat-to-crypto onboarding.</p>
+                <div class="reveal">
+                    <a href="#" class="btn-cta">Read the Whitepaper</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer style="padding: 100px 8%; text-align: center; border-top: var(--border);">
+        <div class="brand" style="margin-bottom: 30px; font-size: 2.5rem;">Verto<span>.</span></div>
+        <div style="display: flex; justify-content: center; gap: 30px; margin-bottom: 40px;">
+            <a href="#" style="color: var(--black); text-decoration: none; font-weight: 700; font-size: 0.8rem;">TWITTER</a>
+            <a href="#" style="color: var(--black); text-decoration: none; font-weight: 700; font-size: 0.8rem;">DISCORD</a>
+            <a href="#" style="color: var(--black); text-decoration: none; font-weight: 700; font-size: 0.8rem;">LINKEDIN</a>
+        </div>
+        <p style="font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; opacity: 0.4;">Verto Labs Inc. © 2026 • All Rights Reserved</p>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+        gsap.registerPlugin(ScrollTrigger);
+
+        const reveals = document.querySelectorAll(".reveal");
+        
+        reveals.forEach((el) => {
+            gsap.to(el, {
+                opacity: 1,
+                y: 0,
+                duration: 1.2,
+                ease: "power4.out",
+                scrollTrigger: {
+                    trigger: el,
+                    start: "top 90%",
+                    toggleActions: "play none none none"
+                }
+            });
+        });
+
+        gsap.to(".hero-image-wrapper", {
+            y: -20,
+            rotation: 1,
+            duration: 3,
+            repeat: -1,
+            yoyo: true,
+            ease: "sine.inOut"
+        });
+    </script>
+</body>
+</html>
