@@ -37,16 +37,34 @@
     margin-bottom: 20px;
   }
 
-  button {
-    width: 100%;
-    height: 46px;
-    border-radius: 14px;
-    border: none;
-    background: #FF4D24;
-    color: #FFF;
-    font-weight: 600;
-    cursor: pointer;
-  }
+button {
+  width: 100%;
+  height: 46px;
+  border-radius: 14px;
+  border: none;
+  background: #FF4D24;
+  color: #FFFFFF;
+  font-weight: 600;
+  cursor: pointer;
+
+  /* ✨ Smooth interaction */
+  transition:
+    transform 0.25s ease,
+    box-shadow 0.3s ease;
+}
+
+button:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 14px 30px rgba(255, 77, 36, 0.35),
+    0 4px 10px rgba(255, 77, 36, 36, 0.25);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow:
+    0 8px 16px rgba(255, 77, 36, 0.35);
+}
 
   .back {
     text-align: center;
