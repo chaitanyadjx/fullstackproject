@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTO | Sign In</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Lora:ital,wght@1,500;1,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-orange: #FF4D24;
+            --black: #0A0A0A;
+            --white: #FFFFFF;
+            --soft-gray: #F8F8F8;
+            --border-thick: 3px solid var(--black);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            color: var(--black);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--soft-gray);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .auth-nav {
+            padding: 24px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--black);
+            text-decoration: none;
+            letter-spacing: -2px;
+        }
+        .brand span { color: var(--brand-orange); }
+
+        .auth-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .auth-card {
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 30px;
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 12px 12px 0px var(--black);
+            transition: transform 0.3s;
+        }
+
+        .auth-card:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 0.95rem;
+        }
+
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--black);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.2s;
+            background: var(--soft-gray);
+        }
+
+        input:focus {
+            border-color: var(--brand-orange);
+            background: var(--white);
+            box-shadow: 4px 4px 0px rgba(255, 77, 36, 0.2);
+        }
+
+        .btn-auth {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            border-radius: 100px;
+            font-weight: 800;
+            background: var(--brand-orange);
+            color: var(--white);
+            border: 3px solid var(--black);
+            cursor: pointer;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 6px 6px 0px var(--black);
+            transition: all 0.2s;
+            margin-top: 10px;
+        }
+
+        .btn-auth:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0px var(--black);
+        }
+
+        .auth-footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .auth-footer a {
+            color: var(--black);
+            font-weight: 700;
+            text-decoration: none;
+            border-bottom: 2px solid var(--brand-orange);
+        }
+
+        .auth-footer a:hover {
+            color: var(--brand-orange);
+        }
+
+        .back-link {
+            font-weight: 700;
+            color: var(--black);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+        
+    </style>
+</head>
+<body>
+    <nav class="auth-nav">
+        <a href="../../index.html" class="brand">VERTO<span>.</span></a>
+        <a href="../../index.html" class="back-link"><i data-lucide="arrow-left" size="16"></i> Back to Home</a>
+    </nav>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <h1>Welcome Back</h1>
+            <p class="subtitle">Enter your credentials to access your account.</p>
+            
+            <form onsubmit="event.preventDefault(); window.location.href='../discovery/browse.html';">
+                <div class="form-group">
+                    <label>Email Address</label>
+                    <input type="email" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" placeholder="••••••••" required>
+                </div>
+                
+                <div style="text-align: right; margin-bottom: 24px;">
+                    <a href="forgot-password.html" style="font-size: 0.85rem; color: #666; text-decoration: none; font-weight: 600;">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="btn-auth">Sign In</button>
+            </form>
+
+            <div class="auth-footer">
+                Don't have an account yet? <a href="sign-up.html">Sign Up</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
