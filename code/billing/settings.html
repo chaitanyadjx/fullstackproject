@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTO | Account Settings</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Lora:ital,wght@1,500;1,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-orange: #FF4D24;
+            --black: #0A0A0A;
+            --white: #FFFFFF;
+            --soft-gray: #F8F8F8;
+            --border-thick: 3px solid var(--black);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            color: var(--black);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--soft-gray);
+            min-height: 100vh;
+        }
+
+        /* --- Nav --- */
+        .nav-wrapper {
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+            padding: 0 5%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 30px;
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 100px;
+            box-shadow: 6px 6px 0px var(--black);
+        }
+
+        .brand {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--black);
+            text-decoration: none;
+            letter-spacing: -2px;
+        }
+        .brand span { color: var(--brand-orange); }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            font-weight: 700;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 1rem;
+        }
+        .nav-link.active {
+            color: var(--brand-orange);
+            text-decoration: underline;
+            text-decoration-thickness: 3px;
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+
+        .user-avatar-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--black);
+            overflow: hidden;
+            border: 2px solid var(--black);
+        }
+        .user-avatar-small img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- Layout --- */
+        .page-container {
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 40px;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: var(--black);
+            font-weight: 700;
+            border-radius: 12px;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .menu-item:hover {
+            background: var(--white);
+            border-color: var(--black);
+            transform: translate(4px, 0);
+        }
+
+        .menu-item.active {
+            background: var(--brand-orange);
+            color: var(--white);
+            border: 2px solid var(--black);
+            box-shadow: 4px 4px 0px var(--black);
+        }
+
+        /* --- Content --- */
+        .content-card {
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 8px 8px 0px var(--black);
+        }
+
+        h2 {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+
+        .section-desc {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        /* --- Forms --- */
+        .form-section {
+            margin-bottom: 40px;
+            padding-bottom: 40px;
+            border-bottom: 2px solid var(--soft-gray);
+        }
+
+        .form-section:last-child {
+            border-bottom: none;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group.full-width {
+            grid-column: span 2;
+        }
+
+        label {
+            display: block;
+            font-weight: 700;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid var(--black);
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.2s;
+            background: var(--soft-gray);
+        }
+
+        input:focus {
+            border-color: var(--brand-orange);
+            background: var(--white);
+            box-shadow: 4px 4px 0px rgba(255, 77, 36, 0.2);
+        }
+
+        .btn-save {
+            padding: 16px 32px;
+            border-radius: 100px;
+            font-weight: 800;
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.2s;
+        }
+
+        .btn-save:hover {
+            background: var(--brand-orange);
+            transform: translateY(-2px);
+            box-shadow: 5px 5px 0px var(--black);
+            border: 2px solid var(--black);
+            color: var(--white);
+            padding: 14px 30px; /* Compensate for border */
+        }
+
+        .avatar-upload {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+
+        .avatar-preview {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            border: 3px solid var(--black);
+            overflow: hidden;
+            background: var(--soft-gray);
+        }
+        .avatar-preview img { width: 100%; height: 100%; object-fit: cover; }
+
+        .btn-upload {
+            padding: 10px 20px;
+            border: 2px solid var(--black);
+            background: var(--white);
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-upload:hover { background: var(--soft-gray); }
+
+        @media (max-width: 900px) {
+            .page-container {
+                grid-template-columns: 1fr;
+            }
+            .sidebar-menu {
+                flex-direction: row;
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+            .menu-item {
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-wrapper">
+        <nav>
+            <a href="../../index.html" class="brand">VERTO<span>.</span></a>
+            
+            <div class="nav-menu">
+                <a href="../discovery/browse.html" class="nav-link">Discover</a>
+                <a href="../discovery/guide.html" class="nav-link">Guide</a>
+                <a href="../community/community.html" class="nav-link">Community</a>
+            </div>
+
+            <div class="nav-user">
+                <a href="#" class="nav-link active">Account</a>
+                <div class="user-avatar-small">
+                    <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=100" alt="User">
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="page-container">
+        <!-- Sidebar -->
+        <aside>
+            <div class="sidebar-menu">
+                <a href="settings.html" class="menu-item active">
+                    <i data-lucide="user" size="20"></i>
+                    Profile Settings
+                </a>
+                <a href="subscriptions.html" class="menu-item">
+                    <i data-lucide="tv-2" size="20"></i>
+                    My Subscriptions
+                </a>
+                <a href="billing.html" class="menu-item">
+                    <i data-lucide="credit-card" size="20"></i>
+                    Billing History
+                </a>
+                <a href="notifications.html" class="menu-item">
+                    <i data-lucide="bell" size="20"></i>
+                    Notifications
+                </a>
+                <a href="../../index.html" class="menu-item" style="color: #666; margin-top: 20px;">
+                    <i data-lucide="log-out" size="20"></i>
+                    Sign Out
+                </a>
+            </div>
+        </aside>
+
+        <!-- Content -->
+        <main class="content-card">
+            <h2>Profile Settings</h2>
+            <p class="section-desc">Manage your public identity and security preferences.</p>
+
+            <form>
+                <!-- Avatar -->
+                <div class="form-section">
+                    <h3><i data-lucide="camera" size="20"></i> Profile Photo</h3>
+                    <div class="avatar-upload">
+                        <div class="avatar-preview">
+                            <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=200" alt="Profile">
+                        </div>
+                        <div>
+                            <button type="button" class="btn-upload">Change Photo</button>
+                            <p style="font-size: 0.85rem; color: #666; margin-top: 8px;">Recommended: 400x400px JPG or PNG</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Identity -->
+                <div class="form-section">
+                    <h3><i data-lucide="fingerprint" size="20"></i> Identity</h3>
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Display Name</label>
+                            <input type="text" value="Alex Runner">
+                        </div>
+                        <div class="form-group">
+                            <label>Username (Handle)</label>
+                            <input type="text" value="@alexrunner" disabled style="opacity: 0.7;">
+                        </div>
+                        <div class="form-group full-width">
+                            <label>Bio</label>
+                            <textarea rows="3">Just a viewer enjoying the indie film revolution.</textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security -->
+                <div class="form-section">
+                    <h3><i data-lucide="shield" size="20"></i> Security</h3>
+                    <div class="form-grid">
+                        <div class="form-group full-width">
+                            <label>Email Address</label>
+                            <input type="email" value="alex@example.com">
+                        </div>
+                        <div class="form-group">
+                            <label>New Password</label>
+                            <input type="password" placeholder="Leave empty to keep current">
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" placeholder="Repeat new password">
+                        </div>
+                    </div>
+                </div>
+
+                <div style="text-align: right;">
+                    <button type="submit" class="btn-save">Save Changes</button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
