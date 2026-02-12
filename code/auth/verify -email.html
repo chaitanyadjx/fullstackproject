@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTO | Verify Email</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Lora:ital,wght@1,500;1,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-orange: #FF4D24;
+            --black: #0A0A0A;
+            --white: #FFFFFF;
+            --soft-gray: #F8F8F8;
+            --border-thick: 3px solid var(--black);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            color: var(--black);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--soft-gray);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .auth-nav {
+            padding: 24px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--black);
+            text-decoration: none;
+            letter-spacing: -2px;
+        }
+        .brand span { color: var(--brand-orange); }
+
+        .auth-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+
+        .auth-card {
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 30px;
+            padding: 50px 40px;
+            width: 100%;
+            max-width: 480px;
+            box-shadow: 12px 12px 0px var(--black);
+            transition: transform 0.3s;
+            text-align: center;
+        }
+
+        .auth-card:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            background: var(--brand-orange);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            border: 3px solid var(--black);
+            box-shadow: 4px 4px 0px var(--black);
+        }
+
+        .btn-auth {
+            display: block;
+            width: 100%;
+            padding: 18px;
+            border-radius: 100px;
+            font-weight: 800;
+            background: var(--brand-orange);
+            color: var(--white);
+            border: 3px solid var(--black);
+            cursor: pointer;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 6px 6px 0px var(--black);
+            transition: all 0.2s;
+            margin-top: 10px;
+            text-decoration: none;
+        }
+
+        .btn-auth:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 8px 8px 0px var(--black);
+        }
+
+        .auth-footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .auth-footer a {
+            color: var(--black);
+            font-weight: 700;
+            text-decoration: none;
+            border-bottom: 2px solid var(--brand-orange);
+        }
+
+        .auth-footer a:hover {
+            color: var(--brand-orange);
+        }
+
+        .back-link {
+            font-weight: 700;
+            color: var(--black);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <nav class="auth-nav">
+        <a href="../../index.html" class="brand">VERTO<span>.</span></a>
+        <a href="../../index.html" class="back-link"><i data-lucide="arrow-left" size="16"></i> Back to Home</a>
+    </nav>
+
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="icon-circle">
+                <i data-lucide="mail" size="36"></i>
+            </div>
+            <h1>Check Inbox</h1>
+            <p class="subtitle">We've sent a verification link to <strong>you@example.com</strong>.<br>Please confirm to proceed.</p>
+            
+            <a href="reset.html" class="btn-auth" style="text-align: center; text-decoration: none; display: block;">Simulate: Click Email Link</a>
+
+            <div class="auth-footer">
+                Didn't receive it? <a href="#">Click to resend</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
