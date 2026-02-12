@@ -3,195 +3,453 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VERTO | Discovery</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@300;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>VERTO | Browse</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Lora:ital,wght@1,500;1,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #FDFBFB; color: #0D0D0D; overflow-x: hidden; }
-        .heading-font { font-family: 'Bricolage Grotesque', sans-serif; }
-        .orange-gradient { background: linear-gradient(135deg, #FF6B4A 0%, #FF3D1F 100%); }
-        .dark-hero { background: radial-gradient(circle at 20% 50%, #1a1a1a 0%, #0d0d0d 100%); }
+        :root {
+            --brand-orange: #FF4D24;
+            --black: #0A0A0A;
+            --white: #FFFFFF;
+            --soft-gray: #F8F8F8;
+            --border-thick: 3px solid var(--black);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            color: var(--black);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--soft-gray);
+            min-height: 100vh;
+        }
+
+        /* --- Nav --- */
+        .nav-wrapper {
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+            padding: 0 5%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 30px;
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 100px;
+            box-shadow: 6px 6px 0px var(--black);
+        }
+
+        .brand {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--black);
+            text-decoration: none;
+            letter-spacing: -2px;
+        }
+        .brand span { color: var(--brand-orange); }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            font-weight: 700;
+        }
         
-        /* DRM Player Mockup */
-        .player-glass {
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .nav-link {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 1rem;
+        }
+        .nav-link.active {
+            color: var(--brand-orange);
+            text-decoration: underline;
+            text-decoration-thickness: 3px;
         }
 
-        /* Search Bar Glow */
-        .search-focus:focus-within {
-            box-shadow: 0 0 20px rgba(255, 107, 74, 0.2);
-            border-color: #FF6B4A;
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
         }
 
-        .video-card:hover .play-overlay { opacity: 1; }
-        .play-overlay { opacity: 0; transition: opacity 0.3s ease; background: rgba(255, 61, 31, 0.4); }
+        .user-avatar-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--black);
+            overflow: hidden;
+            border: 2px solid var(--black);
+        }
+        .user-avatar-small img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- Hero Search --- */
+        .browse-hero {
+            padding: 60px 5% 40px;
+            text-align: center;
+        }
+        
+        .browse-hero h1 {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            line-height: 0.9;
+        }
+
+        .search-bar {
+            max-width: 600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 20px 60px 20px 25px;
+            border: var(--border-thick);
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            outline: none;
+            box-shadow: 6px 6px 0px var(--black);
+            transition: 0.2s;
+        }
+        .search-bar input:focus {
+            transform: translateY(-2px);
+            box-shadow: 8px 8px 0px var(--black);
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 25px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--black);
+        }
+
+        /* --- Categories --- */
+        .category-scroll {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding: 20px 5%;
+            margin-bottom: 40px;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .category-scroll::-webkit-scrollbar { display: none; }
+
+        .cat-chip {
+            background: var(--white);
+            border: 2px solid var(--black);
+            padding: 10px 24px;
+            border-radius: 30px;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            transition: 0.2s;
+            text-decoration: none;
+            color: var(--black);
+        }
+        .cat-chip:hover, .cat-chip.active {
+            background: var(--black);
+            color: var(--white);
+            transform: translateY(-2px);
+        }
+
+        /* --- Grid Layout --- */
+        .section-container {
+            padding: 0 5%;
+            margin-bottom: 60px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 30px;
+        }
+        
+        .section-header h2 {
+            font-size: 2rem;
+            font-family: 'Lora', serif;
+            font-style: italic;
+        }
+        
+        .section-link {
+            font-weight: 700;
+            color: var(--brand-orange);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        /* --- Station Card --- */
+        .station-card {
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: 0.2s;
+            display: block;
+            text-decoration: none;
+            color: var(--black);
+            height: 100%;
+        }
+
+        .station-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 10px 10px 0px var(--black);
+        }
+
+        .card-thumb {
+            height: 180px;
+            background: #eee;
+            border-bottom: var(--border-thick);
+            position: relative;
+        }
+        .card-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+        .live-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: red;
+            color: white;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            border: 2px solid var(--black);
+        }
+
+        .card-content {
+            padding: 20px;
+        }
+
+        .card-title {
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .card-sub {
+            color: #666;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .tag-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .tag {
+            font-size: 0.75rem;
+            background: #eee;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* --- Bundle Card (Mega) --- */
+        .bundle-card {
+            background: var(--black);
+            color: var(--white);
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            min-height: 350px;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+        
+        .bundle-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%);
+            z-index: 1;
+        }
+
+        .bundle-bg {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            object-fit: cover;
+            opacity: 0.6;
+            transition: 0.3s;
+        }
+
+        .bundle-card:hover { transform: scale(1.02); }
+        .bundle-card:hover .bundle-bg { opacity: 0.4; transform: scale(1.05); }
+
+        .bundle-info {
+            position: relative;
+            z-index: 2;
+        }
+
+        .bundle-label {
+            background: var(--brand-orange);
+            color: var(--white);
+            display: inline-block;
+            padding: 4px 12px;
+            font-weight: 800;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .bundle-title {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
     </style>
 </head>
-<body class="antialiased">
+<body>
 
-    <nav class="fixed top-0 z-50 w-full bg-black/80 backdrop-blur-xl border-b border-white/10 px-8 py-4 flex justify-between items-center text-white">
-        <div class="flex items-center gap-2">
-            <div class="flex flex-col gap-0.5">
-                <div class="w-5 h-1 orange-gradient rounded-full"></div>
-                <div class="w-5 h-1 orange-gradient rounded-full"></div>
-                <div class="w-5 h-1 orange-gradient rounded-full"></div>
+    <div class="nav-wrapper">
+        <nav>
+            <a href="../../index.html" class="brand">VERTO<span>.</span></a>
+            
+            <div class="nav-menu">
+                <a href="browse.html" class="nav-link active">Discover</a>
+                <a href="guide.html" class="nav-link">Guide</a>
+                <a href="../community/community.html" class="nav-link">Community</a>
             </div>
-            <span class="heading-font text-2xl font-800 tracking-tighter uppercase">Verto</span>
+
+            <div class="nav-user">
+                <a href="../billing/settings.html" style="color:var(--black); text-decoration:none;">Account</a>
+                 <div class="user-avatar-small">
+                    <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=100" alt="User">
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Hero Search -->
+    <div class="browse-hero">
+        <h1>Find Your Frequency</h1>
+        <div class="search-bar">
+            <input type="text" placeholder="Search creators, bundles, or tags...">
+            <i data-lucide="search" class="search-icon"></i>
         </div>
-        
-        <div class="hidden lg:flex flex-1 max-w-md mx-10">
-            <div class="relative w-full group search-focus rounded-full border border-white/20 bg-white/5 transition-all">
-                <input type="text" placeholder="Search creators, stations, or packs..." class="w-full bg-transparent px-6 py-2 text-sm outline-none">
-                <span class="absolute right-4 top-2 text-white/40">⌘K</span>
-            </div>
+    </div>
+
+    <!-- Categories -->
+    <div class="category-scroll">
+        <a href="#" class="cat-chip active">All</a>
+        <a href="#" class="cat-chip">Tech & Dev</a>
+        <a href="#" class="cat-chip">Music Production</a>
+        <a href="#" class="cat-chip">Digital Art</a>
+        <a href="#" class="cat-chip">Retrogaming</a>
+        <a href="#" class="cat-chip">Filmmaking</a>
+        <a href="#" class="cat-chip">Lifestyle</a>
+    </div>
+
+    <!-- Live Now -->
+    <div class="section-container">
+        <div class="section-header">
+            <h2>Live Now</h2>
+            <a href="guide.html" class="section-link">View Full Guide <i data-lucide="arrow-right" size="16"></i></a>
         </div>
-
-        <div class="flex items-center gap-6 text-sm font-bold">
-            <a href="/browse" class="hover:text-orange-500 transition-colors uppercase tracking-widest text-[10px]">Browse</a>
-            <div class="h-4 w-[1px] bg-white/20"></div>
-            <a href="/auth/signin" class="hover:text-orange-500 transition-colors uppercase tracking-widest text-[10px]">Sign In</a>
-            <a href="/auth/signup" class="orange-gradient px-6 py-2 rounded-full hover:scale-105 transition-all">Join Verto</a>
+        <div class="card-grid">
+            <a href="live.html" class="station-card">
+                <div class="card-thumb">
+                    <span class="live-badge">Live</span>
+                    <img src="https://images.unsplash.com/photo-1598550476439-6847785fcea6?auto=format&fit=crop&q=80&w=600" alt="Stream">
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Synth Wars 2024</div>
+                    <div class="card-sub">Music Lab • 1.2k watching</div>
+                    <div class="tag-list">
+                        <span class="tag">Music</span>
+                        <span class="tag">Production</span>
+                    </div>
+                </div>
+            </a>
+            <a href="live.html" class="station-card">
+                <div class="card-thumb">
+                    <span class="live-badge">Live</span>
+                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=600" alt="Stream">
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Restoring a 1984 Macintosh</div>
+                    <div class="card-sub">Retro Tech • 850 watching</div>
+                    <div class="tag-list">
+                        <span class="tag">Tech</span>
+                        <span class="tag">Repair</span>
+                    </div>
+                </div>
+            </a>
+            <a href="live.html" class="station-card">
+                <div class="card-thumb">
+                    <span class="live-badge">Live</span>
+                    <img src="https://images.unsplash.com/photo-1629752187687-3d3c7ea3a21b?auto=format&fit=crop&q=80&w=600" alt="Stream">
+                </div>
+                <div class="card-content">
+                    <div class="card-title">Indie Game Dev Sprint</div>
+                    <div class="card-sub">Code Space • 340 watching</div>
+                    <div class="tag-list">
+                        <span class="tag">Coding</span>
+                        <span class="tag">Gamedev</span>
+                    </div>
+                </div>
+            </a>
         </div>
-    </nav>
+    </div>
 
-    <main>
-        <section class="dark-hero min-h-[80vh] pt-32 pb-20 px-8 flex flex-col justify-center items-center relative">
-            <div class="absolute inset-0 overflow-hidden">
-                <img src="https://images.unsplash.com/photo-1614850523296-d8c1af93d400?auto=format&fit=crop&q=80&w=2070" class="w-full h-full object-cover opacity-20 blur-3xl" alt="bg">
-            </div>
-
-            <div class="max-w-7xl w-full grid lg:grid-cols-12 gap-12 relative z-10">
-                <div class="lg:col-span-4 flex flex-col justify-center space-y-6">
-                    <span class="inline-flex items-center gap-2 px-3 py-1 bg-red-500/10 border border-red-500/50 rounded-full text-red-500 text-[10px] font-bold uppercase tracking-widest w-fit">
-                        <span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span> Live Now
-                    </span>
-                    <h1 class="heading-font text-6xl font-800 text-white tracking-tighter leading-none">The Future of <br><span class="text-orange-500">Indie Cinema.</span></h1>
-                    <p class="text-white/60 text-lg">Watch "Neon Protocol" — Exclusive broadcast for Tier 2 Station Members.</p>
-                    <div class="flex gap-4">
-                        <button class="orange-gradient text-white px-8 py-4 rounded-2xl font-800 uppercase text-xs tracking-widest flex items-center gap-2">
-                             Watch Station
-                        </button>
-                        <button class="bg-white/10 hover:bg-white/20 text-white px-8 py-4 rounded-2xl font-800 uppercase text-xs tracking-widest border border-white/10 transition-all">
-                            View Bundle
-                        </button>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-8">
-                    <div class="player-glass rounded-[40px] aspect-video w-full overflow-hidden shadow-2xl relative group cursor-pointer border border-white/5">
-                        <img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?auto=format&fit=crop&q=80&w=1925" class="w-full h-full object-cover" alt="stream">
-                        <div class="absolute inset-0 flex items-center justify-center">
-                            <div class="w-20 h-20 orange-gradient rounded-full flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
-                                <div class="w-0 h-0 border-t-[10px] border-t-transparent border-l-[18px] border-l-white border-b-[10px] border-b-transparent ml-1"></div>
-                            </div>
-                        </div>
-                        <div class="absolute bottom-6 left-6 right-6 flex justify-between items-center text-white/80 text-[10px] font-bold uppercase">
-                            <span class="px-2 py-1 bg-black/50 rounded">4K • DRM PROTECTED</span>
-                            <span class="flex items-center gap-2">12.4k Viewers <span class="w-2 h-2 bg-red-500 rounded-full"></span></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <section class="max-w-7xl mx-auto py-24 px-8">
-            <div class="flex justify-between items-end mb-12">
-                <div>
-                    <h2 class="heading-font text-4xl font-800 tracking-tighter">Live EPG Engine</h2>
-                    <p class="text-gray-400 font-medium">What's playing across 100+ stations right now.</p>
-                </div>
-                <a href="/browse" class="text-orange-500 font-bold text-sm underline decoration-2 underline-offset-8">Explore All Stations</a>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <div class="group cursor-pointer">
-                    <div class="relative rounded-[32px] overflow-hidden aspect-[4/5] mb-4 shadow-sm video-card">
-                        <img src="https://images.unsplash.com/photo-1598899134739-24c46f58b8c0?auto=format&fit=crop&q=80&w=2056" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="v1">
-                        <div class="absolute inset-0 play-overlay flex items-center justify-center">
-                            <span class="text-white font-bold text-xs tracking-widest uppercase">Preview</span>
-                        </div>
-                        <div class="absolute top-4 left-4 bg-black/80 text-white text-[10px] font-bold px-3 py-1 rounded-full backdrop-blur-md">
-                            COLLECTIVE BUNDLE
-                        </div>
-                    </div>
-                    <h4 class="font-800 heading-font text-lg">Synth-Wave Sessions</h4>
-                    <p class="text-sm text-gray-500">Curated by <span class="text-black font-semibold">@VektorLabs</span></p>
-                </div>
-
-                <div class="group cursor-pointer">
-                    <div class="relative rounded-[32px] overflow-hidden aspect-[4/5] mb-4 shadow-sm video-card">
-                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=2070" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="v2">
-                        <div class="absolute inset-0 play-overlay flex items-center justify-center">
-                            <span class="text-white font-bold text-xs tracking-widest uppercase">Preview</span>
-                        </div>
-                        <div class="absolute top-4 left-4 bg-orange-500 text-white text-[10px] font-bold px-3 py-1 rounded-full">
-                            LIVE
-                        </div>
-                    </div>
-                    <h4 class="font-800 heading-font text-lg">Retro-Future Doc</h4>
-                    <p class="text-sm text-gray-500">Curated by <span class="text-black font-semibold">@RetroIndie</span></p>
-                </div>
-
-                <div class="group cursor-pointer">
-                    <div class="relative rounded-[32px] overflow-hidden aspect-[4/5] mb-4 shadow-sm video-card">
-                        <img src="https://images.unsplash.com/photo-1535016120720-40c646bebbfc?auto=format&fit=crop&q=80&w=2070" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="v3">
-                        <div class="absolute inset-0 play-overlay flex items-center justify-center">
-                            <span class="text-white font-bold text-xs tracking-widest uppercase">Preview</span>
-                        </div>
-                    </div>
-                    <h4 class="font-800 heading-font text-lg">Urban Exploration</h4>
-                    <p class="text-sm text-gray-500">Curated by <span class="text-black font-semibold">@CityGhost</span></p>
-                </div>
-
-                <div class="group cursor-pointer">
-                    <div class="relative rounded-[32px] overflow-hidden aspect-[4/5] mb-4 shadow-sm video-card">
-                        <img src="https://images.unsplash.com/photo-1536240478700-b869070f9279?auto=format&fit=crop&q=80&w=2070" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" alt="v4">
-                        <div class="absolute inset-0 play-overlay flex items-center justify-center">
-                            <span class="text-white font-bold text-xs tracking-widest uppercase">Preview</span>
-                        </div>
-                        <div class="absolute bottom-4 left-4 bg-white/90 text-black text-[10px] font-bold px-3 py-1 rounded-full backdrop-blur-md">
-                            SUBSCRIBED
-                        </div>
-                    </div>
-                    <h4 class="font-800 heading-font text-lg">Indie Short Films</h4>
-                    <p class="text-sm text-gray-500">Curated by <span class="text-black font-semibold">@FilmVault</span></p>
-                </div>
-            </div>
-        </section>
-
-        <section class="max-w-7xl mx-auto px-8 mb-32">
-            <div class="orange-gradient rounded-[48px] p-16 relative overflow-hidden flex flex-col items-center text-center">
-                <div class="absolute top-0 right-0 w-64 h-64 bg-white/20 blur-[80px] rounded-full -mr-20 -mt-20"></div>
-                <h2 class="heading-font text-5xl md:text-7xl font-800 text-white tracking-tighter mb-6 relative z-10">Get the Creator <br>Mega Pack.</h2>
-                <p class="text-white/80 text-xl max-w-2xl mb-10 relative z-10">Access 50+ premium indie stations in a single bundle. Direct support, zero platform taxes.</p>
-                <div class="flex flex-col sm:flex-row gap-4 relative z-10">
-                    <button class="bg-black text-white px-10 py-5 rounded-full font-800 uppercase text-xs tracking-widest hover:bg-gray-900 transition-all">Subscribe for $29/mo</button>
-                    <button class="bg-white text-orange-600 px-10 py-5 rounded-full font-800 uppercase text-xs tracking-widest hover:bg-gray-50 transition-all">Learn About Bundling</button>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="bg-black py-20 px-8">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-10">
-            <div class="flex items-center gap-2">
-                <div class="flex flex-col gap-0.5">
-                    <div class="w-5 h-1 bg-white rounded-full"></div>
-                    <div class="w-5 h-1 bg-white rounded-full"></div>
-                    <div class="w-5 h-1 bg-white rounded-full"></div>
-                </div>
-                <span class="heading-font text-2xl font-800 tracking-tighter uppercase text-white">Verto</span>
-            </div>
-            <div class="flex gap-10 text-[10px] font-extrabold uppercase tracking-[0.2em] text-white/40">
-                <a href="/auth/verify-email" class="hover:text-white transition-colors">Verify</a>
-                <a href="/auth/forgot-password" class="hover:text-white transition-colors">Recovery</a>
-                <a href="#" class="hover:text-white transition-colors">DRM Terms</a>
-                <a href="#" class="hover:text-white transition-colors">Privacy</a>
-            </div>
+    <!-- Featured Bundles -->
+    <div class="section-container">
+        <div class="section-header">
+            <h2>Curated Collections</h2>
         </div>
-    </footer>
+        <div class="card-grid" style="grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));">
+            <a href="bundle.html" class="bundle-card">
+                <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800" class="bundle-bg">
+                <div class="bundle-info">
+                    <span class="bundle-label">Mega Pack</span>
+                    <h3 class="bundle-title">The Maker's Toolkit</h3>
+                    <p>Access to 5 premium engineering stations + exclusive schematics library. Includes regular workshops.</p>
+                </div>
+            </a>
+            <a href="#" class="bundle-card">
+                <img src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&q=80&w=800" class="bundle-bg">
+                <div class="bundle-info">
+                    <span class="bundle-label">Starter Pack</span>
+                    <h3 class="bundle-title">Audio Engineering 101</h3>
+                    <p>Everything you need to start mixing. 3 Stations focused on Logic Pro, Ableton, and Hardware.</p>
+                </div>
+            </a>
+        </div>
+    </div>
 
+    <script>
+        lucide.createIcons();
+    </script>
 </body>
 </html>
