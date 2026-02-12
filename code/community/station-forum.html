@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTO | Retro Tech Community</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Lora:ital,wght@1,500;1,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-orange: #FF4D24;
+            --black: #0A0A0A;
+            --white: #FFFFFF;
+            --soft-gray: #F8F8F8;
+            --border-thick: 3px solid var(--black);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            color: var(--black);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--soft-gray);
+            min-height: 100vh;
+        }
+
+        /* --- Nav --- */
+        .nav-wrapper {
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+            padding: 0 5%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 30px;
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 100px;
+            box-shadow: 6px 6px 0px var(--black);
+        }
+
+        .brand {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--black);
+            text-decoration: none;
+            letter-spacing: -2px;
+        }
+        .brand span { color: var(--brand-orange); }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            font-weight: 700;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 1rem;
+        }
+        .nav-link.active {
+            color: var(--brand-orange);
+            text-decoration: underline;
+            text-decoration-thickness: 3px;
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+
+        .user-avatar-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--black);
+            overflow: hidden;
+            border: 2px solid var(--black);
+        }
+        .user-avatar-small img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- Station Banner --- */
+        .station-hero {
+            max-width: 1400px;
+            margin: 40px auto 20px auto;
+            padding: 0 5%;
+        }
+        .station-banner {
+            height: 200px;
+            width: 100%;
+            background-image: url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1200');
+            background-size: cover;
+            background-position: center;
+            border: var(--border-thick);
+            border-radius: 20px;
+            margin-bottom: -40px;
+            position: relative;
+        }
+        
+        .station-meta-wrapper {
+            display: flex;
+            align-items: flex-end;
+            gap: 20px;
+            padding-left: 40px;
+            position: relative;
+        }
+        .station-avatar {
+            width: 120px;
+            height: 120px;
+            background: white;
+            border: var(--border-thick);
+            border-radius: 20px;
+            overflow: hidden;
+        }
+        .station-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .station-titles h1 {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 2.5rem;
+            line-height: 1;
+        }
+
+        /* --- Layout --- */
+        .page-container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 40px;
+        }
+
+        /* --- Filters --- */
+        .filter-list {
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 12px;
+            padding: 10px;
+        }
+        .filter-item {
+            display: block;
+            padding: 10px 15px;
+            font-weight: 700;
+            color: var(--black);
+            text-decoration: none;
+            border-radius: 8px;
+        }
+        .filter-item:hover { background: #eee; }
+        .filter-item.active { background: var(--brand-orange); color: var(--white); }
+
+        /* --- Post List --- */
+        .thread-row {
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            text-decoration: none;
+            color: var(--black);
+            transition: 0.2s;
+            box-shadow: 4px 4px 0px var(--black);
+        }
+        .thread-row:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--black);
+        }
+
+        .vote-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 40px;
+            font-weight: 800;
+        }
+        
+        .pinned-tag {
+            font-size: 0.7rem;
+            background: var(--black);
+            color: var(--white);
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-weight: 700;
+            margin-right: 5px;
+        }
+
+        .thread-content { flex: 1; }
+        .thread-title { font-weight: 800; font-size: 1.1rem; margin-bottom: 5px; }
+        .thread-meta { font-size: 0.8rem; color: #666; }
+
+        @media (max-width: 900px) {
+            .page-container { grid-template-columns: 1fr; }
+            .station-banner { height: 150px; }
+            .station-titles h1 { font-size: 1.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-wrapper">
+        <nav>
+            <a href="../../index.html" class="brand">VERTO<span>.</span></a>
+            <div class="nav-menu">
+                <a href="community.html" class="nav-link">Feed</a>
+                <a href="perks.html" class="nav-link">Perks</a>
+                <a href="../discovery/browse.html" class="nav-link">Discover</a>
+            </div>
+            <div class="nav-user">
+                <a href="../billing/settings.html" style="color:var(--black); text-decoration:none;">Account</a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Station Header -->
+    <div class="station-hero">
+        <div class="station-banner"></div>
+        <div class="station-meta-wrapper">
+            <div class="station-avatar">
+                <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=200">
+            </div>
+            <div class="station-titles">
+                <h1>Retro Tech</h1>
+                <p style="font-weight:700; color:#555;">52.2k Members</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="page-container">
+        <!-- Sidebar -->
+        <aside>
+            <a href="#" class="action-btn" style="
+                background:var(--brand-orange); 
+                color:var(--white); 
+                padding:15px; 
+                border-radius:12px; 
+                text-decoration:none; 
+                font-weight:800; 
+                display:block; 
+                text-align:center; 
+                border:2px solid var(--black);
+                margin-bottom:20px;
+                box-shadow: 4px 4px 0px var(--black);
+            ">
+                + New Thread
+            </a>
+
+            <div class="filter-list">
+                <a href="#" class="filter-item active">All Posts</a>
+                <a href="#" class="filter-item">Announcements</a>
+                <a href="#" class="filter-item">Discussion</a>
+                <a href="#" class="filter-item">Help</a>
+                <a href="#" class="filter-item">Fan Art</a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main>
+            <!-- Pinned Thread -->
+            <a href="thread.html" class="thread-row" style="background: #fff8f0; border-color: var(--brand-orange);">
+                <div class="vote-box" style="color: var(--brand-orange);">
+                    <i data-lucide="pin" size="20"></i>
+                </div>
+                <div class="thread-content">
+                    <div class="thread-title"><span class="pinned-tag">Pinned</span> Welcome to the Retro Tech community! Read the rules first.</div>
+                    <div class="thread-meta">Posted by <strong>Admin</strong> • 5 days ago</div>
+                </div>
+                <div style="font-weight:700; font-size:0.9rem;">
+                    <i data-lucide="message-square" size="14"></i> 0
+                </div>
+            </a>
+
+            <!-- Thread 1 -->
+            <a href="thread.html" class="thread-row">
+                <div class="vote-box">
+                    <i data-lucide="arrow-big-up" size="24"></i>
+                    <span>256</span>
+                </div>
+                <div class="thread-content">
+                    <div class="thread-title">Thoughts on the CRT effect in the latest video?</div>
+                    <div class="thread-meta">Posted by <strong>PixelMaster</strong> • 2 hours ago</div>
+                </div>
+                <div style="font-weight:700; font-size:0.9rem;">
+                    <i data-lucide="message-square" size="14"></i> 42
+                </div>
+            </a>
+
+            <!-- Thread 2 -->
+            <a href="thread.html" class="thread-row">
+                <div class="vote-box">
+                    <i data-lucide="arrow-big-up" size="24"></i>
+                    <span>118</span>
+                </div>
+                <div class="thread-content">
+                    <div class="thread-title">My collection of vintage floppies (Photo)</div>
+                    <div class="thread-meta">Posted by <strong>RetroDave</strong> • 5 hours ago</div>
+                </div>
+                <div style="font-weight:700; font-size:0.9rem;">
+                    <i data-lucide="message-square" size="14"></i> 15
+                </div>
+            </a>
+
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
