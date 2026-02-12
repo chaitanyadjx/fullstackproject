@@ -1,0 +1,394 @@
+community.html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTO | Community Hub</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Lora:ital,wght@1,500;1,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-orange: #FF4D24;
+            --black: #0A0A0A;
+            --white: #FFFFFF;
+            --soft-gray: #F8F8F8;
+            --border-thick: 3px solid var(--black);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            color: var(--black);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--soft-gray);
+            min-height: 100vh;
+        }
+
+        /* --- Nav --- */
+        .nav-wrapper {
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+            padding: 0 5%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 30px;
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 100px;
+            box-shadow: 6px 6px 0px var(--black);
+        }
+
+        .brand {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--black);
+            text-decoration: none;
+            letter-spacing: -2px;
+        }
+        .brand span { color: var(--brand-orange); }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            font-weight: 700;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 1rem;
+        }
+        .nav-link.active {
+            color: var(--brand-orange);
+            text-decoration: underline;
+            text-decoration-thickness: 3px;
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+
+        .user-avatar-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--black);
+            overflow: hidden;
+            border: 2px solid var(--black);
+        }
+        .user-avatar-small img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- Layout --- */
+        .page-container {
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 40px;
+        }
+
+        /* --- Sidebar (Communities) --- */
+        .sidebar h3 {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-weight: 800;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            border-bottom: var(--border-thick);
+            padding-bottom: 10px;
+        }
+
+        .community-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .community-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 12px;
+            text-decoration: none;
+            color: var(--black);
+            transition: 0.2s;
+            box-shadow: 3px 3px 0px var(--black);
+        }
+
+        .community-item:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 5px 5px 0px var(--black);
+        }
+
+        .com-avatar {
+            width: 40px;
+            height: 40px;
+            background: #ddd;
+            border: 2px solid var(--black);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .com-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        .com-info h4 { font-size: 1rem; font-weight: 800; }
+        .com-info span { font-size: 0.8rem; font-weight: 500; color: #666; }
+
+        /* --- Feed --- */
+        .feed-header {
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+
+        .feed-header h1 {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 3rem;
+            line-height: 0.9;
+        }
+        
+        .action-btn {
+            background: var(--black);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+        .action-btn:hover { background: var(--brand-orange); }
+
+        .post-card {
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 20px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 8px 8px 0px var(--black);
+        }
+
+        .post-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .post-author {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: var(--black);
+        }
+        .author-badge {
+            background: var(--brand-orange);
+            color: var(--white);
+            font-size: 0.7rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .post-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin-bottom: 15px;
+            font-family: 'Lora', serif;
+            font-style: italic;
+        }
+
+        .post-body {
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .post-image {
+            width: 100%;
+            height: 300px;
+            background: #eee;
+            border: 2px solid var(--black);
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .post-image img { width: 100%; height: 100%; object-fit: cover; }
+
+        .post-footer {
+            display: flex;
+            gap: 20px;
+            font-weight: 700;
+            color: #666;
+        }
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .stat-item:hover { color: var(--brand-orange); }
+
+        @media (max-width: 900px) {
+            .page-container { grid-template-columns: 1fr; }
+            .sidebar { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-wrapper">
+        <nav>
+            <a href="../../index.html" class="brand">VERTO<span>.</span></a>
+            
+            <div class="nav-menu">
+                <a href="community.html" class="nav-link active">Feed</a>
+                <a href="perks.html" class="nav-link">Perks</a>
+                <a href="../discovery/browse.html" class="nav-link">Discover</a>
+            </div>
+
+            <div class="nav-user">
+                <a href="../billing/settings.html" style="color:var(--black); text-decoration:none;">Account</a>
+                <div class="user-avatar-small">
+                    <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=100" alt="User">
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="page-container">
+        <!-- Sidebar - My Communities -->
+        <aside class="sidebar">
+            <h3>My Stations</h3>
+            <div class="community-list">
+                <a href="station-forum.html" class="community-item">
+                    <div class="com-avatar">
+                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=100" alt="Retro Tech">
+                    </div>
+                    <div class="com-info">
+                        <h4>Retro Tech</h4>
+                        <span>Admin Updates</span>
+                    </div>
+                </a>
+                <a href="station-forum.html" class="community-item">
+                    <div class="com-avatar">
+                        <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=100" alt="Music Lab">
+                    </div>
+                    <div class="com-info">
+                        <h4>Music Lab</h4>
+                        <span>General Chat</span>
+                    </div>
+                </a>
+                <a href="station-forum.html" class="community-item">
+                    <div class="com-avatar">
+                        <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=100" alt="Code Space">
+                    </div>
+                    <div class="com-info">
+                        <h4>Code Space</h4>
+                        <span>Help & Q&A</span>
+                    </div>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Feed -->
+        <main>
+            <div class="feed-header">
+                <div>
+                    <h1>Community Feed</h1>
+                    <p>Updates, discussions, and exclusive drops from your stations.</p>
+                </div>
+                <a href="#" class="action-btn">
+                    <i data-lucide="filter" size="18"></i> Filter
+                </a>
+            </div>
+
+            <!-- Post 1 -->
+            <article class="post-card">
+                <div class="post-meta">
+                    <a href="station-forum.html" class="post-author">
+                        <div class="user-avatar-small">
+                            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=100" alt="Creator">
+                        </div>
+                        <div>
+                            <span style="font-weight: 800;">Retro Tech</span>
+                            <span class="author-badge">Creator</span>
+                            <span style="font-size: 0.8rem; color: #666; margin-left: 8px;">2 hours ago</span>
+                        </div>
+                    </a>
+                    <a href="thread.html" style="color:var(--black);"><i data-lucide="more-horizontal"></i></a>
+                </div>
+
+                <div class="post-title">First look at the new collection dropping Friday!</div>
+                <div class="post-body">
+                    <p>We've been working on this for months. Channel members get early access starting tomorrow at 12PM EST. Check your perks tab for the claim code.</p>
+                </div>
+                
+                <div class="post-image">
+                    <img src="https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80&w=800" alt="Teaser">
+                </div>
+
+                <div class="post-footer">
+                    <div class="stat-item"><i data-lucide="heart" size="18"></i> 1.2k</div>
+                    <a href="thread.html" class="stat-item" style="text-decoration:none; color:inherit;"><i data-lucide="message-square" size="18"></i> 234 Comments</a>
+                    <div class="stat-item"><i data-lucide="share-2" size="18"></i> Share</div>
+                </div>
+            </article>
+
+            <!-- Post 2 -->
+            <article class="post-card">
+                <div class="post-meta">
+                    <a href="public-profile.html" class="post-author">
+                        <div class="user-avatar-small">
+                            <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=100" alt="User">
+                        </div>
+                        <div>
+                            <span style="font-weight: 800;">Sarah Jenkins</span>
+                            <span style="font-size: 0.8rem; color: #666; margin-left: 8px;">in Music Lab</span>
+                        </div>
+                    </a>
+                    <a href="thread.html" style="color:var(--black);"><i data-lucide="more-horizontal"></i></a>
+                </div>
+
+                <div class="post-title">Does anyone know what synth was used in the latest video?</div>
+                <div class="post-body">
+                    <p>It sounds like a Juno-106 but I'm not entirely sure. Currently trying to recreate the patch in Serum if anyone wants to collab.</p>
+                </div>
+
+                <div class="post-footer">
+                    <div class="stat-item"><i data-lucide="heart" size="18"></i> 45</div>
+                    <a href="thread.html" class="stat-item" style="text-decoration:none; color:inherit;"><i data-lucide="message-square" size="18"></i> 12 Comments</a>
+                </div>
+            </article>
+
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
