@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTO | Admin Bundles</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Lora:ital,wght@1,500;1,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-orange: #FF4D24;
+            --black: #0A0A0A;
+            --white: #FFFFFF;
+            --soft-gray: #F8F8F8;
+            --border-thick: 3px solid var(--black);
+            --admin-accent: #3b82f6; 
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            color: var(--black);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--soft-gray);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Top Nav --- */
+        .admin-nav {
+            background: var(--white);
+            color: var(--black);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: var(--border-thick);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--black);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .brand span { 
+            background: var(--black); 
+            color: var(--white); 
+            padding: 2px 8px; 
+            font-size: 0.8rem; 
+            border-radius: 4px;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .nav-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        /* --- Layout --- */
+        .layout-container {
+            display: flex;
+            flex: 1;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 250px;
+            background: var(--black); 
+            color: #ccc;
+            padding: 30px 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .side-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: #999;
+            font-weight: 600;
+            border-radius: 6px;
+            transition: 0.2s;
+            border: 1px solid transparent;
+        }
+        .side-link:hover {
+            color: var(--white);
+            background: #222;
+        }
+        .side-link.active {
+            background: var(--white);
+            color: var(--black);
+            font-weight: 800;
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        h1 {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 2.5rem;
+        }
+
+        .header-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .btn-create {
+            background: var(--black);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 800;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+        .btn-create:hover { opacity: 0.9; transform: translateY(-2px); }
+
+        /* --- Bundle Grid --- */
+        .bundle-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .bundle-card {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 6px 6px 0px rgba(0,0,0,0.1);
+        }
+
+        .bundle-header {
+            height: 120px;
+            background: #333;
+            position: relative;
+            padding: 20px;
+            display: flex;
+            align-items: flex-end;
+        }
+        
+        .bundle-badges {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--white);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 800;
+            text-transform: uppercase;
+        }
+
+        .bundle-body {
+            padding: 20px;
+        }
+
+        .bundle-title { font-size: 1.4rem; font-weight: 800; font-family: 'Lora', serif; margin-bottom: 5px; }
+        .bundle-stat { font-size: 0.9rem; color: #666; font-weight: 600; display:flex; justify-content:space-between; margin-top:10px; border-bottom: 1px solid #eee; padding-bottom: 10px;}
+        .stat-val { color: var(--black); font-weight: 800; }
+
+        .bundle-stations {
+            display: flex;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+        .station-avatar {
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            background: #ddd;
+            border: 2px solid var(--white);
+            margin-left: -10px;
+        }
+        .station-avatar:first-child { margin-left: 0; }
+
+    </style>
+</head>
+<body>
+
+    <nav class="admin-nav">
+        <a href="dashboard.html" class="brand">VERTO <span>ADMIN</span></a>
+        <div class="nav-right">
+            <span>root_admin</span>
+            <div style="width: 32px; height: 32px; background: var(--black); border-radius: 50%;"></div>
+        </div>
+    </nav>
+
+    <div class="layout-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="dashboard.html" class="side-link">
+                <i data-lucide="bar-chart-2" size="20"></i> Overview
+            </a>
+            <a href="creators.html" class="side-link">
+                <i data-lucide="users" size="20"></i> Creators Queue
+            </a>
+            <a href="bundles.html" class="side-link active">
+                <i data-lucide="package" size="20"></i> Bundles
+            </a>
+            <a href="safety.html" class="side-link">
+                <i data-lucide="shield-alert" size="20"></i> Safety & Reports
+            </a>
+            <div style="flex:1;"></div>
+            <a href="../auth/sign-in.html" class="side-link">
+                <i data-lucide="log-out" size="20"></i> Logout
+            </a>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <div class="header-actions">
+                <h1>Global Bundles</h1>
+                <a href="#" class="btn-create"><i data-lucide="plus" size="18"></i> Create Bundle</a>
+            </div>
+
+            <div class="bundle-grid">
+                
+                <!-- Bundle 1 -->
+                <div class="bundle-card">
+                    <div class="bundle-header" style="background: linear-gradient(45deg, #1e3a8a, #3b82f6);">
+                        <div style="color:white; font-weight:800; font-size:1.5rem;">$14.99</div>
+                        <div class="bundle-badges">Featured</div>
+                    </div>
+                    <div class="bundle-body">
+                        <div class="bundle-title">The Tech Stack</div>
+                        <div style="color:#666; font-size:0.9rem;">8 premium technology channels included.</div>
+                        
+                        <div class="bundle-stations">
+                            <div class="station-avatar" style="background: #333;"></div>
+                            <div class="station-avatar" style="background: #555;"></div>
+                            <div class="station-avatar" style="background: #777;"></div>
+                            <div class="station-avatar" style="background: #999;"></div>
+                            <div style="margin-left: 10px; font-size: 0.8rem; align-self: center; font-weight: 700; color: #666;">+4 More</div>
+                        </div>
+
+                        <div class="bundle-stat">
+                            <span>Subscribers</span>
+                            <span class="stat-val">12.5k</span>
+                        </div>
+                        <div class="bundle-stat" style="border:none;">
+                            <span>Est. MRR</span>
+                            <span class="stat-val">$187,000</span>
+                        </div>
+                        
+                        <button style="width:100%; padding:10px; background:var(--white); border:2px solid #ddd; border-radius:6px; font-weight:700; cursor:pointer; margin-top:10px;">Edit</button>
+                    </div>
+                </div>
+
+                <!-- Bundle 2 -->
+                <div class="bundle-card">
+                    <div class="bundle-header" style="background: linear-gradient(45deg, #065f46, #10b981);">
+                        <div style="color:white; font-weight:800; font-size:1.5rem;">$9.99</div>
+                    </div>
+                    <div class="bundle-body">
+                        <div class="bundle-title">Cozy Gaming</div>
+                        <div style="color:#666; font-size:0.9rem;">Relaxing playthroughs and vibes.</div>
+                        
+                        <div class="bundle-stations">
+                            <div class="station-avatar" style="background: #a7f3d0;"></div>
+                            <div class="station-avatar" style="background: #6ee7b7;"></div>
+                            <div class="station-avatar" style="background: #34d399;"></div>
+                        </div>
+
+                        <div class="bundle-stat">
+                            <span>Subscribers</span>
+                            <span class="stat-val">8.2k</span>
+                        </div>
+                        <div class="bundle-stat" style="border:none;">
+                            <span>Est. MRR</span>
+                            <span class="stat-val">$81,000</span>
+                        </div>
+                        
+                        <button style="width:100%; padding:10px; background:var(--white); border:2px solid #ddd; border-radius:6px; font-weight:700; cursor:pointer; margin-top:10px;">Edit</button>
+                    </div>
+                </div>
+
+                 <!-- Bundle 3 -->
+                 <div class="bundle-card">
+                    <div class="bundle-header" style="background: linear-gradient(45deg, #7c2d12, #ea580c);">
+                        <div style="color:white; font-weight:800; font-size:1.5rem;">$19.99</div>
+                    </div>
+                    <div class="bundle-body">
+                        <div class="bundle-title">Documentary+</div>
+                        <div style="color:#666; font-size:0.9rem;">Indie journalism and long-form docs.</div>
+                        
+                        <div class="bundle-stations">
+                            <div class="station-avatar" style="background: #fdba74;"></div>
+                            <div class="station-avatar" style="background: #fb923c;"></div>
+                            <div class="station-avatar" style="background: #f97316;"></div>
+                            <div class="station-avatar" style="background: #ea580c;"></div>
+                             <div class="station-avatar" style="background: #c2410c;"></div>
+                        </div>
+
+                        <div class="bundle-stat">
+                            <span>Subscribers</span>
+                            <span class="stat-val">4.5k</span>
+                        </div>
+                        <div class="bundle-stat" style="border:none;">
+                            <span>Est. MRR</span>
+                            <span class="stat-val">$89,000</span>
+                        </div>
+                        
+                        <button style="width:100%; padding:10px; background:var(--white); border:2px solid #ddd; border-radius:6px; font-weight:700; cursor:pointer; margin-top:10px;">Edit</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>

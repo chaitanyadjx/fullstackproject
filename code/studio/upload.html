@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTO | Upload</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Lora:ital,wght@1,500;1,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-orange: #FF4D24;
+            --black: #0A0A0A;
+            --white: #FFFFFF;
+            --soft-gray: #F8F8F8;
+            --border-thick: 3px solid var(--black);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            color: var(--black);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--soft-gray);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Top Nav --- */
+        .studio-nav {
+            background: var(--black);
+            color: var(--white);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--white);
+            text-decoration: none;
+        }
+        .brand span { color: var(--brand-orange); }
+
+        .nav-right {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .nav-link {
+            color: #ccc;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* --- Layout --- */
+        .layout-container {
+            display: flex;
+            flex: 1;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar {
+            width: 250px;
+            background: var(--white);
+            border-right: var(--border-thick);
+            padding: 30px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .side-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 15px;
+            text-decoration: none;
+            color: var(--black);
+            font-weight: 700;
+            border-radius: 8px;
+            transition: 0.2s;
+            border: 2px solid transparent;
+        }
+        .side-link:hover {
+            background: #eee;
+        }
+        .side-link.active {
+            background: var(--brand-orange);
+            color: var(--white);
+            border: 2px solid var(--black);
+            box-shadow: 4px 4px 0px var(--black);
+        }
+
+        /* --- Main Content --- */
+        .main-content {
+            flex: 1;
+            padding: 40px;
+            overflow-y: auto;
+        }
+
+        .header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .back-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            text-decoration: none;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        .back-link:hover { color: var(--black); }
+
+        h1 {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 2.5rem;
+        }
+
+        .upload-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+        }
+
+        /* Forms */
+        .form-group { margin-bottom: 24px; }
+        label { display: block; font-weight: 800; margin-bottom: 8px; font-size: 0.9rem; }
+        
+        input[type="text"], textarea, select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            background: var(--white);
+            transition: 0.2s;
+        }
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--black);
+        }
+
+        .btn-upload-area {
+            border: 3px dashed #ccc;
+            background: var(--white);
+            border-radius: 12px;
+            height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-upload-area:hover {
+            border-color: var(--brand-orange);
+            background: #fff5f2;
+        }
+        .upload-txt { font-weight: 700; font-size: 1.2rem; }
+        .upload-sub { color: #888; text-align: center; max-width: 80%; }
+
+        .preview-card {
+            background: var(--white);
+            border: 2px solid var(--black);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 6px 6px 0px #ccc;
+        }
+        .preview-thumb {
+            aspect-ratio: 16/9;
+            background: #333;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .footer-actions {
+            margin-top: 40px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: 800;
+            border: 2px solid var(--black);
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.2s;
+        }
+        .btn-secondary {
+            background: var(--white);
+            color: var(--black);
+            box-shadow: 4px 4px 0px #ddd;
+        }
+        .btn-secondary:hover { box-shadow: 2px 2px 0px #ddd; transform: translate(2px, 2px); }
+
+        .btn-primary {
+            background: var(--brand-orange);
+            color: var(--white);
+            box-shadow: 4px 4px 0px var(--black);
+        }
+        .btn-primary:hover {
+            box-shadow: 2px 2px 0px var(--black);
+            transform: translate(2px, 2px);
+        }
+
+    </style>
+</head>
+<body>
+
+    <nav class="studio-nav">
+        <a href="dashboard.html" class="brand">VERTO <span>STUDIO</span></a>
+        <div class="nav-right">
+            <a href="../discovery/station.html" class="nav-link"><i data-lucide="external-link" size="18"></i> View Station</a>
+            <div style="width: 32px; height: 32px; background: #333; border-radius: 50%; border: 1px solid #555; overflow: hidden;">
+                 <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=100" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+        </div>
+    </nav>
+
+    <div class="layout-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <a href="dashboard.html" class="side-link">
+                <i data-lucide="layout-dashboard" size="20"></i> Dashboard
+            </a>
+            <a href="content.html" class="side-link active">
+                <i data-lucide="video" size="20"></i> Content
+            </a>
+            <a href="schedule.html" class="side-link">
+                <i data-lucide="calendar" size="20"></i> Schedule
+            </a>
+            <a href="community.html" class="side-link">
+                <i data-lucide="users" size="20"></i> Community
+            </a>
+            <a href="tiers.html" class="side-link">
+                <i data-lucide="star" size="20"></i> Tiers
+            </a>
+            <a href="payouts.html" class="side-link">
+                <i data-lucide="dollar-sign" size="20"></i> Payouts
+            </a>
+            <div style="flex:1;"></div>
+            <a href="settings.html" class="side-link">
+                <i data-lucide="settings" size="20"></i> Settings
+            </a>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <a href="content.html" class="back-link"><i data-lucide="arrow-left" size="16"></i> Cancel Upload</a>
+            <div class="header-row">
+                <h1>New Upload</h1>
+            </div>
+
+            <div class="upload-grid">
+                
+                <div class="upload-left">
+                    <div class="btn-upload-area">
+                        <i data-lucide="upload-cloud" size="48" color="#FF4D24"></i>
+                        <div class="upload-txt">Drag and drop video files to upload</div>
+                        <div class="upload-sub">Your videos will remain private until you publish them.</div>
+                        <button class="btn btn-secondary">Select Files</button>
+                    </div>
+
+                    <div style="margin-top: 30px;">
+                        <h3 style="margin-bottom: 20px;">Details</h3>
+                        
+                        <div class="form-group">
+                            <label>Title</label>
+                            <input type="text" placeholder="Add a title that describes your video">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea rows="5" placeholder="Tell viewers about your video"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Thumbnail</label>
+                            <div style="display:flex; gap:10px;">
+                                <div style="width: 140px; height: 80px; border: 2px solid #ddd; border-radius:8px; display:flex; align-items:center; justify-content:center; background: #fff;">
+                                    <i data-lucide="image-plus" color="#ccc"></i>
+                                </div>
+                                <div style="width: 140px; height: 80px; border: 2px dashed #ddd; border-radius:8px; display:flex; align-items:center; justify-content:center;">Auto 1</div>
+                                <div style="width: 140px; height: 80px; border: 2px dashed #ddd; border-radius:8px; display:flex; align-items:center; justify-content:center;">Auto 2</div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="upload-right">
+                    <div class="preview-card">
+                        <label>Preview</label>
+                        <div class="preview-thumb">
+                            Video Player
+                        </div>
+                        <div style="font-size: 0.9rem; color:#666;">
+                            <div>Video Link:</div>
+                            <a href="#" style="color: var(--brand-orange)">verto.tv/v/x7B2n9</a>
+                        </div>
+                        <div style="margin-top:20px;">
+                            <label>Visibility</label>
+                            <select>
+                                <option>Public</option>
+                                <option>Members Only</option>
+                                <option>Private</option>
+                                <option>Unlisted</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="footer-actions">
+                <button class="btn btn-secondary">Save as Draft</button>
+                <button class="btn btn-primary">Publish Now</button>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
