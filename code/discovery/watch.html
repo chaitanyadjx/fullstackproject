@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTO | Watch</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Lora:ital,wght@1,500;1,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-orange: #FF4D24;
+            --black: #0A0A0A;
+            --white: #FFFFFF;
+            --soft-gray: #F8F8F8;
+            --border-thick: 3px solid var(--black);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            color: var(--black);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--black); /* Dark mode for cinema feeling */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- Nav (Dark Mode Variant) --- */
+        .nav-wrapper {
+            padding: 20px 2%;
+            background: var(--black);
+            border-bottom: 1px solid #333;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .brand {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: var(--white);
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+        .brand span { color: var(--brand-orange); }
+
+        .nav-controls {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-btn {
+            color: var(--white);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            padding: 8px 16px;
+            border-radius: 50px;
+            transition: 0.2s;
+        }
+        .nav-btn:hover { background: rgba(255,255,255,0.1); }
+        .nav-btn.active { background: var(--brand-orange); color: var(--black); }
+
+        /* --- Player Layout --- */
+        .theater-container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            flex: 1;
+            height: calc(100vh - 80px);
+        }
+
+        /* Left Side: Video */
+        .main-stage {
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .video-player {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 12px;
+            border: 2px solid #333;
+            margin-bottom: 20px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+        }
+
+        .stream-info {
+            padding: 0 10px;
+        }
+        .stream-title {
+            color: var(--white);
+            font-size: 1.5rem;
+            font-family: 'Lora', serif;
+            font-style: italic;
+            margin-bottom: 10px;
+        }
+        
+        .stream-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #888;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 20px;
+        }
+
+        .creator-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .creator-avatar {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            background: #eee;
+        }
+        .creator-btn {
+            background: var(--brand-orange);
+            color: var(--black);
+            border: none;
+            padding: 6px 16px;
+            font-weight: 800;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        /* Start Up Next */
+        .up-next-list {
+            margin-top: 20px;
+        }
+        .list-header {
+            color: var(--white);
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            font-weight: 800;
+        }
+        
+        .next-card {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .next-card:hover { opacity: 0.8; }
+
+        .next-thumb {
+            width: 160px;
+            height: 90px;
+            background: #333;
+            border-radius: 8px;
+            flex-shrink: 0;
+            overflow: hidden;
+        }
+        .next-thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+        .next-info { flex: 1; }
+        .next-title { color: var(--white); font-weight: 700; font-size: 0.95rem; margin-bottom: 4px; }
+        .next-meta { color: #666; font-size: 0.8rem; }
+
+
+        /* Right Side: Chat */
+        .chat-sidebar {
+            background: #111;
+            border-left: 1px solid #333;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .chat-header {
+            padding: 15px;
+            color: var(--white);
+            font-weight: 800;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chat-msg {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #ccc;
+        }
+        .user-name {
+            color: var(--brand-orange);
+            font-weight: 700;
+            margin-right: 6px;
+        }
+        .admin-badge {
+            background: var(--white);
+            color: var(--black);
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            margin-right: 5px;
+        }
+
+        .chat-input-area {
+            padding: 15px;
+            border-top: 1px solid #333;
+            background: #111;
+        }
+        .chat-input {
+            width: 100%;
+            background: #222;
+            border: 1px solid #444;
+            padding: 12px;
+            border-radius: 8px;
+            color: var(--white);
+            outline: none;
+        }
+        .chat-input:focus { border-color: var(--brand-orange); }
+
+        @media (max-width: 900px) {
+            .theater-container { grid-template-columns: 1fr; overflow-y: auto; height: auto; }
+            .chat-sidebar { height: 400px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-wrapper">
+        <nav>
+            <div style="display:flex; align-items:center; gap:20px;">
+                <a href="../../index.html" class="brand">VERTO<span>.</span></a>
+                <a href="browse.html" class="nav-btn"><i data-lucide="arrow-left" size="18"></i> Back to Browse</a>
+            </div>
+            
+            <div class="nav-controls">
+                <a href="../community/community.html" class="nav-btn"><i data-lucide="users" size="18"></i> Community</a>
+                <a href="../billing/settings.html" class="nav-btn"><i data-lucide="user" size="18"></i> Account</a>
+            </div>
+        </nav>
+    </div>
+
+    <div class="theater-container">
+        <!-- Main Stage -->
+        <main class="main-stage">
+            <div class="video-player">
+                <div style="text-align:center;">
+                    <i data-lucide="play-circle" size="64" style="margin-bottom:10px;"></i>
+                    <p>VOD Placeholder</p>
+                </div>
+            </div>
+
+            <div class="stream-info">
+                <h1 class="stream-title">Restoring a 1984 Macintosh - Part 3: The CRT</h1>
+                <div class="stream-meta">
+                    <div class="creator-row">
+                        <div class="creator-avatar">
+                            <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=100">
+                        </div>
+                        <div>
+                            <div style="color:white; font-weight:700;">Retro Tech</div>
+                            <div style="font-size:0.8rem;">52.2k Subscribers</div>
+                        </div>
+                        <button class="creator-btn">Subscribe</button>
+                    </div>
+                    <div style="display:flex; gap:15px;">
+                        <span><i data-lucide="eye" size="16" style="vertical-align:middle;"></i> 850</span>
+                        <span><i data-lucide="thumbs-up" size="16" style="vertical-align:middle;"></i> 2.1k</span>
+                        <span><i data-lucide="share-2" size="16" style="vertical-align:middle;"></i> Share</span>
+                    </div>
+                </div>
+
+                <!-- Up Next -->
+                <div class="up-next-list">
+                    <h3 class="list-header">Up Next on Retro Tech</h3>
+                    
+                    <a href="#" class="next-card">
+                        <div class="next-thumb">
+                            <img src="https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&q=80&w=300" alt="Thumb">
+                        </div>
+                        <div class="next-info">
+                            <div class="next-title">Commodore 64 Midi Setup</div>
+                            <div class="next-meta">Starts at 11:30 PM</div>
+                        </div>
+                    </a>
+
+                    <a href="#" class="next-card">
+                        <div class="next-thumb">
+                            <img src="https://images.unsplash.com/photo-1555664424-778a69631079?auto=format&fit=crop&q=80&w=300" alt="Thumb">
+                        </div>
+                        <div class="next-info">
+                            <div class="next-title">Installing Windows 95 on a Watch</div>
+                            <div class="next-meta">Tomorrow at 2:00 PM</div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <!-- Chat Sidebar -->
+        <aside class="chat-sidebar">
+            <div class="chat-header">
+                <span>Live Chat</span>
+                <i data-lucide="more-horizontal"></i>
+            </div>
+            
+            <div class="chat-messages">
+                <div class="chat-msg">
+                    <span class="user-name">8bit_hero</span>
+                    Can't believe that capacitor didn't blow!
+                </div>
+                <div class="chat-msg">
+                    <span class="admin-badge">MOD</span>
+                    <span class="user-name">RetroAdmin</span>
+                     Please keep chat respectful.
+                </div>
+                <div class="chat-msg">
+                    <span class="user-name">techno_viking</span>
+                     Is this the 128k or the 512k model?
+                </div>
+                <div class="chat-msg">
+                    <span class="user-name">pixel_dust</span>
+                    The aesthetic is so good.
+                </div>
+                <div class="chat-msg">
+                    <span class="user-name">Dr_Diskmag</span>
+                    Wait, did you check the voltage rail?
+                </div>
+                <div class="chat-msg">
+                    <span class="user-name">vapor_wave_Actual</span>
+                    S A D M A C
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <input type="text" class="chat-input" placeholder="Say something...">
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
