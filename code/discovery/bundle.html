@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTO | Creative Bundle</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Lora:ital,wght@1,500;1,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-orange: #FF4D24;
+            --black: #0A0A0A;
+            --white: #FFFFFF;
+            --soft-gray: #F8F8F8;
+            --border-thick: 3px solid var(--black);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            color: var(--black);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--soft-gray);
+            min-height: 100vh;
+        }
+
+        .nav-wrapper {
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+            padding: 0 5%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 30px;
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 100px;
+            box-shadow: 6px 6px 0px var(--black);
+        }
+
+        .brand {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--black);
+            text-decoration: none;
+            letter-spacing: -2px;
+        }
+        .brand span { color: var(--brand-orange); }
+
+        .back-link {
+            text-decoration: none;
+            color: var(--black);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* --- Hero --- */
+        .bundle-hero {
+            background: var(--black);
+            color: var(--white);
+            padding: 80px 5%;
+            margin-top: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .bundle-bg {
+            position: absolute;
+            top: 0; right: 0;
+            width: 50%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.4;
+            mask-image: linear-gradient(to right, transparent, black);
+            -webkit-mask-image: linear-gradient(to right, transparent, black);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+        }
+
+        .label {
+            background: var(--brand-orange);
+            color: var(--white);
+            padding: 6px 12px;
+            font-weight: 800;
+            border-radius: 6px;
+            display: inline-block;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        h1 {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 3.5rem;
+            line-height: 1;
+            margin-bottom: 20px;
+        }
+
+        .price-block {
+            display: flex;
+            align-items: baseline;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .price { font-size: 3rem; font-weight: 800; color: var(--brand-orange); }
+        .period { font-size: 1.2rem; opacity: 0.8; }
+
+        .buy-btn {
+            background: var(--white);
+            color: var(--black);
+            font-size: 1.2rem;
+            padding: 16px 40px;
+            border-radius: 50px;
+            font-weight: 800;
+            text-decoration: none;
+            display: inline-block;
+            transition: 0.2s;
+        }
+        .buy-btn:hover { transform: scale(1.05); background: var(--brand-orange); color: var(--white); }
+
+        /* --- Included --- */
+        .included-section {
+            padding: 60px 8%;
+        }
+
+        .section-title {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 2rem;
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        .station-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .station-card {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: 0.2s;
+        }
+        .station-card:hover { transform: translateY(-5px); box-shadow: 6px 6px 0px var(--black); }
+
+        .s-avatar {
+            width: 80px; height: 80px;
+            background: #eee;
+            border-radius: 50%;
+            margin: 0 auto 15px;
+            border: 2px solid var(--black);
+            overflow: hidden;
+        }
+        .s-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        .s-name { font-weight: 800; font-size: 1.1rem; margin-bottom: 5px; }
+        .s-desc { font-size: 0.9rem; color: #666; line-height: 1.4; }
+
+    </style>
+</head>
+<body>
+
+    <div class="nav-wrapper">
+        <nav>
+            <a href="browse.html" class="back-link"><i data-lucide="arrow-left"></i> Back to Browse</a>
+            <a href="../../index.html" class="brand">VERTO<span>.</span></a>
+            <div style="width: 100px;"></div> <!-- Spacer -->
+        </nav>
+    </div>
+
+    <!-- Hero -->
+    <div class="bundle-hero">
+        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1000" class="bundle-bg" alt="Creative">
+        <div class="hero-content">
+            <span class="label">Mega Pack</span>
+            <h1>The Creative Suite</h1>
+            <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9;">Unlock full access to 5 top-tier design and dev stations. Includes all perks, community access, and live stream archives.</p>
+            
+            <div class="price-block">
+                <span class="price">$25</span>
+                <span class="period">/ month</span>
+            </div>
+
+            <a href="#" class="buy-btn">Get the Bundle</a>
+        </div>
+    </div>
+
+    <!-- Included Stations -->
+    <div class="included-section">
+        <h2 class="section-title">Included in this Bundle</h2>
+        
+        <div class="station-grid">
+            <div class="station-card">
+                <div class="s-avatar">
+                   <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=200" alt="S1">
+                </div>
+                <div class="s-name">Retro Tech</div>
+                <div class="s-desc">Restoring vintage computing history.</div>
+            </div>
+
+            <div class="station-card">
+                 <div class="s-avatar">
+                   <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200" alt="S2">
+                </div>
+                <div class="s-name">Design Systems</div>
+                <div class="s-desc">Deep dives into UI/UX architecture.</div>
+            </div>
+
+            <div class="station-card">
+                 <div class="s-avatar">
+                   <img src="https://images.unsplash.com/photo-1542206395-9feb3edaa68d?auto=format&fit=crop&q=80&w=200" alt="S3">
+                </div>
+                <div class="s-name">Code Kitchen</div>
+                <div class="s-desc">Fullstack tutorials and live debugging.</div>
+            </div>
+
+            <div class="station-card">
+                 <div class="s-avatar">
+                   <img src="https://images.unsplash.com/photo-1593085512500-6d1e375293ef?auto=format&fit=crop&q=80&w=200" alt="S4">
+                </div>
+                <div class="s-name">Motion Daily</div>
+                <div class="s-desc">After Effects wizardry and 3D art.</div>
+            </div>
+            
+             <div class="station-card">
+                 <div class="s-avatar">
+                   <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&q=80&w=200" alt="S5">
+                </div>
+                <div class="s-name">Synth Lab</div>
+                <div class="s-desc">Modular synthesis and sound design.</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
