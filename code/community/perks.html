@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTO | Perks</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Lora:ital,wght@1,500;1,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-orange: #FF4D24;
+            --black: #0A0A0A;
+            --white: #FFFFFF;
+            --soft-gray: #F8F8F8;
+            --border-thick: 3px solid var(--black);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            color: var(--black);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--soft-gray);
+            min-height: 100vh;
+        }
+
+        /* --- Nav --- */
+        .nav-wrapper {
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+            padding: 0 5%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 30px;
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 100px;
+            box-shadow: 6px 6px 0px var(--black);
+        }
+
+        .brand {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--black);
+            text-decoration: none;
+            letter-spacing: -2px;
+        }
+        .brand span { color: var(--brand-orange); }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            font-weight: 700;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 1rem;
+        }
+        .nav-link.active {
+            color: var(--brand-orange);
+            text-decoration: underline;
+            text-decoration-thickness: 3px;
+        }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+        
+        .user-avatar-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--black);
+            overflow: hidden;
+            border: 2px solid var(--black);
+        }
+        .user-avatar-small img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- Layout --- */
+        .page-container {
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 5%;
+        }
+
+        .page-header {
+            margin-bottom: 50px;
+            text-align: center;
+        }
+        .page-header h1 {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        .page-header p { font-size: 1.2rem; color: #666; }
+
+        /* --- Perks Grid --- */
+        .perks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .perk-card {
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 6px 6px 0px var(--black);
+            transition: 0.2s;
+            display: flex;
+            flex-direction: column;
+        }
+        .perk-card:hover {
+            transform: translate(-4px, -4px);
+            box-shadow: 10px 10px 0px var(--black);
+        }
+
+        .perk-image {
+            height: 200px;
+            background: #eee;
+            border-bottom: var(--border-thick);
+            position: relative;
+        }
+        .perk-image img { width: 100%; height: 100%; object-fit: cover; }
+
+        .station-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: var(--black);
+            color: var(--white);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: 800;
+            font-size: 0.8rem;
+        }
+
+        .perk-content {
+            padding: 25px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .perk-title {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-weight: 800;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+        }
+        
+        .perk-desc {
+            color: #555;
+            margin-bottom: 20px;
+            flex: 1;
+            line-height: 1.5;
+        }
+
+        .claim-btn {
+            background: var(--brand-orange);
+            color: var(--white);
+            border: 2px solid var(--black);
+            padding: 12px;
+            width: 100%;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .claim-btn:hover {
+            background: var(--black);
+        }
+        
+        .claimed-btn {
+            background: #ddd;
+            color: #888;
+            border: 2px solid #bbb;
+            padding: 12px;
+            width: 100%;
+            border-radius: 10px;
+            font-weight: 800;
+            font-size: 1rem;
+            cursor: not-allowed;
+            text-align: center; 
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="nav-wrapper">
+        <nav>
+            <a href="../../index.html" class="brand">VERTO<span>.</span></a>
+            <div class="nav-menu">
+                <a href="community.html" class="nav-link">Feed</a>
+                <a href="perks.html" class="nav-link active">Perks</a>
+                <a href="../discovery/browse.html" class="nav-link">Discover</a>
+            </div>
+            <div class="nav-user">
+                <a href="../billing/settings.html" style="color:var(--black); text-decoration:none;">Account</a>
+                 <div class="user-avatar-small">
+                    <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=100" alt="User">
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="page-container">
+        
+        <div class="page-header">
+            <h1>Subscriber Perks</h1>
+            <p>Exclusive downloads, wallpapers, and codes from your stations.</p>
+        </div>
+
+        <div class="perks-grid">
+            
+            <!-- Perk 1 -->
+            <div class="perk-card">
+                <div class="perk-image">
+                    <span class="station-badge">Retro Tech</span>
+                    <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=600" alt="Wallpaper">
+                </div>
+                <div class="perk-content">
+                    <div class="perk-title">4K Wallpaper Pack Vol. 2</div>
+                    <p class="perk-desc">A collection of 10 high-resolution desktop backgrounds featuring vintage hardware.</p>
+                    <button class="claim-btn">Download .ZIP</button>
+                </div>
+            </div>
+
+            <!-- Perk 2 -->
+            <div class="perk-card">
+                <div class="perk-image">
+                    <span class="station-badge">Music Lab</span>
+                    <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?auto=format&fit=crop&q=80&w=600" alt="Samples">
+                </div>
+                <div class="perk-content">
+                    <div class="perk-title">Analog Drum Samples</div>
+                    <p class="perk-desc">200+ royalty-free wav files recorded from a TR-808.</p>
+                    <button class="claim-btn">Get Access</button>
+                </div>
+            </div>
+
+            <!-- Perk 3 -->
+            <div class="perk-card">
+                <div class="perk-image">
+                    <span class="station-badge">Code Space</span>
+                    <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=600" alt="Theme">
+                </div>
+                <div class="perk-content">
+                    <div class="perk-title">VS Code Theme: Midnight</div>
+                    <p class="perk-desc">The exact color theme I use in my tutorials. Easy on the eyes for late night coding.</p>
+                    <div class="claimed-btn">Claimed</div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
