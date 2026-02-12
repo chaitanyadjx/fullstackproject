@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTO | Retro Tech Station</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Lora:ital,wght@1,500;1,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-orange: #FF4D24;
+            --black: #0A0A0A;
+            --white: #FFFFFF;
+            --soft-gray: #F8F8F8;
+            --border-thick: 3px solid var(--black);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            color: var(--black);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--soft-gray);
+            min-height: 100vh;
+        }
+
+        /* --- Nav --- */
+        .nav-wrapper {
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+            padding: 0 5%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 30px;
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 100px;
+            box-shadow: 6px 6px 0px var(--black);
+        }
+
+        .brand {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--black);
+            text-decoration: none;
+            letter-spacing: -2px;
+        }
+        .brand span { color: var(--brand-orange); }
+
+        .nav-menu {
+            display: flex;
+            gap: 30px;
+            font-weight: 700;
+        }
+        
+        .nav-link {
+            text-decoration: none;
+            color: var(--black);
+            font-size: 1rem;
+        }
+        .nav-link:hover { color: var(--brand-orange); }
+
+        /* --- Station Hero --- */
+        .station-header {
+            background: var(--white);
+            border-bottom: var(--border-thick);
+            padding-bottom: 40px;
+        }
+
+        .banner {
+            height: 250px;
+            background: #333;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .station-meta-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 5%;
+            position: relative;
+            margin-top: -60px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            align-items: flex-end;
+        }
+
+        .station-avatar {
+            width: 180px;
+            height: 180px;
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 20px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        .station-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        .station-info {
+            flex: 1;
+            padding-bottom: 10px;
+        }
+
+        .station-title {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 2.5rem;
+            font-weight: 800;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .station-tags {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .tag {
+            background: #eee;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        .subscribe-btn {
+            background: var(--brand-orange);
+            color: var(--white);
+            border: 3px solid var(--black);
+            padding: 12px 30px;
+            font-weight: 800;
+            text-transform: uppercase;
+            border-radius: 50px;
+            box-shadow: 4px 4px 0px var(--black);
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 1rem;
+        }
+        .subscribe-btn:hover {
+            transform: translate(-2px, -2px);
+            box-shadow: 6px 6px 0px var(--black);
+        }
+
+        /* --- Tabs --- */
+        .station-nav {
+            max-width: 1200px;
+            margin: 30px auto 0;
+            padding: 0 5%;
+            display: flex;
+            gap: 30px;
+            border-bottom: 2px solid #eee;
+        }
+        .tab-link {
+            padding-bottom: 15px;
+            text-decoration: none;
+            color: #666;
+            font-weight: 700;
+            border-bottom: 3px solid transparent;
+        }
+        .tab-link.active {
+            color: var(--black);
+            border-color: var(--brand-orange);
+        }
+
+        /* --- Content Grid --- */
+        .content-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .video-card {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 12px;
+            overflow: hidden;
+            text-decoration: none;
+            color: var(--black);
+            transition: 0.2s;
+        }
+        .video-card:hover { transform: translateY(-4px); box-shadow: 4px 4px 0px var(--black); }
+
+        .vid-thumb {
+            height: 140px;
+            background: #ddd;
+            position: relative;
+        }
+        .vid-thumb img { width: 100%; height: 100%; object-fit: cover; }
+        .vid-duration {
+            position: absolute;
+            bottom: 8px; right: 8px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+        }
+
+        .vid-info { padding: 15px; }
+        .vid-title { font-weight: 700; font-size: 1rem; margin-bottom: 5px; line-height: 1.3; }
+        .vid-meta { font-size: 0.8rem; color: #666; }
+
+        /* --- Tiers / Sidebar --- */
+        .sidebar h3 {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--black);
+            display: inline-block;
+        }
+
+        .tier-card {
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        .tier-name { font-weight: 800; font-size: 1.1rem; margin-bottom: 5px; }
+        .tier-price { color: var(--brand-orange); font-weight: 800; font-size: 1.2rem; margin-bottom: 15px; }
+        .tier-perk { display: flex; gap: 8px; font-size: 0.9rem; margin-bottom: 8px; align-items: flex-start;}
+
+        .btn-tier {
+            width: 100%;
+            padding: 10px;
+            background: var(--black);
+            color: var(--white);
+            border: none;
+            border-radius: 8px;
+            font-weight: 700;
+            margin-top: 15px;
+            cursor: pointer;
+        }
+        .btn-tier:hover { opacity: 0.9; }
+
+    </style>
+</head>
+<body>
+
+    <div class="nav-wrapper">
+        <nav>
+            <a href="../../index.html" class="brand">VERTO<span>.</span></a>
+            <div class="nav-menu">
+                <a href="browse.html" class="nav-link">Discover</a>
+                <a href="guide.html" class="nav-link">Guide</a>
+                <a href="../community/community.html" class="nav-link">Community</a>
+            </div>
+            <a href="../billing/settings.html" style="color:var(--black); text-decoration:none; font-weight:700;">Account</a>
+        </nav>
+    </div>
+
+    <!-- Station Header -->
+    <header class="station-header">
+        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1200" class="banner" alt="Banner">
+        
+        <div class="station-meta-container">
+            <div class="station-avatar">
+                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400" alt="Avatar">
+            </div>
+            <div class="station-info">
+                <h1 class="station-title">Retro Tech</h1>
+                <div class="station-tags">
+                    <span class="tag">Technology</span>
+                    <span class="tag">History</span>
+                    <span class="tag">Restoration</span>
+                </div>
+                <p style="max-width: 600px; line-height: 1.5;">Restoring vintage computers, exploring abandoned abandonware, and keeping the beige box dream alive. New videos every Tuesday.</p>
+            </div>
+            <div>
+                <button class="subscribe-btn">Subscribe $5/mo</button>
+            </div>
+        </div>
+
+        <div class="station-nav">
+            <a href="#" class="tab-link active">Videos</a>
+            <a href="live.html" class="tab-link">Live</a>
+            <a href="../community/station-forum.html" class="tab-link">Community</a>
+            <a href="#" class="tab-link">About</a>
+        </div>
+    </header>
+
+    <div class="content-container">
+        
+        <!-- Main Content (Videos) -->
+        <div>
+            <h3 style="font-weight:800; margin-bottom:20px;">Latest Uploads</h3>
+            <div class="video-grid">
+                <!-- Video 1 -->
+                <a href="watch.html" class="video-card">
+                    <div class="vid-thumb">
+                        <img src="https://images.unsplash.com/photo-1517430816045-df4b7de8db17?auto=format&fit=crop&q=80&w=600" alt="Video">
+                        <span class="vid-duration">12:45</span>
+                    </div>
+                    <div class="vid-info">
+                        <div class="vid-title">The Commodore 64 Mystery</div>
+                        <div class="vid-meta">2 days ago • 14k views</div>
+                    </div>
+                </a>
+
+                <!-- Video 2 -->
+                <a href="watch.html" class="video-card">
+                    <div class="vid-thumb">
+                        <img src="https://images.unsplash.com/photo-1526666923127-b2970f64b422?auto=format&fit=crop&q=80&w=600" alt="Video">
+                        <span class="vid-duration">45:10</span>
+                    </div>
+                    <div class="vid-info">
+                        <div class="vid-title">Restoring a 1984 Macintosh - Part 3</div>
+                        <div class="vid-meta">1 week ago • 32k views</div>
+                    </div>
+                </a>
+
+                <!-- Video 3 -->
+                <a href="watch.html" class="video-card">
+                    <div class="vid-thumb">
+                        <img src="https://images.unsplash.com/photo-1629752187687-3d3c7ea3a21b?auto=format&fit=crop&q=80&w=600" alt="Video">
+                        <span class="vid-duration">08:20</span>
+                    </div>
+                    <div class="vid-info">
+                        <div class="vid-title">Why I still use Windows 95</div>
+                        <div class="vid-meta">2 weeks ago • 8k views</div>
+                    </div>
+                </a>
+
+                <!-- Video 4 -->
+                <a href="watch.html" class="video-card">
+                    <div class="vid-thumb">
+                        <img src="https://images.unsplash.com/photo-1555680202-c86f0e12f086?auto=format&fit=crop&q=80&w=600" alt="Video">
+                        <span class="vid-duration">22:15</span>
+                    </div>
+                    <div class="vid-info">
+                        <div class="vid-title">Mechanical Keyboard History</div>
+                        <div class="vid-meta">3 weeks ago • 55k views</div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- Sidebar (Tiers) -->
+        <div class="sidebar">
+            <h3>Support the Station</h3>
+            <p style="margin-bottom:20px; font-size:0.9rem; margin-top:10px;">Directly support the preservation of tech history.</p>
+
+            <div class="tier-card">
+                <div class="tier-name">Supporter</div>
+                <div class="tier-price">$5 / month</div>
+                <div class="tier-perk"><i data-lucide="check" size="16"></i> Early Access to videos</div>
+                <div class="tier-perk"><i data-lucide="check" size="16"></i> Supporter Badge</div>
+                <button class="btn-tier">Join Tier</button>
+            </div>
+
+            <div class="tier-card" style="border-color: var(--brand-orange); box-shadow: 6px 6px 0px var(--brand-orange);">
+                <div style="position:absolute; top:-12px; right:20px; background:var(--brand-orange); color:white; font-size:0.7rem; font-weight:800; padding:2px 8px; border-radius:4px;">POPULAR</div>
+                <div class="tier-name">Producer</div>
+                <div class="tier-price">$15 / month</div>
+                <div class="tier-perk"><i data-lucide="check" size="16"></i> All Supporter perks</div>
+                <div class="tier-perk"><i data-lucide="check" size="16"></i> Name in credits</div>
+                <div class="tier-perk"><i data-lucide="check" size="16"></i> Monthly Q&A</div>
+                <button class="btn-tier" style="background:var(--brand-orange);">Join Tier</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
