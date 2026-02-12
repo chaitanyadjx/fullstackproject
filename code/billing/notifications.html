@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTO | Notifications</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Lora:ital,wght@1,500;1,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-orange: #FF4D24;
+            --black: #0A0A0A;
+            --white: #FFFFFF;
+            --soft-gray: #F8F8F8;
+            --border-thick: 3px solid var(--black);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            color: var(--black);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--soft-gray);
+            min-height: 100vh;
+        }
+
+        /* --- Nav --- */
+        .nav-wrapper {
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+            padding: 0 5%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 30px;
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 100px;
+            box-shadow: 6px 6px 0px var(--black);
+        }
+
+        .brand {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--black);
+            text-decoration: none;
+            letter-spacing: -2px;
+        }
+        .brand span { color: var(--brand-orange); }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+
+        .user-avatar-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--black);
+            overflow: hidden;
+            border: 2px solid var(--black);
+        }
+        .user-avatar-small img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- Layout --- */
+        .page-container {
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 40px;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: var(--black);
+            font-weight: 700;
+            border-radius: 12px;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .menu-item:hover {
+            background: var(--white);
+            border-color: var(--black);
+            transform: translate(4px, 0);
+        }
+
+        .menu-item.active {
+            background: var(--brand-orange);
+            color: var(--white);
+            border: 2px solid var(--black);
+            box-shadow: 4px 4px 0px var(--black);
+        }
+
+        /* --- Content --- */
+        .content-card {
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 8px 8px 0px var(--black);
+        }
+
+        h2 {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+
+        .section-desc {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        /* --- Toggles --- */
+        .setting-group {
+            margin-bottom: 40px;
+        }
+        
+        h3 {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--soft-gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #888;
+        }
+
+        .notification-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .notification-item:last-child { border-bottom: none; }
+
+        .note-info h4 { font-size: 1rem; margin-bottom: 5px; }
+        .note-info p { font-size: 0.9rem; color: #666; }
+
+        /* Custom Toggle */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+        }
+
+        .switch input { opacity: 0; width: 0; height: 0; }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+            border: 2px solid var(--black);
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 2px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+            border: 2px solid var(--black);
+        }
+
+        input:checked + .slider {
+            background-color: var(--brand-orange);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        @media (max-width: 900px) {
+            .page-container {
+                grid-template-columns: 1fr;
+            }
+            .sidebar-menu {
+                flex-direction: row;
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+            .menu-item {
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-wrapper">
+        <nav>
+            <a href="../../index.html" class="brand">VERTO<span>.</span></a>
+            <div class="nav-user">
+                <span>Account</span>
+                <div class="user-avatar-small">
+                    <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=100" alt="User">
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="page-container">
+        <!-- Sidebar -->
+        <aside>
+            <div class="sidebar-menu">
+                <a href="settings.html" class="menu-item">
+                    <i data-lucide="user" size="20"></i>
+                    Profile Settings
+                </a>
+                <a href="subscriptions.html" class="menu-item">
+                    <i data-lucide="tv-2" size="20"></i>
+                    My Subscriptions
+                </a>
+                <a href="billing.html" class="menu-item">
+                    <i data-lucide="credit-card" size="20"></i>
+                    Billing History
+                </a>
+                <a href="notifications.html" class="menu-item active">
+                    <i data-lucide="bell" size="20"></i>
+                    Notifications
+                </a>
+                <a href="../../index.html" class="menu-item" style="color: #666; margin-top: 20px;">
+                    <i data-lucide="log-out" size="20"></i>
+                    Sign Out
+                </a>
+            </div>
+        </aside>
+
+        <!-- Content -->
+        <main class="content-card">
+            <h2>Notifications</h2>
+            <p class="section-desc">Choose what we keep you in the loop about.</p>
+
+            <div class="setting-group">
+                <h3>Subscription Updates</h3>
+                
+                <div class="notification-item">
+                    <div class="note-info">
+                        <h4>New Content Alerts</h4>
+                        <p>Notify me when my subscribed stations publish new videos.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="notification-item">
+                    <div class="note-info">
+                        <h4>Community Replies</h4>
+                        <p>Notify me when someone replies to my comments.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="notification-item">
+                    <div class="note-info">
+                        <h4>Exclusive Perks</h4>
+                        <p>Notify me when a creator drops a new digital asset for my tier.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="setting-group">
+                <h3>Email Preferences</h3>
+                
+                <div class="notification-item">
+                    <div class="note-info">
+                        <h4>Weekly Digest</h4>
+                        <p>A summary of top content from your subscriptions every Monday.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="notification-item">
+                    <div class="note-info">
+                        <h4>Billing Receipts</h4>
+                        <p>Email me invoices for every successful payment.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+                
+                <div class="notification-item">
+                    <div class="note-info">
+                        <h4>Product Updates</h4>
+                        <p>News about Verto platform features and improvements.</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
