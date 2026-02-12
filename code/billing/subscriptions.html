@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTO | My Subscriptions</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Lora:ital,wght@1,500;1,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-orange: #FF4D24;
+            --black: #0A0A0A;
+            --white: #FFFFFF;
+            --soft-gray: #F8F8F8;
+            --border-thick: 3px solid var(--black);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            color: var(--black);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: var(--soft-gray);
+            min-height: 100vh;
+        }
+
+        /* --- Nav --- */
+        .nav-wrapper {
+            position: sticky;
+            top: 20px;
+            z-index: 1000;
+            padding: 0 5%;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 30px;
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 100px;
+            box-shadow: 6px 6px 0px var(--black);
+        }
+
+        .brand {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--black);
+            text-decoration: none;
+            letter-spacing: -2px;
+        }
+        .brand span { color: var(--brand-orange); }
+
+        .nav-user {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-weight: 700;
+        }
+
+        .user-avatar-small {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--black);
+            overflow: hidden;
+            border: 2px solid var(--black);
+        }
+        .user-avatar-small img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* --- Layout --- */
+        .page-container {
+            max-width: 1400px;
+            margin: 60px auto;
+            padding: 0 5%;
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 40px;
+        }
+
+        /* --- Sidebar --- */
+        .sidebar-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 15px 20px;
+            text-decoration: none;
+            color: var(--black);
+            font-weight: 700;
+            border-radius: 12px;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .menu-item:hover {
+            background: var(--white);
+            border-color: var(--black);
+            transform: translate(4px, 0);
+        }
+
+        .menu-item.active {
+            background: var(--brand-orange);
+            color: var(--white);
+            border: 2px solid var(--black);
+            box-shadow: 4px 4px 0px var(--black);
+        }
+
+        /* --- Content --- */
+        .content-card {
+            background: var(--white);
+            border: var(--border-thick);
+            border-radius: 30px;
+            padding: 50px;
+            box-shadow: 8px 8px 0px var(--black);
+        }
+
+        h2 {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+
+        .section-desc {
+            color: #666;
+            margin-bottom: 40px;
+            font-size: 1.1rem;
+        }
+
+        /* --- Subscriptions --- */
+        .sub-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .sub-card {
+            border: 2px solid var(--black);
+            border-radius: 20px;
+            overflow: hidden;
+            background: var(--soft-gray);
+            transition: all 0.2s;
+        }
+
+        .sub-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 6px 6px 0px var(--black);
+        }
+
+        .sub-header {
+            height: 100px;
+            background: #ddd;
+            position: relative;
+        }
+        .sub-header img { width: 100%; height: 100%; object-fit: cover; }
+
+        .sub-body {
+            padding: 20px;
+            position: relative;
+        }
+
+        .station-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            border: 2px solid var(--black);
+            background: var(--white);
+            position: absolute;
+            top: -30px;
+            left: 20px;
+            overflow: hidden;
+        }
+        .station-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+        .station-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            border: 1px solid var(--black);
+        }
+
+        .status-active { background: #4ADE80; color: #000; }
+        .status-canceled { background: #FF4D24; color: #fff; }
+
+        .station-info {
+            margin-top: 35px;
+        }
+
+        .station-info h4 {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 1.3rem;
+        }
+
+        .sub-plan {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 15px;
+            display: block;
+            font-weight: 600;
+        }
+
+        .sub-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: #444;
+            padding-top: 15px;
+            border-top: 2px solid rgba(0,0,0,0.1);
+        }
+
+        .btn-manage {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            text-align: center;
+            background: var(--white);
+            border: 2px solid var(--black);
+            border-radius: 12px;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--black);
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+
+        .btn-manage:hover {
+            background: var(--black);
+            color: var(--white);
+        }
+
+        @media (max-width: 900px) {
+            .page-container {
+                grid-template-columns: 1fr;
+            }
+            .sidebar-menu {
+                flex-direction: row;
+                overflow-x: auto;
+                padding-bottom: 10px;
+            }
+            .menu-item {
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="nav-wrapper">
+        <nav>
+            <a href="../../index.html" class="brand">VERTO<span>.</span></a>
+            <div class="nav-user">
+                <span>Account</span>
+                <div class="user-avatar-small">
+                    <img src="https://images.unsplash.com/photo-1599566150163-29194dcaad36?auto=format&fit=crop&q=80&w=100" alt="User">
+                </div>
+            </div>
+        </nav>
+    </div>
+
+    <div class="page-container">
+        <!-- Sidebar -->
+        <aside>
+            <div class="sidebar-menu">
+                <a href="settings.html" class="menu-item">
+                    <i data-lucide="user" size="20"></i>
+                    Profile Settings
+                </a>
+                <a href="subscriptions.html" class="menu-item active">
+                    <i data-lucide="tv-2" size="20"></i>
+                    My Subscriptions
+                </a>
+                <a href="billing.html" class="menu-item">
+                    <i data-lucide="credit-card" size="20"></i>
+                    Billing History
+                </a>
+                <a href="notifications.html" class="menu-item">
+                    <i data-lucide="bell" size="20"></i>
+                    Notifications
+                </a>
+                <a href="../../index.html" class="menu-item" style="color: #666; margin-top: 20px;">
+                    <i data-lucide="log-out" size="20"></i>
+                    Sign Out
+                </a>
+            </div>
+        </aside>
+
+        <!-- Content -->
+        <main class="content-card">
+            <h2>My Subscriptions</h2>
+            <p class="section-desc">Manage the stations you support.</p>
+
+            <div class="sub-grid">
+                <!-- Active Sub -->
+                <div class="sub-card">
+                    <div class="sub-header">
+                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=500" alt="Cover">
+                    </div>
+                    <div class="sub-body">
+                        <div class="station-avatar">
+                            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=100" alt="Avatar">
+                        </div>
+                        <span class="station-status status-active">Active</span>
+                        
+                        <div class="station-info">
+                            <h4>Elena Vasquez Docs</h4>
+                            <span class="sub-plan">Patron Tier • $5.00/mo</span>
+                        </div>
+                        
+                        <div class="sub-meta">
+                            <span>Next bill: Mar 15</span>
+                            <span style="font-weight: 700;">$5.00</span>
+                        </div>
+
+                        <a href="#" class="btn-manage">Manage Subscription</a>
+                    </div>
+                </div>
+
+                <!-- Another Active Sub -->
+                <div class="sub-card">
+                    <div class="sub-header">
+                        <img src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&q=80&w=500" alt="Cover">
+                    </div>
+                    <div class="sub-body">
+                        <div class="station-avatar">
+                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=100" alt="Avatar">
+                        </div>
+                        <span class="station-status status-active">Active</span>
+                        
+                        <div class="station-info">
+                            <h4>Audio Mastery</h4>
+                            <span class="sub-plan">Student Pass • $9.00/mo</span>
+                        </div>
+                        
+                        <div class="sub-meta">
+                            <span>Next bill: Mar 02</span>
+                            <span style="font-weight: 700;">$9.00</span>
+                        </div>
+
+                        <a href="#" class="btn-manage">Manage Subscription</a>
+                    </div>
+                </div>
+
+                <!-- Canceled Sub -->
+                <div class="sub-card">
+                    <div class="sub-header" style="filter: grayscale(1);">
+                        <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=500" alt="Cover">
+                    </div>
+                    <div class="sub-body">
+                        <div class="station-avatar" style="filter: grayscale(1);">
+                            <img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&q=80&w=100" alt="Avatar">
+                        </div>
+                        <span class="station-status status-canceled">Canceled</span>
+                        
+                        <div class="station-info">
+                            <h4 style="color: #666;">Zara Kim Studio</h4>
+                            <span class="sub-plan">Fan Tier • $3.00/mo</span>
+                        </div>
+                        
+                        <div class="sub-meta">
+                            <span>Expired: Jan 10</span>
+                            <span style="color: #666;">Inactive</span>
+                        </div>
+
+                        <a href="#" class="btn-manage">Reactivate</a>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
