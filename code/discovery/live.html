@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VERTO | LIVE: Retro Tech</title>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@800&family=Lora:ital,wght@1,500;1,800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --brand-orange: #FF4D24;
+            --black: #0A0A0A;
+            --white: #FFFFFF;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #000;
+            color: #eee;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* --- Dark Nav --- */
+        .nav-wrapper {
+            background: #000;
+            border-bottom: 1px solid #333;
+            padding: 10px 20px;
+        }
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .brand {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-weight: 800;
+            font-size: 1.4rem;
+            color: var(--white);
+            text-decoration: none;
+        }
+        .brand span { color: var(--brand-orange); }
+
+        .nav-btn {
+            color: #ccc;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+        .nav-btn:hover { color: var(--white); }
+
+        .nav-controls {
+            display: flex;
+            gap: 20px;
+        }
+
+        /* --- Layout --- */
+        .theater-container {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            height: calc(100vh - 60px); 
+        }
+
+        /* --- Main Stage --- */
+        .main-stage {
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            border-right: 1px solid #333;
+        }
+
+        .video-player {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #111;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #555;
+            position: relative;
+        }
+        
+        .live-indicator {
+            position: absolute;
+            top: 20px; left: 20px;
+            background: #FF0000;
+            color: white;
+            font-weight: 800;
+            padding: 4px 10px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            box-shadow: 0 0 10px rgba(255,0,0,0.5);
+        }
+        .live-dot {
+            width: 8px; height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse { 0% {opacity:1;} 50% {opacity:0.5;} 100% {opacity:1;} }
+
+        .stream-info { padding: 25px; }
+
+        .stream-title {
+            font-family: 'Lora', serif;
+            font-style: italic;
+            font-size: 2rem;
+            margin-bottom: 15px;
+            color: var(--white);
+        }
+
+        .stream-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 25px;
+            border-bottom: 1px solid #333;
+        }
+
+        .creator-row { display: flex; align-items: center; gap: 15px; }
+        .creator-avatar {
+            width: 50px; height: 50px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #333;
+        }
+        .creator-avatar img { width: 100%; height: 100%; object-fit: cover; }
+        
+        .creator-name { font-weight: 800; font-size: 1.1rem; color: var(--white); }
+        .sub-count { font-size: 0.85rem; color: #888; }
+
+        .action-btns { display: flex; gap: 10px; }
+        .btn-action {
+            background: #333;
+            color: var(--white);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: 700;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-action:hover { background: #444; }
+        .btn-primary { background: var(--brand-orange); color: white; }
+        .btn-primary:hover { background: #ff6a47; }
+
+
+        /* --- Right Side: Chat --- */
+        .chat-sidebar {
+            background: #111;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .chat-header {
+            padding: 15px;
+            color: var(--white);
+            font-weight: 800;
+            border-bottom: 1px solid #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .chat-msg {
+            font-size: 0.9rem;
+            line-height: 1.4;
+            color: #ccc;
+        }
+        .user-name {
+            color: var(--brand-orange);
+            font-weight: 700;
+            margin-right: 6px;
+        }
+        .admin-badge {
+            background: var(--white);
+            color: var(--black);
+            padding: 1px 4px;
+            border-radius: 3px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            margin-right: 6px;
+        }
+
+        .chat-input-area {
+            padding: 15px;
+            border-top: 1px solid #333;
+            background: #111;
+        }
+        .chat-input-box {
+            display: flex;
+            gap: 10px;
+        }
+        .chat-input {
+            flex: 1;
+            background: #222;
+            border: 1px solid #444;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            outline: none;
+        }
+        .chat-input:focus { border-color: var(--brand-orange); }
+        
+        .btn-send {
+            background: var(--brand-orange);
+            border: none;
+            color: white;
+            padding: 0 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        @media (max-width: 900px) {
+            .theater-container { grid-template-columns: 1fr; overflow-y: auto; height: auto; }
+            .chat-sidebar { height: 400px; }
+            .main-stage { overflow: visible; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="nav-wrapper">
+        <nav>
+            <div style="display:flex; align-items:center; gap:20px;">
+                <a href="../../index.html" class="brand">VERTO<span>.</span></a>
+                <a href="guide.html" class="nav-btn"><i data-lucide="arrow-left" size="18"></i> Back to Guide</a>
+            </div>
+            
+            <div class="nav-controls">
+                <a href="../community/station-forum.html" class="nav-btn"><i data-lucide="users" size="18"></i> Community</a>
+                <a href="../billing/settings.html" class="nav-btn"><i data-lucide="user" size="18"></i> Account</a>
+            </div>
+        </nav>
+    </div>
+
+    <div class="theater-container">
+        <!-- Main Stage -->
+        <main class="main-stage">
+            <div class="video-player">
+                <div class="live-indicator">
+                    <span class="live-dot"></span> LIVE
+                </div>
+                <div style="text-align:center;">
+                    <i data-lucide="play-circle" size="64" style="margin-bottom:10px;"></i>
+                    <p>Live WebRTC Stream</p>
+                </div>
+            </div>
+
+            <div class="stream-info">
+                <h1 class="stream-title">Live: Repairing a Water Damaged GPU</h1>
+                <div class="stream-meta">
+                    <div class="creator-row">
+                        <div class="creator-avatar">
+                            <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=100">
+                        </div>
+                        <div>
+                            <div class="creator-name">Retro Tech</div>
+                            <div class="sub-count">1.4k watching</div>
+                        </div>
+                    </div>
+                    
+                    <div class="action-btns">
+                        <button class="btn-action btn-primary"><i data-lucide="heart" size="18"></i> Follow</button>
+                        <button class="btn-action"><i data-lucide="share-2" size="18"></i> Share</button>
+                    </div>
+                </div>
+
+                <div class="stream-desc">
+                    <h3 style="color:white; margin-bottom:10px;">About this stream</h3>
+                    <p style="color:#aaa; line-height:1.6; max-width:800px;">
+                        Today we are attempting to fix an RTX 3080 that was spilled on. We'll be using the microscope, soldering iron, and schematic diagrams. Feel free to ask questions in chat!
+                    </p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Chat Sidebar -->
+        <aside class="chat-sidebar">
+            <div class="chat-header">
+                <span>Live Chat</span>
+                <i data-lucide="more-vertical" size="18" style="cursor:pointer;"></i>
+            </div>
+            
+            <div class="chat-messages">
+                <div class="chat-msg">
+                    <span class="admin-badge">MOD</span><span class="user-name">System</span>
+                    Welcome to the chat! Please be respectful to the host and other viewers.
+                </div>
+                <div class="chat-msg">
+                    <span class="user-name">Alex.dev</span>
+                    Is that flux you are using?
+                </div>
+                 <div class="chat-msg">
+                    <span class="user-name">PixelArtist</span>
+                    Good luck with those tiny capacitors!
+                </div>
+                 <div class="chat-msg">
+                    <span class="user-name">RetroFan99</span>
+                    Sound is a bit low, can you boost it?
+                </div>
+            </div>
+
+            <div class="chat-input-area">
+                <div class="chat-input-box">
+                    <input type="text" class="chat-input" placeholder="Say something...">
+                    <button class="btn-send"><i data-lucide="send" size="18"></i></button>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        lucide.createIcons();
+    </script>
+</body>
+</html>
