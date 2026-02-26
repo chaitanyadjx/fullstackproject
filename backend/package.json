@@ -1,0 +1,43 @@
+{
+  "name": "verto-backend",
+  "version": "1.0.0",
+  "description": "Verto API — Express.js + MongoDB",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest --runInBand --forceExit",
+    "test:watch": "jest --watch --runInBand",
+    "test:coverage": "jest --coverage --runInBand --forceExit",
+    "test:auth": "jest tests/auth.test.js --runInBand --forceExit",
+    "test:user": "jest tests/user.test.js --runInBand --forceExit",
+    "test:studio": "jest tests/studio.test.js --runInBand --forceExit",
+    "test:videos": "jest tests/videos.test.js --runInBand --forceExit",
+    "test:streams": "jest tests/streams.test.js --runInBand --forceExit",
+    "test:tiers": "jest tests/tiers.test.js --runInBand --forceExit",
+    "test:subscriptions": "jest tests/subscriptions.test.js --runInBand --forceExit",
+    "test:payouts": "jest tests/payouts.test.js --runInBand --forceExit",
+    "test:discovery": "jest tests/discovery.test.js --runInBand --forceExit",
+    "test:bundles": "jest tests/bundles.test.js --runInBand --forceExit",
+    "test:community": "jest tests/community.test.js --runInBand --forceExit",
+    "test:comments": "jest tests/comments.test.js --runInBand --forceExit",
+    "test:perks": "jest tests/perks.test.js --runInBand --forceExit",
+    "test:notifications": "jest tests/notifications.test.js --runInBand --forceExit",
+    "test:billing": "jest tests/billing.test.js --runInBand --forceExit",
+    "test:admin": "jest tests/admin.test.js --runInBand --forceExit"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.18.3",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.2.1",
+    "multer": "^1.4.5-lts.1"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "mongodb-memory-server": "^9.1.6",
+    "supertest": "^6.3.4"
+  }
+}

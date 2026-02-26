@@ -7,3 +7,12 @@ Currently: Designing phase
 2. Community: Ragavendra
 3.  Accounts & Billing: Amnarnath
 4. Viewer Module: Chaitanya
+
+
+## For backend project
+
+
+
+## Tester
+
+1. Frontend Mockup: 
