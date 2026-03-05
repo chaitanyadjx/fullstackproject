@@ -176,18 +176,18 @@
             <h1>Create Account</h1>
             <p class="subtitle">Join the revolution. Watch freely.</p>
             
-            <form onsubmit="event.preventDefault(); window.location.href='../discovery/browse.html';">
+            <form id="signup-form">
                 <div class="form-group">
                     <label>Full Name</label>
-                    <input type="text" placeholder="Jane Doe" required>
+                    <input type="text" name="fullName" placeholder="Jane Doe" required>
                 </div>
                 <div class="form-group">
                     <label>Email Address</label>
-                    <input type="email" placeholder="you@example.com" required>
+                    <input type="email" name="email" placeholder="you@example.com" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" placeholder="Min. 8 characters" required>
+                    <input type="password" name="password" placeholder="Min. 8 characters" minlength="8" required>
                 </div>
 
                 <div class="form-group" style="display: flex; gap: 10px; align-items: start; margin-top: 10px;">
@@ -204,8 +204,28 @@
         </div>
     </div>
 
+    <script src="/js/api.js"></script>
     <script>
         lucide.createIcons();
+
+        if (auth.isLoggedIn()) window.location.href = '/discovery/browse.html';
+
+        document.getElementById('signup-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type=submit]');
+            btnLoading(btn);
+            try {
+                const fullName = e.target.fullName.value.trim();
+                const email    = e.target.email.value.trim();
+                const password = e.target.password.value;
+                await auth.register({ fullName, email, password });
+                showToast('Account created! Please sign in.', 'success');
+                setTimeout(() => { window.location.href = '/auth/sign-in.html'; }, 1200);
+            } catch (err) {
+                showToast(err.message || 'Registration failed', 'error');
+                btnLoading(btn, false);
+            }
+        });
     </script>
 </body>
 </html>

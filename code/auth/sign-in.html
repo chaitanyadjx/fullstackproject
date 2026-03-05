@@ -177,14 +177,14 @@
             <h1>Welcome Back</h1>
             <p class="subtitle">Enter your credentials to access your account.</p>
             
-            <form onsubmit="event.preventDefault(); window.location.href='../discovery/browse.html';">
+            <form id="signin-form">
                 <div class="form-group">
                     <label>Email Address</label>
-                    <input type="email" placeholder="you@example.com" required>
+                    <input type="email" name="email" placeholder="you@example.com" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" placeholder="••••••••" required>
+                    <input type="password" name="password" placeholder="••••••••" required>
                 </div>
                 
                 <div style="text-align: right; margin-bottom: 24px;">
@@ -200,8 +200,33 @@
         </div>
     </div>
 
+    <script src="/js/api.js"></script>
     <script>
         lucide.createIcons();
+
+        // Redirect if already logged in
+        if (auth.isLoggedIn()) window.location.href = '/discovery/browse.html';
+
+        document.getElementById('signin-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = e.target.querySelector('button[type=submit]');
+            btnLoading(btn);
+            try {
+                const email    = e.target.email.value.trim();
+                const password = e.target.password.value;
+                await auth.login({ email, password });
+                showToast('Welcome back!', 'success');
+                const user = auth.getUser();
+                setTimeout(() => {
+                    if (user?.role === 'admin') window.location.href = '/admin/dashboard.html';
+                    else if (user?.role === 'creator') window.location.href = '/studio/dashboard.html';
+                    else window.location.href = '/discovery/browse.html';
+                }, 500);
+            } catch (err) {
+                showToast(err.message || 'Invalid credentials', 'error');
+                btnLoading(btn, false);
+            }
+        });
     </script>
 </body>
 </html>

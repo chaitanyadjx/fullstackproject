@@ -1,0 +1,73 @@
+
+> verto-backend@1.0.0 test:videos
+> jest tests/videos.test.js --runInBand --forceExit
+
+ΓùÅ Validation Warning:
+
+  Unknown option "setupFilesAfterFramework" with value [] was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+ΓùÅ Validation Warning:
+
+  Unknown option "setupFilesAfterFramework" with value [] was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+FAIL tests/videos.test.js
+  POST /api/v1/videos/upload
+    ├ù 201 ΓÇö creates a video with required fields (55 ms)
+    ΓêÜ 400 ΓÇö rejects missing title (27 ms)
+    ΓêÜ 400 ΓÇö rejects invalid visibility value (26 ms)
+    ΓêÜ 403 ΓÇö viewer cannot upload (24 ms)
+  GET /api/v1/videos/mine
+    ΓêÜ 200 ΓÇö returns creator video library (30 ms)
+    ΓêÜ 200 ΓÇö filter=drafts only returns drafts (28 ms)
+    ΓêÜ 403 ΓÇö viewer cannot access studio video library (17 ms)
+  PUT /api/v1/videos/:videoId
+    ΓêÜ 200 ΓÇö updates title and visibility (1 ms)
+    ΓêÜ 404 ΓÇö returns 404 for non-existent videoId (19 ms)
+    ΓêÜ 403 ΓÇö viewer cannot edit videos (1 ms)
+  GET /api/v1/videos
+    ΓêÜ 200 ΓÇö returns public video list without auth (14 ms)
+    ΓêÜ 200 ΓÇö supports pagination params (16 ms)
+    ΓêÜ 200 ΓÇö no members_only videos in public listing (12 ms)
+  GET /api/v1/videos/:videoId
+    ΓêÜ 404 ΓÇö returns 404 for non-existent video (12 ms)
+  POST /api/v1/videos/:videoId/view
+    ΓêÜ 200 ΓÇö records a view event (1 ms)
+  POST /api/v1/videos/:videoId/like
+    ΓêÜ 200 ΓÇö toggles like on a video
+    ΓêÜ 401 ΓÇö unauthenticated users cannot like
+  DELETE /api/v1/videos/:videoId
+    ΓêÜ 200 ΓÇö deletes a video the creator owns (1 ms)
+    ΓêÜ 404 ΓÇö returns 404 when video already deleted
+
+  ΓùÅ POST /api/v1/videos/upload ΓÇ║ 201 ΓÇö creates a video with required fields
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 400
+
+      100 | /** Assert standard success shape */
+      101 | function expectSuccess(res, statusCode = 200) {
+    > 102 |   expect(res.statusCode).toBe(statusCode);
+          |                          ^
+      103 |   expect(res.body.success).toBe(true);
+      104 |   expect(res.body).toHaveProperty('data');
+      105 | }
+
+      at toBe (tests/helpers.js:102:26)
+      at Object.expectSuccess (tests/videos.test.js:46:5)
+
+Test Suites: 1 failed, 1 total
+Tests:       1 failed, 18 passed, 19 total
+Snapshots:   0 total
+Time:        2.621 s, estimated 3 s
+Ran all test suites matching /tests\\videos.test.js/i.
+Force exiting Jest: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?

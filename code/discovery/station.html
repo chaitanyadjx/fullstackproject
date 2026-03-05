@@ -274,23 +274,19 @@
 
     <!-- Station Header -->
     <header class="station-header">
-        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=1200" class="banner" alt="Banner">
+        <img src="" class="banner" alt="Banner" id="station-banner">
         
         <div class="station-meta-container">
             <div class="station-avatar">
-                <img src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=400" alt="Avatar">
+                <img src="" alt="Avatar" id="station-avatar">
             </div>
             <div class="station-info">
-                <h1 class="station-title">Retro Tech</h1>
-                <div class="station-tags">
-                    <span class="tag">Technology</span>
-                    <span class="tag">History</span>
-                    <span class="tag">Restoration</span>
-                </div>
-                <p style="max-width: 600px; line-height: 1.5;">Restoring vintage computers, exploring abandoned abandonware, and keeping the beige box dream alive. New videos every Tuesday.</p>
+                <h1 class="station-title" id="station-name">Loading...</h1>
+                <div class="station-tags" id="station-tags"></div>
+                <p style="max-width: 600px; line-height: 1.5;" id="station-bio"></p>
             </div>
             <div>
-                <button class="subscribe-btn">Subscribe $5/mo</button>
+                <button class="subscribe-btn" id="subscribe-btn">Subscribe</button>
             </div>
         </div>
 
@@ -307,85 +303,94 @@
         <!-- Main Content (Videos) -->
         <div>
             <h3 style="font-weight:800; margin-bottom:20px;">Latest Uploads</h3>
-            <div class="video-grid">
-                <!-- Video 1 -->
-                <a href="watch.html" class="video-card">
-                    <div class="vid-thumb">
-                        <img src="https://images.unsplash.com/photo-1517430816045-df4b7de8db17?auto=format&fit=crop&q=80&w=600" alt="Video">
-                        <span class="vid-duration">12:45</span>
-                    </div>
-                    <div class="vid-info">
-                        <div class="vid-title">The Commodore 64 Mystery</div>
-                        <div class="vid-meta">2 days ago • 14k views</div>
-                    </div>
-                </a>
-
-                <!-- Video 2 -->
-                <a href="watch.html" class="video-card">
-                    <div class="vid-thumb">
-                        <img src="https://images.unsplash.com/photo-1526666923127-b2970f64b422?auto=format&fit=crop&q=80&w=600" alt="Video">
-                        <span class="vid-duration">45:10</span>
-                    </div>
-                    <div class="vid-info">
-                        <div class="vid-title">Restoring a 1984 Macintosh - Part 3</div>
-                        <div class="vid-meta">1 week ago • 32k views</div>
-                    </div>
-                </a>
-
-                <!-- Video 3 -->
-                <a href="watch.html" class="video-card">
-                    <div class="vid-thumb">
-                        <img src="https://images.unsplash.com/photo-1629752187687-3d3c7ea3a21b?auto=format&fit=crop&q=80&w=600" alt="Video">
-                        <span class="vid-duration">08:20</span>
-                    </div>
-                    <div class="vid-info">
-                        <div class="vid-title">Why I still use Windows 95</div>
-                        <div class="vid-meta">2 weeks ago • 8k views</div>
-                    </div>
-                </a>
-
-                <!-- Video 4 -->
-                <a href="watch.html" class="video-card">
-                    <div class="vid-thumb">
-                        <img src="https://images.unsplash.com/photo-1555680202-c86f0e12f086?auto=format&fit=crop&q=80&w=600" alt="Video">
-                        <span class="vid-duration">22:15</span>
-                    </div>
-                    <div class="vid-info">
-                        <div class="vid-title">Mechanical Keyboard History</div>
-                        <div class="vid-meta">3 weeks ago • 55k views</div>
-                    </div>
-                </a>
+            <div class="video-grid" id="video-grid">
+                <p style="color:#999;padding:20px;">Loading videos...</p>
             </div>
         </div>
 
         <!-- Sidebar (Tiers) -->
         <div class="sidebar">
             <h3>Support the Station</h3>
-            <p style="margin-bottom:20px; font-size:0.9rem; margin-top:10px;">Directly support the preservation of tech history.</p>
-
-            <div class="tier-card">
-                <div class="tier-name">Supporter</div>
-                <div class="tier-price">$5 / month</div>
-                <div class="tier-perk"><i data-lucide="check" size="16"></i> Early Access to videos</div>
-                <div class="tier-perk"><i data-lucide="check" size="16"></i> Supporter Badge</div>
-                <button class="btn-tier">Join Tier</button>
-            </div>
-
-            <div class="tier-card" style="border-color: var(--brand-orange); box-shadow: 6px 6px 0px var(--brand-orange);">
-                <div style="position:absolute; top:-12px; right:20px; background:var(--brand-orange); color:white; font-size:0.7rem; font-weight:800; padding:2px 8px; border-radius:4px;">POPULAR</div>
-                <div class="tier-name">Producer</div>
-                <div class="tier-price">$15 / month</div>
-                <div class="tier-perk"><i data-lucide="check" size="16"></i> All Supporter perks</div>
-                <div class="tier-perk"><i data-lucide="check" size="16"></i> Name in credits</div>
-                <div class="tier-perk"><i data-lucide="check" size="16"></i> Monthly Q&A</div>
-                <button class="btn-tier" style="background:var(--brand-orange);">Join Tier</button>
+            <p style="margin-bottom:20px; font-size:0.9rem; margin-top:10px;">Directly support this creator.</p>
+            <div id="tiers-container">
+                <p style="color:#999;">Loading tiers...</p>
             </div>
         </div>
 
     </div>
 
+    <script src="/js/api.js"></script>
     <script>
         lucide.createIcons();
+
+        const stationId = new URLSearchParams(window.location.search).get('id');
+        if (!stationId) { window.location.href = '/discovery/browse.html'; }
+
+        const defaultThumb = 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=600';
+
+        async function loadStation() {
+            try {
+                const res = await api.get(`/stations/${stationId}`);
+                const s = res.data;
+                document.getElementById('station-name').textContent = s.name || s.stationName || 'Station';
+                document.getElementById('station-bio').textContent = s.description || s.bio || '';
+                if (s.bannerUrl) document.getElementById('station-banner').src = s.bannerUrl;
+                if (s.avatarUrl) document.getElementById('station-avatar').src = s.avatarUrl;
+                
+                const tags = document.getElementById('station-tags');
+                if (s.category) tags.innerHTML = `<span class="tag">${s.category}</span>`;
+
+                // Videos
+                const videos = s.recentVideos || [];
+                const grid = document.getElementById('video-grid');
+                if (videos.length) {
+                    grid.innerHTML = videos.map(v => `
+                        <a href="watch.html?id=${v._id}" class="video-card">
+                            <div class="vid-thumb">
+                                <img src="${v.thumbnailUrl || defaultThumb}" alt="Video">
+                                ${v.durationSeconds ? `<span class="vid-duration">${Math.floor(v.durationSeconds/60)}:${String(v.durationSeconds%60).padStart(2,'0')}</span>` : ''}
+                            </div>
+                            <div class="vid-info">
+                                <div class="vid-title">${v.title}</div>
+                                <div class="vid-meta">${formatDate(v.createdAt)} • ${formatNumber(v.viewCount)} views</div>
+                            </div>
+                        </a>
+                    `).join('');
+                } else {
+                    grid.innerHTML = '<p style="color:#999;">No videos yet</p>';
+                }
+
+                // Tiers
+                const tiers = s.tiers || [];
+                const container = document.getElementById('tiers-container');
+                if (tiers.length) {
+                    container.innerHTML = tiers.map((t, i) => `
+                        <div class="tier-card" ${i === 1 ? 'style="border-color: var(--brand-orange); box-shadow: 6px 6px 0px var(--brand-orange);"' : ''}>
+                            ${i === 1 ? '<div style="position:absolute; top:-12px; right:20px; background:var(--brand-orange); color:white; font-size:0.7rem; font-weight:800; padding:2px 8px; border-radius:4px;">POPULAR</div>' : ''}
+                            <div class="tier-name">${t.name}</div>
+                            <div class="tier-price">$${t.price} / ${t.billingPeriod || 'month'}</div>
+                            ${(t.perks||[]).map(p => `<div class="tier-perk"><i data-lucide="check" size="16"></i> ${p}</div>`).join('')}
+                            <button class="btn-tier" ${i === 1 ? 'style="background:var(--brand-orange);"' : ''} onclick="joinTier('${t._id}')">Join Tier</button>
+                        </div>
+                    `).join('');
+                    lucide.createIcons();
+                } else {
+                    container.innerHTML = '<p style="color:#999;">No tiers available</p>';
+                }
+            } catch (err) {
+                document.getElementById('station-name').textContent = 'Station not found';
+            }
+        }
+
+        async function joinTier(tierId) {
+            if (!auth.isLoggedIn()) { window.location.href = '/auth/sign-in.html'; return; }
+            try {
+                await api.post('/subscriptions', { tierId, paymentMethodId: 'demo_card' });
+                showToast('Subscribed successfully!', 'success');
+            } catch (err) { showToast(err.message, 'error'); }
+        }
+
+        loadStation();
     </script>
 </body>
 </html>

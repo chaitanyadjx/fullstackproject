@@ -254,22 +254,22 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <div class="stat-label">Total Revenue (30d)</div>
-                    <div class="stat-value">$3,240</div>
-                    <div class="stat-delta positive"><i data-lucide="arrow-up-right" size="16"></i> 12% vs last month</div>
+                    <div class="stat-value" id="stat-revenue">$0</div>
+                    <div class="stat-delta" id="stat-revenue-delta"></div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Active Subscribers</div>
-                    <div class="stat-value">842</div>
-                    <div class="stat-delta positive"><i data-lucide="arrow-up-right" size="16"></i> 54 new</div>
+                    <div class="stat-value" id="stat-subs">0</div>
+                    <div class="stat-delta" id="stat-subs-delta"></div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Watch Time (Hours)</div>
-                    <div class="stat-value">12.5k</div>
-                    <div class="stat-delta negative"><i data-lucide="arrow-down-right" size="16"></i> 3% vs last month</div>
+                    <div class="stat-value" id="stat-watch">0</div>
+                    <div class="stat-delta" id="stat-watch-delta"></div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-label">Avg. Retention</div>
-                    <div class="stat-value">64%</div>
+                    <div class="stat-value" id="stat-retention">0%</div>
                     <div class="stat-delta"><i data-lucide="minus" size="16"></i> Stable</div>
                 </div>
             </div>
@@ -285,40 +285,60 @@
                         <th>Video Title</th>
                         <th>Date</th>
                         <th>Views</th>
-                        <th>Revenue</th>
                         <th>Status</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>Restoring a 1984 Macintosh</td>
-                        <td>Oct 24, 2024</td>
-                        <td>45,231</td>
-                        <td>$210.50</td>
-                        <td><span class="status-badge status-published">Published</span></td>
-                    </tr>
-                    <tr>
-                        <td>Live: GPU Repair Attempt</td>
-                        <td>Oct 22, 2024</td>
-                        <td>12,400</td>
-                        <td>$85.00</td>
-                        <td><span class="status-badge status-live">Live Replay</span></td>
-                    </tr>
-                     <tr>
-                        <td>Vintage Keyboard Teardown</td>
-                        <td>Oct 28, 2024</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td><span class="status-badge status-scheduled">Scheduled</span></td>
-                    </tr>
+                <tbody id="recent-uploads">
+                    <tr><td colspan="4" style="color:#999;">Loading...</td></tr>
                 </tbody>
             </table>
 
         </main>
     </div>
 
+    <script src="/js/api.js"></script>
     <script>
         lucide.createIcons();
+        if (!auth.requireRole('creator', 'admin')) throw 'redirect';
+
+        async function loadDashboard() {
+            try {
+                const res = await api.get('/studio/me/stats');
+                const s = res.data;
+                document.getElementById('stat-revenue').textContent = '$' + (s.revenue30d || 0).toLocaleString();
+                document.getElementById('stat-revenue-delta').innerHTML = `<i data-lucide="arrow-up-right" size="16"></i> ${s.revenueChange || 0}% vs last month`;
+                document.getElementById('stat-subs').textContent = formatNumber(s.activeSubscribers || 0);
+                document.getElementById('stat-subs-delta').innerHTML = `<i data-lucide="arrow-up-right" size="16"></i> ${s.newSubscribers || 0} new`;
+                document.getElementById('stat-watch').textContent = formatNumber(s.watchTimeHours || 0);
+                document.getElementById('stat-retention').textContent = (s.avgRetentionPct || 0) + '%';
+
+                // Recent uploads table
+                const uploads = s.recentUploads || [];
+                const tbody = document.getElementById('recent-uploads');
+                if (uploads.length) {
+                    tbody.innerHTML = uploads.map(v => `
+                        <tr>
+                            <td>${v.title}</td>
+                            <td>${formatDate(v.createdAt)}</td>
+                            <td>${formatNumber(v.viewCount)}</td>
+                            <td><span class="status-badge status-${v.status === 'ready' ? 'published' : v.status}">${v.status}</span></td>
+                        </tr>
+                    `).join('');
+                } else {
+                    tbody.innerHTML = '<tr><td colspan="4" style="color:#999;">No uploads yet</td></tr>';
+                }
+                lucide.createIcons();
+            } catch (err) { showToast('Could not load dashboard', 'error'); }
+        }
+
+        // Logout link
+        document.querySelectorAll('a[href*="sign-in"], .side-link').forEach(l => {
+            if (l.textContent.includes('Logout') || l.textContent.includes('Sign Out')) {
+                l.addEventListener('click', (e) => { e.preventDefault(); auth.logout(); });
+            }
+        });
+
+        loadDashboard();
     </script>
 </body>
 </html>

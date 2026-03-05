@@ -284,11 +284,12 @@
             <div class="upload-grid">
                 
                 <div class="upload-left">
-                    <div class="btn-upload-area">
+                    <div class="btn-upload-area" id="drop-zone">
                         <i data-lucide="upload-cloud" size="48" color="#FF4D24"></i>
                         <div class="upload-txt">Drag and drop video files to upload</div>
                         <div class="upload-sub">Your videos will remain private until you publish them.</div>
-                        <button class="btn btn-secondary">Select Files</button>
+                        <button class="btn btn-secondary" id="select-file-btn">Select Files</button>
+                        <input type="file" id="video-file" accept="video/*" style="display:none;">
                     </div>
 
                     <div style="margin-top: 30px;">
@@ -296,45 +297,44 @@
                         
                         <div class="form-group">
                             <label>Title</label>
-                            <input type="text" placeholder="Add a title that describes your video">
+                            <input type="text" id="upload-title" placeholder="Add a title that describes your video" required>
                         </div>
 
                         <div class="form-group">
                             <label>Description</label>
-                            <textarea rows="5" placeholder="Tell viewers about your video"></textarea>
+                            <textarea rows="5" id="upload-desc" placeholder="Tell viewers about your video"></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Tags (comma-separated)</label>
+                            <input type="text" id="upload-tags" placeholder="tech, tutorial, retro">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Category</label>
+                            <input type="text" id="upload-category" placeholder="Technology">
                         </div>
 
                         <div class="form-group">
                             <label>Thumbnail</label>
-                            <div style="display:flex; gap:10px;">
-                                <div style="width: 140px; height: 80px; border: 2px solid #ddd; border-radius:8px; display:flex; align-items:center; justify-content:center; background: #fff;">
-                                    <i data-lucide="image-plus" color="#ccc"></i>
-                                </div>
-                                <div style="width: 140px; height: 80px; border: 2px dashed #ddd; border-radius:8px; display:flex; align-items:center; justify-content:center;">Auto 1</div>
-                                <div style="width: 140px; height: 80px; border: 2px dashed #ddd; border-radius:8px; display:flex; align-items:center; justify-content:center;">Auto 2</div>
-                            </div>
+                            <input type="file" id="thumbnail-file" accept="image/*">
                         </div>
-
                     </div>
                 </div>
 
                 <div class="upload-right">
                     <div class="preview-card">
                         <label>Preview</label>
-                        <div class="preview-thumb">
-                            Video Player
-                        </div>
-                        <div style="font-size: 0.9rem; color:#666;">
-                            <div>Video Link:</div>
-                            <a href="#" style="color: var(--brand-orange)">verto.tv/v/x7B2n9</a>
+                        <div class="preview-thumb" id="preview-area">
+                            No file selected
                         </div>
                         <div style="margin-top:20px;">
                             <label>Visibility</label>
-                            <select>
-                                <option>Public</option>
-                                <option>Members Only</option>
-                                <option>Private</option>
-                                <option>Unlisted</option>
+                            <select id="upload-visibility">
+                                <option value="public">Public</option>
+                                <option value="members_only">Members Only</option>
+                                <option value="private">Private</option>
+                                <option value="unlisted">Unlisted</option>
                             </select>
                         </div>
                     </div>
@@ -343,15 +343,73 @@
             </div>
 
             <div class="footer-actions">
-                <button class="btn btn-secondary">Save as Draft</button>
-                <button class="btn btn-primary">Publish Now</button>
+                <button class="btn btn-secondary" id="save-draft-btn">Save as Draft</button>
+                <button class="btn btn-primary" id="publish-btn">Publish Now</button>
             </div>
 
         </main>
     </div>
 
+    <script src="/js/api.js"></script>
     <script>
         lucide.createIcons();
+        if (!auth.requireRole('creator', 'admin')) throw 'redirect';
+
+        let selectedFile = null;
+
+        // File select
+        document.getElementById('select-file-btn').addEventListener('click', () => document.getElementById('video-file').click());
+        document.getElementById('video-file').addEventListener('change', (e) => {
+            selectedFile = e.target.files[0];
+            if (selectedFile) document.getElementById('preview-area').textContent = selectedFile.name;
+        });
+
+        // Drag & drop
+        const dz = document.getElementById('drop-zone');
+        dz.addEventListener('dragover', (e) => { e.preventDefault(); dz.style.borderColor = '#FF4D24'; });
+        dz.addEventListener('dragleave', () => { dz.style.borderColor = ''; });
+        dz.addEventListener('drop', (e) => {
+            e.preventDefault(); dz.style.borderColor = '';
+            selectedFile = e.dataTransfer.files[0];
+            if (selectedFile) document.getElementById('preview-area').textContent = selectedFile.name;
+        });
+
+        async function uploadVideo(asDraft) {
+            const title = document.getElementById('upload-title').value.trim();
+            if (!title) { showToast('Title is required', 'error'); return; }
+
+            const fd = new FormData();
+            fd.append('title', title);
+            fd.append('description', document.getElementById('upload-desc').value.trim());
+            fd.append('visibility', asDraft ? 'private' : document.getElementById('upload-visibility').value);
+            fd.append('category', document.getElementById('upload-category').value.trim());
+            const tags = document.getElementById('upload-tags').value.trim();
+            if (tags) fd.append('tags', tags);
+            if (selectedFile) fd.append('videoFile', selectedFile);
+
+            const btn = asDraft ? document.getElementById('save-draft-btn') : document.getElementById('publish-btn');
+            btnLoading(btn);
+            try {
+                const res = await api.post('/videos/upload', fd, true);
+                showToast(asDraft ? 'Saved as draft!' : 'Video published!', 'success');
+
+                // Upload thumbnail if selected
+                const thumbFile = document.getElementById('thumbnail-file').files[0];
+                if (thumbFile && res.data?._id) {
+                    const tf = new FormData();
+                    tf.append('thumbnailFile', thumbFile);
+                    await api.post(`/videos/${res.data._id}/thumbnail`, tf, true);
+                }
+
+                setTimeout(() => { window.location.href = '/studio/content.html'; }, 1000);
+            } catch (err) {
+                showToast(err.message || 'Upload failed', 'error');
+                btnLoading(btn, false);
+            }
+        }
+
+        document.getElementById('save-draft-btn').addEventListener('click', () => uploadVideo(true));
+        document.getElementById('publish-btn').addEventListener('click', () => uploadVideo(false));
     </script>
 </body>
 </html>

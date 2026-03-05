@@ -31,12 +31,13 @@ afterAll(async () => {
 });
 
 // ─────────────────────────────────────────────────────────────
-// POST /studio/me/videos  (Upload)
 // ─────────────────────────────────────────────────────────────
-describe('POST /api/v1/studio/me/videos', () => {
+// POST /api/v1/videos/upload  (Upload)
+// ─────────────────────────────────────────────────────────────
+describe('POST /api/v1/videos/upload', () => {
   it('201 — creates a video with required fields', async () => {
     const res = await request(app)
-      .post('/api/v1/studio/me/videos')
+      .post('/api/v1/videos/upload')
       .set('Authorization', `Bearer ${creatorToken}`)
       // Use .field() / .attach() for multipart; here we test JSON fallback
       .field('title', 'Restoring a 1984 Macintosh')
@@ -45,13 +46,13 @@ describe('POST /api/v1/studio/me/videos', () => {
     expectSuccess(res, 201);
     expect(res.body.data).toHaveProperty('_id');
     expect(res.body.data).toHaveProperty('status');
-    expect(res.body.data.status).toBe('processing');
+    expect(res.body.data.status).toBe('ready');
     createdVideoId = res.body.data._id;
   });
 
   it('400 — rejects missing title', async () => {
     const res = await request(app)
-      .post('/api/v1/studio/me/videos')
+      .post('/api/v1/videos/upload')
       .set('Authorization', `Bearer ${creatorToken}`)
       .field('description', 'No title here')
       .field('visibility', 'public');
@@ -60,7 +61,7 @@ describe('POST /api/v1/studio/me/videos', () => {
 
   it('400 — rejects invalid visibility value', async () => {
     const res = await request(app)
-      .post('/api/v1/studio/me/videos')
+      .post('/api/v1/videos/upload')
       .set('Authorization', `Bearer ${creatorToken}`)
       .field('title', 'Test')
       .field('visibility', 'invisible'); // invalid
@@ -69,7 +70,7 @@ describe('POST /api/v1/studio/me/videos', () => {
 
   it('403 — viewer cannot upload', async () => {
     const res = await request(app)
-      .post('/api/v1/studio/me/videos')
+      .post('/api/v1/videos/upload')
       .set('Authorization', `Bearer ${viewerToken}`)
       .field('title', 'Hack')
       .field('visibility', 'public');
@@ -78,45 +79,46 @@ describe('POST /api/v1/studio/me/videos', () => {
 });
 
 // ─────────────────────────────────────────────────────────────
-// GET /studio/me/videos
 // ─────────────────────────────────────────────────────────────
-describe('GET /api/v1/studio/me/videos', () => {
+// GET /api/v1/videos/mine
+// ─────────────────────────────────────────────────────────────
+describe('GET /api/v1/videos/mine', () => {
   it('200 — returns creator video library', async () => {
     const res = await request(app)
-      .get('/api/v1/studio/me/videos')
+      .get('/api/v1/videos/mine')
       .set('Authorization', `Bearer ${creatorToken}`);
     expectSuccess(res, 200);
-    expect(res.body.data).toHaveProperty('videos');
-    expect(res.body.data).toHaveProperty('total');
-    expect(Array.isArray(res.body.data.videos)).toBe(true);
+    expect(res.body).toHaveProperty('total');
+    expect(Array.isArray(res.body.data)).toBe(true);
   });
 
   it('200 — filter=drafts only returns drafts', async () => {
     const res = await request(app)
-      .get('/api/v1/studio/me/videos?filter=drafts')
+      .get('/api/v1/videos/mine?filter=drafts')
       .set('Authorization', `Bearer ${creatorToken}`);
     expectSuccess(res, 200);
-    res.body.data.videos.forEach((v) => {
+    res.body.data.forEach((v) => {
       expect(['draft', 'processing']).toContain(v.status);
     });
   });
 
   it('403 — viewer cannot access studio video library', async () => {
     const res = await request(app)
-      .get('/api/v1/studio/me/videos')
+      .get('/api/v1/videos/mine')
       .set('Authorization', `Bearer ${viewerToken}`);
     expectError(res, 403);
   });
 });
 
 // ─────────────────────────────────────────────────────────────
-// PUT /studio/me/videos/:videoId
 // ─────────────────────────────────────────────────────────────
-describe('PUT /api/v1/studio/me/videos/:videoId', () => {
+// PUT /api/v1/videos/:videoId
+// ─────────────────────────────────────────────────────────────
+describe('PUT /api/v1/videos/:videoId', () => {
   it('200 — updates title and visibility', async () => {
     if (!createdVideoId) return;
     const res = await request(app)
-      .put(`/api/v1/studio/me/videos/${createdVideoId}`)
+      .put(`/api/v1/videos/${createdVideoId}`)
       .set('Authorization', `Bearer ${creatorToken}`)
       .send({ title: 'Updated Title', visibility: 'members_only' });
     expectSuccess(res, 200);
@@ -126,7 +128,7 @@ describe('PUT /api/v1/studio/me/videos/:videoId', () => {
 
   it('404 — returns 404 for non-existent videoId', async () => {
     const res = await request(app)
-      .put('/api/v1/studio/me/videos/000000000000000000000000')
+      .put('/api/v1/videos/000000000000000000000000')
       .set('Authorization', `Bearer ${creatorToken}`)
       .send({ title: 'Ghost' });
     expectError(res, 404);
@@ -135,7 +137,7 @@ describe('PUT /api/v1/studio/me/videos/:videoId', () => {
   it('403 — viewer cannot edit videos', async () => {
     if (!createdVideoId) return;
     const res = await request(app)
-      .put(`/api/v1/studio/me/videos/${createdVideoId}`)
+      .put(`/api/v1/videos/${createdVideoId}`)
       .set('Authorization', `Bearer ${viewerToken}`)
       .send({ title: 'Hacked' });
     expectError(res, 403);
@@ -149,18 +151,18 @@ describe('GET /api/v1/videos', () => {
   it('200 — returns public video list without auth', async () => {
     const res = await request(app).get('/api/v1/videos');
     expectSuccess(res, 200);
-    expect(Array.isArray(res.body.data.videos)).toBe(true);
+    expect(Array.isArray(res.body.data)).toBe(true);
   });
 
   it('200 — supports pagination params', async () => {
     const res = await request(app).get('/api/v1/videos?page=1&limit=5');
     expectSuccess(res, 200);
-    expect(res.body.data.videos.length).toBeLessThanOrEqual(5);
+    expect(res.body.data.length).toBeLessThanOrEqual(5);
   });
 
   it('200 — no members_only videos in public listing', async () => {
     const res = await request(app).get('/api/v1/videos');
-    res.body.data.videos.forEach((v) => {
+    res.body.data.forEach((v) => {
       expect(v.visibility).not.toBe('members_only');
       expect(v.visibility).not.toBe('private');
     });
@@ -212,13 +214,13 @@ describe('POST /api/v1/videos/:videoId/like', () => {
 });
 
 // ─────────────────────────────────────────────────────────────
-// DELETE /studio/me/videos/:videoId
+// DELETE /api/v1/videos/:videoId
 // ─────────────────────────────────────────────────────────────
-describe('DELETE /api/v1/studio/me/videos/:videoId', () => {
+describe('DELETE /api/v1/videos/:videoId', () => {
   it('200 — deletes a video the creator owns', async () => {
     if (!createdVideoId) return;
     const res = await request(app)
-      .delete(`/api/v1/studio/me/videos/${createdVideoId}`)
+      .delete(`/api/v1/videos/${createdVideoId}`)
       .set('Authorization', `Bearer ${creatorToken}`);
     expect([200, 204]).toContain(res.statusCode);
   });
@@ -226,7 +228,7 @@ describe('DELETE /api/v1/studio/me/videos/:videoId', () => {
   it('404 — returns 404 when video already deleted', async () => {
     if (!createdVideoId) return;
     const res = await request(app)
-      .delete(`/api/v1/studio/me/videos/${createdVideoId}`)
+      .delete(`/api/v1/videos/${createdVideoId}`)
       .set('Authorization', `Bearer ${creatorToken}`);
     expectError(res, 404);
   });

@@ -294,58 +294,76 @@
                         <th>Actions</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            <div class="video-cell">
-                                <div class="vid-thumb">
-                                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=200">
-                                </div>
-                                <div>
-                                    <div class="vid-title">Restoring a 1984 Macintosh</div>
-                                    <div class="vid-desc">A deep dive into the CRT repairs...</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="status-badge status-published">Public</span></td>
-                        <td>Oct 24, 2024</td>
-                        <td>45,231</td>
-                        <td>142</td>
-                        <td>
-                            <button class="btn-icon"><i data-lucide="edit-2" size="18"></i></button>
-                            <button class="btn-icon"><i data-lucide="trash-2" size="18"></i></button>
-                        </td>
-                    </tr>
-                    
-                    <tr>
-                        <td>
-                            <div class="video-cell">
-                                <div class="vid-thumb">
-                                    <img src="https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&q=80&w=200">
-                                </div>
-                                <div>
-                                    <div class="vid-title">Chipset schematic review</div>
-                                    <div class="vid-desc">Reviewing the docs for the new...</div>
-                                </div>
-                            </div>
-                        </td>
-                        <td><span class="status-badge status-draft">Draft</span></td>
-                        <td>Edited Oct 26</td>
-                        <td>-</td>
-                        <td>-</td>
-                        <td>
-                            <button class="btn-icon"><i data-lucide="edit-2" size="18"></i></button>
-                            <button class="btn-icon"><i data-lucide="trash-2" size="18"></i></button>
-                        </td>
-                    </tr>
+                <tbody id="video-tbody">
+                    <tr><td colspan="6" style="color:#999;">Loading videos...</td></tr>
                 </tbody>
             </table>
 
         </main>
     </div>
 
+    <script src="/js/api.js"></script>
     <script>
         lucide.createIcons();
+        if (!auth.requireRole('creator', 'admin')) throw 'redirect';
+
+        const defaultThumb = 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=200';
+        let currentFilter = '';
+
+        async function loadVideos(filter) {
+            const q = filter === 'drafts' ? '?filter=drafts' : '';
+            try {
+                const res = await api.get(`/videos/mine${q}`);
+                const videos = res.data || [];
+                const tbody = document.getElementById('video-tbody');
+                if (!videos.length) {
+                    tbody.innerHTML = '<tr><td colspan="6" style="color:#999;">No videos found</td></tr>';
+                    return;
+                }
+                tbody.innerHTML = videos.map(v => `
+                    <tr>
+                        <td>
+                            <div class="video-cell">
+                                <div class="vid-thumb"><img src="${v.thumbnailUrl || defaultThumb}"></div>
+                                <div>
+                                    <div class="vid-title">${v.title}</div>
+                                    <div class="vid-desc">${v.description || ''}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td><span class="status-badge status-${v.status === 'ready' ? 'published' : 'draft'}">${v.visibility || v.status}</span></td>
+                        <td>${formatDate(v.createdAt)}</td>
+                        <td>${formatNumber(v.viewCount)}</td>
+                        <td>${v.commentCount || 0}</td>
+                        <td>
+                            <button class="btn-icon" onclick="deleteVideo('${v._id}')"><i data-lucide="trash-2" size="18"></i></button>
+                        </td>
+                    </tr>
+                `).join('');
+                lucide.createIcons();
+            } catch (err) { showToast('Could not load videos', 'error'); }
+        }
+
+        async function deleteVideo(id) {
+            if (!confirm('Delete this video?')) return;
+            try {
+                await api.del(`/videos/${id}`);
+                showToast('Video deleted', 'success');
+                loadVideos(currentFilter);
+            } catch (err) { showToast(err.message, 'error'); }
+        }
+
+        // Tab filtering
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                currentFilter = tab.textContent.trim().toLowerCase() === 'drafts' ? 'drafts' : '';
+                loadVideos(currentFilter);
+            });
+        });
+
+        loadVideos();
     </script>
 </body>
 </html>

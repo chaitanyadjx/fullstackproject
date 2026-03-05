@@ -362,14 +362,8 @@
     </div>
 
     <!-- Categories -->
-    <div class="category-scroll">
-        <a href="#" class="cat-chip active">All</a>
-        <a href="#" class="cat-chip">Tech & Dev</a>
-        <a href="#" class="cat-chip">Music Production</a>
-        <a href="#" class="cat-chip">Digital Art</a>
-        <a href="#" class="cat-chip">Retrogaming</a>
-        <a href="#" class="cat-chip">Filmmaking</a>
-        <a href="#" class="cat-chip">Lifestyle</a>
+    <div class="category-scroll" id="categories-bar">
+        <a href="#" class="cat-chip active" data-category="">All</a>
     </div>
 
     <!-- Live Now -->
@@ -378,49 +372,18 @@
             <h2>Live Now</h2>
             <a href="guide.html" class="section-link">View Full Guide <i data-lucide="arrow-right" size="16"></i></a>
         </div>
-        <div class="card-grid">
-            <a href="live.html" class="station-card">
-                <div class="card-thumb">
-                    <span class="live-badge">Live</span>
-                    <img src="https://images.unsplash.com/photo-1598550476439-6847785fcea6?auto=format&fit=crop&q=80&w=600" alt="Stream">
-                </div>
-                <div class="card-content">
-                    <div class="card-title">Synth Wars 2024</div>
-                    <div class="card-sub">Music Lab • 1.2k watching</div>
-                    <div class="tag-list">
-                        <span class="tag">Music</span>
-                        <span class="tag">Production</span>
-                    </div>
-                </div>
-            </a>
-            <a href="live.html" class="station-card">
-                <div class="card-thumb">
-                    <span class="live-badge">Live</span>
-                    <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80&w=600" alt="Stream">
-                </div>
-                <div class="card-content">
-                    <div class="card-title">Restoring a 1984 Macintosh</div>
-                    <div class="card-sub">Retro Tech • 850 watching</div>
-                    <div class="tag-list">
-                        <span class="tag">Tech</span>
-                        <span class="tag">Repair</span>
-                    </div>
-                </div>
-            </a>
-            <a href="live.html" class="station-card">
-                <div class="card-thumb">
-                    <span class="live-badge">Live</span>
-                    <img src="https://images.unsplash.com/photo-1629752187687-3d3c7ea3a21b?auto=format&fit=crop&q=80&w=600" alt="Stream">
-                </div>
-                <div class="card-content">
-                    <div class="card-title">Indie Game Dev Sprint</div>
-                    <div class="card-sub">Code Space • 340 watching</div>
-                    <div class="tag-list">
-                        <span class="tag">Coding</span>
-                        <span class="tag">Gamedev</span>
-                    </div>
-                </div>
-            </a>
+        <div class="card-grid" id="live-grid">
+            <p style="color:#999;padding:20px;">Loading live streams...</p>
+        </div>
+    </div>
+
+    <!-- Trending Videos -->
+    <div class="section-container">
+        <div class="section-header">
+            <h2>Trending Videos</h2>
+        </div>
+        <div class="card-grid" id="videos-grid">
+            <p style="color:#999;padding:20px;">Loading videos...</p>
         </div>
     </div>
 
@@ -429,28 +392,138 @@
         <div class="section-header">
             <h2>Curated Collections</h2>
         </div>
-        <div class="card-grid" style="grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));">
-            <a href="bundle.html" class="bundle-card">
-                <img src="https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=800" class="bundle-bg">
-                <div class="bundle-info">
-                    <span class="bundle-label">Mega Pack</span>
-                    <h3 class="bundle-title">The Maker's Toolkit</h3>
-                    <p>Access to 5 premium engineering stations + exclusive schematics library. Includes regular workshops.</p>
-                </div>
-            </a>
-            <a href="#" class="bundle-card">
-                <img src="https://images.unsplash.com/photo-1514320291840-2e0a9bf2a9ae?auto=format&fit=crop&q=80&w=800" class="bundle-bg">
-                <div class="bundle-info">
-                    <span class="bundle-label">Starter Pack</span>
-                    <h3 class="bundle-title">Audio Engineering 101</h3>
-                    <p>Everything you need to start mixing. 3 Stations focused on Logic Pro, Ableton, and Hardware.</p>
-                </div>
-            </a>
+        <div class="card-grid" id="bundles-grid" style="grid-template-columns: repeat(auto-fill, minmax(500px, 1fr));">
+            <p style="color:#999;padding:20px;">Loading bundles...</p>
         </div>
     </div>
 
+    <script src="/js/api.js"></script>
     <script>
         lucide.createIcons();
+
+        const defaultThumb = 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&q=80&w=600';
+
+        // ── Load categories ──
+        async function loadCategories() {
+            try {
+                const res = await api.get('/discover/categories');
+                const bar = document.getElementById('categories-bar');
+                (res.data || []).forEach(c => {
+                    const a = document.createElement('a');
+                    a.href = '#';
+                    a.className = 'cat-chip';
+                    a.dataset.category = c.name;
+                    a.textContent = c.name;
+                    bar.appendChild(a);
+                });
+                // Chip click handler
+                bar.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('cat-chip')) return;
+                    e.preventDefault();
+                    bar.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+                    e.target.classList.add('active');
+                    loadVideos(e.target.dataset.category);
+                });
+            } catch {}
+        }
+
+        // ── Load live streams ──
+        async function loadLive() {
+            try {
+                const res = await api.get('/streams/live');
+                const grid = document.getElementById('live-grid');
+                const streams = res.data || [];
+                if (!streams.length) { grid.innerHTML = '<p style="color:#999;padding:20px;">No live streams right now</p>'; return; }
+                grid.innerHTML = streams.map(s => `
+                    <a href="live.html?id=${s._id}" class="station-card">
+                        <div class="card-thumb">
+                            <span class="live-badge">Live</span>
+                            <img src="${s.thumbnailUrl || defaultThumb}" alt="Stream">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title">${s.title}</div>
+                            <div class="card-sub">${formatNumber(s.viewerCount)} watching</div>
+                        </div>
+                    </a>
+                `).join('');
+            } catch { document.getElementById('live-grid').innerHTML = '<p style="color:#999;padding:20px;">Could not load streams</p>'; }
+        }
+
+        // ── Load videos ──
+        async function loadVideos(category) {
+            try {
+                const q = category ? `?category=${encodeURIComponent(category)}` : '';
+                const res = await api.get(`/videos${q}`);
+                const grid = document.getElementById('videos-grid');
+                const videos = res.data || [];
+                if (!videos.length) { grid.innerHTML = '<p style="color:#999;padding:20px;">No videos found</p>'; return; }
+                grid.innerHTML = videos.map(v => `
+                    <a href="watch.html?id=${v._id}" class="station-card">
+                        <div class="card-thumb">
+                            <img src="${v.thumbnailUrl || defaultThumb}" alt="${v.title}">
+                        </div>
+                        <div class="card-content">
+                            <div class="card-title">${v.title}</div>
+                            <div class="card-sub">${formatNumber(v.viewCount)} views</div>
+                            <div class="tag-list">
+                                ${(v.tags||[]).slice(0,3).map(t => `<span class="tag">${t}</span>`).join('')}
+                            </div>
+                        </div>
+                    </a>
+                `).join('');
+            } catch { document.getElementById('videos-grid').innerHTML = '<p style="color:#999;padding:20px;">Could not load videos</p>'; }
+        }
+
+        // ── Load bundles ──
+        async function loadBundles() {
+            try {
+                const res = await api.get('/bundles');
+                const grid = document.getElementById('bundles-grid');
+                const bundles = res.data || [];
+                if (!bundles.length) { grid.innerHTML = '<p style="color:#999;padding:20px;">No bundles yet</p>'; return; }
+                grid.innerHTML = bundles.map(b => `
+                    <a href="bundle.html?id=${b._id}" class="bundle-card">
+                        <img src="${b.coverImageUrl || defaultThumb}" class="bundle-bg">
+                        <div class="bundle-info">
+                            <span class="bundle-label">$${b.price}/${b.billingPeriod || 'monthly'}</span>
+                            <h3 class="bundle-title">${b.name}</h3>
+                            <p>${b.description || ''}</p>
+                        </div>
+                    </a>
+                `).join('');
+            } catch { document.getElementById('bundles-grid').innerHTML = '<p style="color:#999;padding:20px;">Could not load bundles</p>'; }
+        }
+
+        // ── Search ──
+        const searchInput = document.querySelector('.search-bar input');
+        let searchTimeout;
+        searchInput.addEventListener('input', () => {
+            clearTimeout(searchTimeout);
+            searchTimeout = setTimeout(async () => {
+                const q = searchInput.value.trim();
+                if (!q) { loadVideos(); return; }
+                try {
+                    const res = await api.get(`/videos?q=${encodeURIComponent(q)}`);
+                    const grid = document.getElementById('videos-grid');
+                    const videos = res.data || [];
+                    grid.innerHTML = videos.length ? videos.map(v => `
+                        <a href="watch.html?id=${v._id}" class="station-card">
+                            <div class="card-thumb"><img src="${v.thumbnailUrl || defaultThumb}" alt="${v.title}"></div>
+                            <div class="card-content">
+                                <div class="card-title">${v.title}</div>
+                                <div class="card-sub">${formatNumber(v.viewCount)} views</div>
+                            </div>
+                        </a>
+                    `).join('') : '<p style="color:#999;padding:20px;">No results found</p>';
+                } catch {}
+            }, 400);
+        });
+
+        // ── Init ──
+        loadCategories();
+        loadLive();
+        loadVideos();
+        loadBundles();
     </script>
 </body>
 </html>

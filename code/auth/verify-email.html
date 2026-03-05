@@ -161,18 +161,33 @@
                 <i data-lucide="mail" size="36"></i>
             </div>
             <h1>Check Inbox</h1>
-            <p class="subtitle">We've sent a verification link to <strong>you@example.com</strong>.<br>Please confirm to proceed.</p>
+            <p class="subtitle">We've sent a verification link to <strong id="reset-email">your email</strong>.<br>Please confirm to proceed.</p>
             
             <a href="reset.html" class="btn-auth" style="text-align: center; text-decoration: none; display: block;">Simulate: Click Email Link</a>
 
             <div class="auth-footer">
-                Didn't receive it? <a href="#">Click to resend</a>
+                Didn't receive it? <a href="#" id="resend-link">Click to resend</a>
             </div>
         </div>
     </div>
 
+    <script src="/js/api.js"></script>
     <script>
         lucide.createIcons();
+
+        const savedEmail = sessionStorage.getItem('verto_reset_email');
+        if (savedEmail) document.getElementById('reset-email').textContent = savedEmail;
+
+        document.getElementById('resend-link').addEventListener('click', async (e) => {
+            e.preventDefault();
+            if (!savedEmail) { showToast('No email found. Go back and try again.', 'warning'); return; }
+            try {
+                await api.post('/auth/resend-verification', { email: savedEmail });
+                showToast('Verification email resent!', 'success');
+            } catch (err) {
+                showToast(err.message || 'Could not resend', 'error');
+            }
+        });
     </script>
 </body>
 </html>

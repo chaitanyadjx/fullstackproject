@@ -1,0 +1,226 @@
+
+> verto-backend@1.0.0 test:videos
+> jest tests/videos.test.js --runInBand --forceExit
+
+ΓùÅ Validation Warning:
+
+  Unknown option "setupFilesAfterFramework" with value [] was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+ΓùÅ Validation Warning:
+
+  Unknown option "setupFilesAfterFramework" with value [] was found.
+  This is probably a typing mistake. Fixing it will remove this message.
+
+  Configuration Documentation:
+  https://jestjs.io/docs/configuration
+
+FAIL tests/videos.test.js
+  POST /api/v1/studio/me/videos
+    ├ù 201 ΓÇö creates a video with required fields (8 ms)
+    ├ù 400 ΓÇö rejects missing title (5 ms)
+    ├ù 400 ΓÇö rejects invalid visibility value (4 ms)
+    ├ù 403 ΓÇö viewer cannot upload (4 ms)
+  GET /api/v1/studio/me/videos
+    ├ù 200 ΓÇö returns creator video library (3 ms)
+    ├ù 200 ΓÇö filter=drafts only returns drafts (5 ms)
+    ├ù 403 ΓÇö viewer cannot access studio video library (4 ms)
+  PUT /api/v1/studio/me/videos/:videoId
+    ΓêÜ 200 ΓÇö updates title and visibility (1 ms)
+    ΓêÜ 404 ΓÇö returns 404 for non-existent videoId (3 ms)
+    ΓêÜ 403 ΓÇö viewer cannot edit videos
+  GET /api/v1/videos
+    ├ù 200 ΓÇö returns public video list without auth (7 ms)
+    ├ù 200 ΓÇö supports pagination params (5 ms)
+    ├ù 200 ΓÇö no members_only videos in public listing (4 ms)
+  GET /api/v1/videos/:videoId
+    ΓêÜ 404 ΓÇö returns 404 for non-existent video (4 ms)
+  POST /api/v1/videos/:videoId/view
+    ΓêÜ 200 ΓÇö records a view event
+  POST /api/v1/videos/:videoId/like
+    ΓêÜ 200 ΓÇö toggles like on a video
+    ΓêÜ 401 ΓÇö unauthenticated users cannot like
+  DELETE /api/v1/studio/me/videos/:videoId
+    ΓêÜ 200 ΓÇö deletes a video the creator owns
+    ΓêÜ 404 ΓÇö returns 404 when video already deleted
+
+  ΓùÅ POST /api/v1/studio/me/videos ΓÇ║ 201 ΓÇö creates a video with required fields
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 404
+
+      100 | /** Assert standard success shape */
+      101 | function expectSuccess(res, statusCode = 200) {
+    > 102 |   expect(res.statusCode).toBe(statusCode);
+          |                          ^
+      103 |   expect(res.body.success).toBe(true);
+      104 |   expect(res.body).toHaveProperty('data');
+      105 | }
+
+      at toBe (tests/helpers.js:102:26)
+      at Object.expectSuccess (tests/videos.test.js:45:5)
+
+  ΓùÅ POST /api/v1/studio/me/videos ΓÇ║ 400 ΓÇö rejects missing title
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 404
+
+      107 | /** Assert standard error shape */
+      108 | function expectError(res, statusCode) {
+    > 109 |   expect(res.statusCode).toBe(statusCode);
+          |                          ^
+      110 |   expect(res.body.success).toBe(false);
+      111 | }
+      112 |
+
+      at toBe (tests/helpers.js:109:26)
+      at Object.expectError (tests/videos.test.js:58:5)
+
+  ΓùÅ POST /api/v1/studio/me/videos ΓÇ║ 400 ΓÇö rejects invalid visibility value
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 400
+    Received: 404
+
+      107 | /** Assert standard error shape */
+      108 | function expectError(res, statusCode) {
+    > 109 |   expect(res.statusCode).toBe(statusCode);
+          |                          ^
+      110 |   expect(res.body.success).toBe(false);
+      111 | }
+      112 |
+
+      at toBe (tests/helpers.js:109:26)
+      at Object.expectError (tests/videos.test.js:67:5)
+
+  ΓùÅ POST /api/v1/studio/me/videos ΓÇ║ 403 ΓÇö viewer cannot upload
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 404
+
+      107 | /** Assert standard error shape */
+      108 | function expectError(res, statusCode) {
+    > 109 |   expect(res.statusCode).toBe(statusCode);
+          |                          ^
+      110 |   expect(res.body.success).toBe(false);
+      111 | }
+      112 |
+
+      at toBe (tests/helpers.js:109:26)
+      at Object.expectError (tests/videos.test.js:76:5)
+
+  ΓùÅ GET /api/v1/studio/me/videos ΓÇ║ 200 ΓÇö returns creator video library
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      100 | /** Assert standard success shape */
+      101 | function expectSuccess(res, statusCode = 200) {
+    > 102 |   expect(res.statusCode).toBe(statusCode);
+          |                          ^
+      103 |   expect(res.body.success).toBe(true);
+      104 |   expect(res.body).toHaveProperty('data');
+      105 | }
+
+      at toBe (tests/helpers.js:102:26)
+      at Object.expectSuccess (tests/videos.test.js:88:5)
+
+  ΓùÅ GET /api/v1/studio/me/videos ΓÇ║ 200 ΓÇö filter=drafts only returns drafts
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 200
+    Received: 404
+
+      100 | /** Assert standard success shape */
+      101 | function expectSuccess(res, statusCode = 200) {
+    > 102 |   expect(res.statusCode).toBe(statusCode);
+          |                          ^
+      103 |   expect(res.body.success).toBe(true);
+      104 |   expect(res.body).toHaveProperty('data');
+      105 | }
+
+      at toBe (tests/helpers.js:102:26)
+      at Object.expectSuccess (tests/videos.test.js:98:5)
+
+  ΓùÅ GET /api/v1/studio/me/videos ΓÇ║ 403 ΓÇö viewer cannot access studio video library
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: 403
+    Received: 404
+
+      107 | /** Assert standard error shape */
+      108 | function expectError(res, statusCode) {
+    > 109 |   expect(res.statusCode).toBe(statusCode);
+          |                          ^
+      110 |   expect(res.body.success).toBe(false);
+      111 | }
+      112 |
+
+      at toBe (tests/helpers.js:109:26)
+      at Object.expectError (tests/videos.test.js:108:5)
+
+  ΓùÅ GET /api/v1/videos ΓÇ║ 200 ΓÇö returns public video list without auth
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: true
+    Received: false
+
+      150 |     const res = await request(app).get('/api/v1/videos');
+      151 |     expectSuccess(res, 200);
+    > 152 |     expect(Array.isArray(res.body.data.videos)).toBe(true);
+          |                                                 ^
+      153 |   });
+      154 |
+      155 |   it('200 ΓÇö supports pagination params', async () => {
+
+      at Object.toBe (tests/videos.test.js:152:49)
+
+  ΓùÅ GET /api/v1/videos ΓÇ║ 200 ΓÇö supports pagination params
+
+    TypeError: Cannot read properties of undefined (reading 'length')
+
+      156 |     const res = await request(app).get('/api/v1/videos?page=1&limit=5');
+      157 |     expectSuccess(res, 200);
+    > 158 |     expect(res.body.data.videos.length).toBeLessThanOrEqual(5);
+          |                                 ^
+      159 |   });
+      160 |
+      161 |   it('200 ΓÇö no members_only videos in public listing', async () => {
+
+      at Object.length (tests/videos.test.js:158:33)
+
+  ΓùÅ GET /api/v1/videos ΓÇ║ 200 ΓÇö no members_only videos in public listing
+
+    TypeError: Cannot read properties of undefined (reading 'forEach')
+
+      161 |   it('200 ΓÇö no members_only videos in public listing', async () => {
+      162 |     const res = await request(app).get('/api/v1/videos');
+    > 163 |     res.body.data.videos.forEach((v) => {
+          |                          ^
+      164 |       expect(v.visibility).not.toBe('members_only');
+      165 |       expect(v.visibility).not.toBe('private');
+      166 |     });
+
+      at Object.forEach (tests/videos.test.js:163:26)
+
+Test Suites: 1 failed, 1 total
+Tests:       10 failed, 9 passed, 19 total
+Snapshots:   0 total
+Time:        1.731 s, estimated 31 s
+Ran all test suites matching /tests\\videos.test.js/i.
+Force exiting Jest: Have you considered using `--detectOpenHandles` to detect async operations that kept running after all tests finished?
